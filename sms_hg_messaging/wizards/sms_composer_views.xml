@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sms_composer_inherit_view_form" model="ir.ui.view">
+        <field name="name">sms.composer.inherit.view.form</field>
+        <field name="model">sms.composer</field>
+        <field name="inherit_id" ref="sms.sms_composer_view_form"/>
+        <field name="arch" type="xml">
+            <field name="body" position="before">
+                <field name="method" required="1"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_users_whatsapp_form_view" model="ir.ui.view">
+        <field name="name">res.users.whatsapp.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="priority">22</field>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='security']" position="after">
+                <page name="whatsapp_configuration" string="Whatsapp Configuration">
+                    <group>
+                        <field name="whatsapp_endpoint"/>
+                        <field name="whatsapp_token" password="True"/>
+                        <field name="whatsapp_authenticate" invisible="1"/>
+                    </group>
+                    <div class="row">
+                        <div class="col-md-4" align="center" attrs="{'invisible': [('whatsapp_authenticate','=',True)]}">
+                            <button string="Get QR Code" type="object" class="oe_highlight" name="action_get_qr_code" attrs="{'visible': [('whatsapp_authenticate','=',False)]}"/>
+                        </div>
+                        <div class="col-md-4" align="center" attrs="{'invisible': [('whatsapp_authenticate','=',False)]}">
+                            <button string="Logout" type="object" class="oe_highlight" name="action_logout_from_whatsapp" attrs="{'visible': [('whatsapp_authenticate','=',True)]}"/>
+                            <div class="text-muted"> This will take 1 or 2 minutes to logout from whatsapp </div>
+                        </div>
+                    </div>
+                </page>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_sms_inherit_form" model="ir.ui.view">
+        <field name="name">res.partner.view.inherit.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="SMS">
+                    <field name="sms_ids">
+                        <tree editable="top" delete="0" create="0">
+                            <field name="number" readonly="1"/>
+                            <field name="create_date" readonly="1"/>
+                            <field name="body" readonly="1"/>
+                            <field name="state" readonly="1"/>
+                            <field name="failure_type" readonly="1"/>
+                        </tree>
+                    </field>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

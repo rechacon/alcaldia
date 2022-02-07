@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<record id="sms_hg_messaging_view_tree" model="ir.ui.view">
+		<field name="name">sms.hg.messaging.tree</field>
+		<field name="model">sms.hg.messaging</field>
+		<field name="arch" type="xml">
+		<tree editable="top">
+			<field name="name"/>
+			<field name="wsdl"/>
+			<field name="passport"/>
+			<field name="password" password="True"/>
+			<field name="active" widget="boolean_toggle"/>
+		</tree>
+		</field>
+	</record>
+	<record id="sms_hg_messaging_view_search" model="ir.ui.view">
+	    <field name="name">sms.hg.messaging.search</field>
+	    <field name="model">sms.hg.messaging</field>
+	    <field name="arch" type="xml">
+	    	<search string="Filter forma de pago">
+		        <field name="name"/>
+		        <field name="wsdl"/>
+		        <separator/>
+		        <filter string="Archivados" name="inactives" domain="[('active', '=', False)]"/>
+	      	</search>
+	    </field>
+	</record>
+	<record id="sms_hg_messaging_action" model="ir.actions.act_window">
+		<field name="name">Hg Messaging API</field>
+		<field name="res_model">sms.hg.messaging</field>
+		<field name="view_mode">tree</field>
+		<field name="search_view_id" ref="sms_hg_messaging_view_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+			Clic en "+ Crear" para agregar un nuevo registro
+			</p>
+			<p>Agregue un nuevo registro</p>
+		</field>
+	</record>
+  
+	<menuitem
+		id="sms_hg_messaging_menu"
+		name="Hg Messaging API"
+		parent="phone_validation.phone_menu_main"
+		action="sms_hg_messaging_action"
+		sequence="4"/>
+</odoo>
