@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"access_atr_connect_group_user","atr_connect","model_atr_connect","base.group_user",1,1,1,1
+"access_atr_group_user","atr","model_atr","base.group_user",1,1,1,1
+"access_atr_log_group_user","atr_log","model_atr_log","base.group_user",1,1,1,1

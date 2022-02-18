@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<record model="ir.ui.view" id="atr_form">
+	    <field name="name">atr.form</field>
+	    <field name="model">atr</field>
+	    <field name="arch" type="xml">
+	        <form string="Conexión ATR" create="0" delete="0">
+            	<header>
+            		<button name="connect_atr" type="object" string="Actualizar registros" class="btn-primary" icon="fa-download"/>
+            	</header>
+	            <sheet>
+                	<div class="oe_title">
+		                <h1>
+		                    <field name="name"/>
+		                </h1>
+		            </div>
+	                <group>
+	                    <field name="type_atr" readonly="1"/>
+	                    <field name="lote" required="1"/>
+	                </group>
+	                <notebook>
+	                	<page string="SQL">
+		                    <field name="sql" required="1" colspan="4" widget="ace" />
+	                	</page>
+	                	<page string="SQL Total">
+	                		<div><p class="text-justify text-success">Esta consulta se utiliza para conocer el total de los registros en el momento</p></div>
+		                    <field name="sql_count" required="1" colspan="4" widget="ace" />
+	                	</page>
+	                	<page string="Logs">
+		                    <field name="log_ids" colspan="4" nolabel="1">
+		                    	<tree create="0" delete="1" editable="top" default_order="create_date desc" decoration-success="flag==total and total!=0" decoration-danger="flag!=total">
+				                    <field name="name" readonly="1"/>
+				                    <field name="qty" readonly="1"/>
+				                    <field name="upd" readonly="1"/>
+				                    <field name="flag" readonly="1"/>
+				                    <field name="ignore" readonly="1"/>
+				                    <field name="total" readonly="1"/>
+				                    <field name="send" readonly="1"/>
+				                    <field name="date_start" readonly="1"/>
+				                    <field name="date_end" readonly="1"/>
+				                    <field name="create_date" string="Fecha" readonly="1"/>
+		                    	</tree>
+		                    </field>
+	                	</page>
+	                </notebook>
+	            </sheet>
+	        </form>
+	    </field>
+	</record>
+	<record model="ir.ui.view" id="atr_tree">
+	    <field name="name">atr.tree</field>
+	    <field name="model">atr</field>
+	    <field name="arch" type="xml">
+	        <tree string="Conexión ATR" create="0" delete="0">
+	            <field name="name"/>
+	            <field name="type_atr"/>
+	        </tree>
+	    </field>
+	</record>
+	<record id="action_atr" model="ir.actions.act_window">
+		<field name="name">Conexión ATR</field>
+		<field name="res_model">atr</field>
+		<field name="view_mode">tree,form</field>
+	</record>
+
+	<record id="atr_connect_view_tree" model="ir.ui.view">
+		<field name="name">atr.connect.tree</field>
+		<field name="model">atr.connect</field>
+		<field name="arch" type="xml">
+		<tree editable="top">
+			<field name="name"/>
+			<field name="server"/>
+			<field name="name_bd"/>
+			<field name="user"/>
+			<field name="port"/>
+			<field name="password" password="True"/>
+			<field name="active" widget="boolean_toggle"/>
+		</tree>
+		</field>
+	</record>
+	<record id="atr_connect_view_search" model="ir.ui.view">
+	    <field name="name">atr.connect.search</field>
+	    <field name="model">atr.connect</field>
+	    <field name="arch" type="xml">
+	    	<search string="Filter forma de pago">
+		        <field name="name"/>
+		        <field name="server"/>
+		        <separator/>
+		        <filter string="Archivados" name="inactives" domain="[('active', '=', False)]"/>
+	      	</search>
+	    </field>
+	</record>
+	<record id="atr_connect_action" model="ir.actions.act_window">
+		<field name="name">Conexión ATR</field>
+		<field name="res_model">atr.connect</field>
+		<field name="view_mode">tree</field>
+		<field name="search_view_id" ref="atr_connect_view_search"/>
+		<field name="help" type="html">
+			<p class="o_view_nocontent_smiling_face">
+			Clic en "+ Crear" para agregar un nuevo registro
+			</p>
+			<p>Agregue un nuevo registro</p>
+		</field>
+	</record>
+
+	<menuitem
+		id="atr_connect_menu_main"
+		name="Conexión ATR"
+		sequence="40"
+		web_icon="binding_atr,static/description/icon.png"
+	/>
+  
+	<menuitem
+		id="atr_menu"
+		name="ATR"
+		action="action_atr"
+		parent="binding_atr.atr_connect_menu_main"
+		sequence="10"
+	/>
+
+	<menuitem
+		id="atr_connect_menu"
+		name="Credenciales ATR"
+		action="atr_connect_action"
+		parent="binding_atr.atr_connect_menu_main"
+		sequence="20"
+	/>
+
+</odoo>
