@@ -18,7 +18,7 @@ class ATR(models.Model):
 
     def _cron_update_partner(self):
         """Cron para actualizar los contactos"""
-        atr = self.env['atr'].search([('type_gp', '=', 'partner')])
+        atr = self.env['atr'].search([('type_atr', '=', 'partner')])
         atr.connect_atr()
 
     def get_last_log(self, cursor):
