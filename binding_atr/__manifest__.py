@@ -13,6 +13,7 @@
     'data': [
         'security/ir.model.access.csv',
         'data/atr_data.xml',
+        'data/ir_cron.xml',
         'views/atr_views.xml',
         'views/partner_views.xml',
     ],
