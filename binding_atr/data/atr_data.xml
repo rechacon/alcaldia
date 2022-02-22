@@ -34,6 +34,50 @@ WHERE firm_name not ilike '%prueba%' AND u.id IS NOT NULL
 	    <record id="atr_payment" model="atr">
 	        <field name="name">Conexión a Declaraciones de Impuestos</field>
 	        <field name="type_atr">payment</field>
+	        <field name="sql">SELECT
+    rif,
+    firm_name AS contribuyente,
+    invoice_number AS planilla,
+    total_amount AS monto,
+    emision_date AS emision,
+    invoice.expiry_date AS vencimiento,
+    CASE
+        WHEN invoice_type = 1 THEN 'TASAS'
+        ELSE 'IMPUESTOS'
+    END AS tipo_planilla,
+    tax_account_number AS cuenta,
+    CASE
+        WHEN tax_type.id = 4 THEN 'PUBLICIDAD'
+        WHEN tax_type.id = 5 THEN 'CATASTRO MUNICIPAL'
+        WHEN tax_type.id = 6 THEN 'INGENIERÍA MUNICIPAL'
+        WHEN tax_type.id = 7 THEN 'REGISTRO Y NOTARÍA'
+        WHEN tax_type.id = 8 THEN
+	CASE WHEN is_public_show THEN 'ESPECTÁCULOS PÚBLICOS' ELSE 'TASA ADMINISTRATIVA' END
+        ELSE tax_type.name
+    END AS tipo_impuesto,
+    CASE
+        WHEN (invoice.status = 4 OR invoice.status = 6) THEN 'PAGADA'
+        ELSE 'PENDIENTE'
+    END AS estatus_planilla
+FROM invoice
+LEFT JOIN appweb.tax ON invoice.id_tax = tax.id
+LEFT JOIN taxpayer ON tax.id_taxpayer = taxpayer.id
+LEFT JOIN invoice_fee ON invoice_fee.id_invoice = invoice.id
+LEFT JOIN fee_type ON invoice_fee.id_fee_type = fee_type.id
+LEFT JOIN tecnologia.fee_tax ON fee_tax.id_fee_type = fee_type.id
+LEFT JOIN tax_type ON CASE WHEN tax.id_tax_type ISNULL THEN fee_tax.id_tax_type ELSE tax.id_tax_type END = tax_type.id
+WHERE invoice.status IN(1,4,6) AND firm_name not ilike '%prueba%'
+ORDER BY contribuyente
+OFFSET {offset} LIMIT {limit}</field>
+	        <field name="sql_count">SELECT COUNT(*)
+FROM invoice
+LEFT JOIN appweb.tax ON invoice.id_tax = tax.id
+LEFT JOIN taxpayer ON tax.id_taxpayer = taxpayer.id
+LEFT JOIN invoice_fee ON invoice_fee.id_invoice = invoice.id
+LEFT JOIN fee_type ON invoice_fee.id_fee_type = fee_type.id
+LEFT JOIN tecnologia.fee_tax ON fee_tax.id_fee_type = fee_type.id
+LEFT JOIN tax_type ON CASE WHEN tax.id_tax_type ISNULL THEN fee_tax.id_tax_type ELSE tax.id_tax_type END = tax_type.id
+WHERE invoice.status IN(1,4,6) AND firm_name not ilike '%prueba%'</field>
 	    </record>
 	</data>
 </odoo>

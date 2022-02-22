@@ -8,7 +8,8 @@
     'license': 'AGPL-3',
     'summary': 'ATR',
     'depends': ['base',
-                'contacts'
+                'contacts',
+                'declaration_tax_return'
                 ],
     'data': [
         'security/ir.model.access.csv',

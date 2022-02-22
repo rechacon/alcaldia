@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- VISTA FORM: Declaración de impuesto -->
+    <record id="view_account_tax_return_form" model="ir.ui.view">
+        <field name="name">account.tax.return.form</field>
+        <field name="model">account.tax.return</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.tax.return">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable':True}"/>
+                </header>
+                <sheet>
+                    <group col="4" colspan="2">
+                        <field name="partner_id"/>
+                        <field name="name"/>
+                        <field name="amount"/>
+                        <field name="date"/>
+                        <field name="date_due"/>
+                        <field name="account"/>
+                        <field name="template_id"/>
+                        <field name="tax_id"/>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- FIN VISTA FORM: Declaración de impuesto -->
+
+    <!-- VISTA TREE: Declaración de impuesto -->
+    <record id="view_account_tax_return_tree" model="ir.ui.view">
+        <field name="name">account.tax.return.tree</field>
+        <field name="model">account.tax.return</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.tax.return">
+                <field name="partner_id"/>
+                <field name="name"/>
+                <field name="account"/>
+                <field name="amount" sum="Total"/>
+                <field name="date"/>
+                <field name="date_due"/>
+                <field name="template_id"/>
+                <field name="tax_id"/>
+                <field name="state"/>
+
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Declaración de impuesto -->
+
+    <record id="view_account_tax_return_search" model="ir.ui.view">
+        <field name="name">account.tax.return.search</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <search string="Declaración de impuestos">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="account"/>
+                <filter name="group_by_account" string="Cuenta" context="{'group_by':'account'}"/>
+                <filter name="group_by_partner_id" string="Contribuyente" context="{'group_by':'partner_id'}"/>
+                <filter name="group_by_date" string="Emisión" context="{'group_by':'date'}"/>
+                <filter name="group_by_date_due" string="Vencimiento" context="{'group_by':'date_due'}"/>
+                <filter name="group_by_state" string="Estatus" context="{'group_by':'state'}"/>
+                <filter name="group_by_template_id" string="Tipo de plantilla" context="{'group_by':'template_id'}"/>
+                <filter name="group_by_tax_id" string="Tipo de impuesto" context="{'group_by':'tax_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION: Declaración de impuesto -->
+    <record id="action_account_tax_return" model="ir.actions.act_window">
+        <field name="name">Declaración de impuesto</field>
+        <field name="res_model">account.tax.return</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click para crear un nuevo registro
+          </p>
+        </field>
+    </record>
+    <!-- FIN ACTION: Declaración de impuesto -->
+
+<!-- ==================================================================== -->
+        
+    <!-- VISTA FORM: Tipo de planilla -->
+    <record id="view_account_template_type_form" model="ir.ui.view">
+        <field name="name">account.template.type.form</field>
+        <field name="model">account.template.type</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.template.type">
+            <group col="4" colspan="2">
+                <field name="sequence"/>
+                <field name="name"/>
+
+            </group>
+            </form>
+        </field>
+    </record>
+    <!-- FIN VISTA FORM: Tipo de planilla -->
+
+    <!-- VISTA TREE: Tipo de planilla -->
+    <record id="view_account_template_type_tree" model="ir.ui.view">
+        <field name="name">account.template.type.tree</field>
+        <field name="model">account.template.type</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.template.type" editable="top">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Tipo de planilla -->
+
+    <!-- ACTION: Tipo de planilla -->
+    <record id="action_account_template_type" model="ir.actions.act_window">
+        <field name="name">Tipos de planillas</field>
+        <field name="res_model">account.template.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click para crear un nuevo registro
+          </p>
+        </field>
+    </record>
+    <!-- FIN ACTION: Tipo de planilla -->
+
+<!-- ==================================================================== -->
+        
+    <!-- VISTA FORM: Tipo de impuesto -->
+    <record id="view_account_tax_type_form" model="ir.ui.view">
+        <field name="name">account.declaration.tax.type.form</field>
+        <field name="model">account.declaration.tax.type</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.declaration.tax.type">
+            <group col="4" colspan="2">
+                <field name="sequence"/>
+                <field name="name"/>
+
+            </group>
+            </form>
+        </field>
+    </record>
+    <!-- FIN VISTA FORM: Tipo de impuesto -->
+
+    <!-- VISTA TREE: Tipo de impuesto -->
+    <record id="view_account_tax_type_tree" model="ir.ui.view">
+        <field name="name">account.declaration.tax.type.tree</field>
+        <field name="model">account.declaration.tax.type</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.declaration.tax.type" editable="top">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Tipo de impuesto -->
+
+    <!-- ACTION: Tipo de impuesto -->
+    <record id="action_account_tax_type" model="ir.actions.act_window">
+        <field name="name">Tipos de impuestos</field>
+        <field name="res_model">account.declaration.tax.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click para crear un nuevo registro
+          </p>
+        </field>
+    </record>
+    <!-- FIN ACTION: Tipo de impuesto -->
+
+<!-- ==================================================================== -->
+        
+
+<!-- ====================== MENUS ====================== -->
+    <menuitem name="Declaración de impuestos"
+              id="menu_tax_return"
+              web_icon="declaration_tax_return,static/description/icon.png"
+              sequence="60"/>
+        
+        <menuitem name="Declaración de impuesto"
+                  id="menu_account_tax_return"
+                  action="action_account_tax_return"
+                  parent="menu_tax_return"
+                  sequence="10"/>
+
+        <menuitem name="Configuración"
+                  id="menu_account_tax_return_config"
+                  action="action_account_tax_return"
+                  parent="menu_tax_return"
+                  sequence="10"/>
+        
+        <menuitem name="Tipo de planilla"
+                  id="menu_account_template_type"
+                  action="action_account_template_type"
+                  parent="menu_account_tax_return_config"
+                  sequence="10"/>
+        
+        <menuitem name="Tipo de impuesto"
+                  id="menu_account_tax_type"
+                  action="action_account_tax_type"
+                  parent="menu_account_tax_return_config"
+                  sequence="20"/>
+
+</odoo>
