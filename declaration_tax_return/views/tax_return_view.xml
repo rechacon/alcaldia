@@ -59,6 +59,10 @@
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="account"/>
+                <filter name="date_filter" string="Emisión" date="date"/>
+                <filter name="date_due_filter" string="Vencimiento" date="date_due"/>
+                <filter string="Monto mayor a 100" name="gt_100" domain="[('amount', '>=', 100)]"/>
+                <filter string="Monto mayor a 1000" name="gt_1000" domain="[('amount', '>=', 1000)]"/>
                 <filter name="group_by_account" string="Cuenta" context="{'group_by':'account'}"/>
                 <filter name="group_by_partner_id" string="Contribuyente" context="{'group_by':'partner_id'}"/>
                 <filter name="group_by_date" string="Emisión" context="{'group_by':'date'}"/>
