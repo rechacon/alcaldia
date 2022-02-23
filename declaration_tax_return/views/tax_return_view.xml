@@ -74,11 +74,36 @@
         </field>
     </record>
 
+    <record id="account_tax_return_graph" model="ir.ui.view">
+        <field name="name">account.tax.return.view.graph</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <graph string="Declaración de impuesto" type="bar" sample="1" disable_linking="0">
+                    <field name="state" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_account_tax_return_pivot" model="ir.ui.view">
+         <field name="name">account.tax.return.pivot</field>
+         <field name="model">account.tax.return</field>
+         <field name="arch" type="xml">
+             <pivot string="Declaración de impuesto" disable_linking="0" sample="1">
+                 <field name="state" type="row"/>
+                 <field name="tax_id" type="col"/>
+                 <!-- <field name="template_id" type="col"/> -->
+             </pivot>
+         </field>
+    </record>
+
     <!-- ACTION: Declaración de impuesto -->
     <record id="action_account_tax_return" model="ir.actions.act_window">
         <field name="name">Declaración de impuesto</field>
         <field name="res_model">account.tax.return</field>
         <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="context">{
+            'graph_groupbys': ['state'],
+        }</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
             Click para crear un nuevo registro
