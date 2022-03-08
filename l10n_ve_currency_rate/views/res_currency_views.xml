@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_currency_rate_tree" model="ir.ui.view">
+        <field name="name">res.currency.rate.l10n.ve.tree.inherit</field>
+        <field name="model">res.currency.rate</field>
+        <field name="inherit_id" ref="base.view_currency_rate_tree"/>
+        <field name="arch" type="xml">
+           <xpath expr="//field[@name='name']" position="after">
+           		<field name="sell_rate"/>
+           </xpath>
+        </field>
+    </record>
+    <!-- Esta herencia va en contra de las buenas prácticas pero la herencia al notebook no se sobreescribe -->
+    <record id="view_currency_l10nve_form" model="ir.ui.view">
+        <field name="name">res.currency.l10n.ve.form.inherit</field>
+        <field name="model">res.currency</field>
+        <field name="inherit_id" ref="base.view_currency_form"/>
+        <field name="arch" type="xml">
+           <notebook class="o_currency_rate_list" position="attributes">
+                <field name="attrs">{}</field>
+                <field name="invisible">0</field>
+           </notebook>
+           <notebook position="after">
+                <notebook class="o_currency_rate_list" attrs="{'invisible': [('is_current_company_currency','=',False)]}">
+                    <page string="Tasas" name="rates">
+                        <field name="rate_ids" widget="one2many">
+                            <tree string="Rates" editable="top" limit="25">
+                                <field name="name"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="sell_rate" digits="[12,12]" string="Tasa"/>
+                                <field name="company_rate" digits="[12,12]" invisible="1"/>
+                                <field name="inverse_company_rate" digits="[12,12]" invisible="1"/>
+                                <field name="rate" digits="[12,12]" optional="hide"/>
+                                <field name="write_date" optional="hide"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+           </notebook>
+        </field>
+    </record>
+    <!-- Views exchange rate -->
+    <record id="res_currency_exchange_rate_view_form" model="ir.ui.view">
+        <field name="name">res.currency.exchange.rate.view.form</field>
+        <field name="model">res.currency.exchange.rate</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <header>
+                    <button name="set_rate" type="object" string="Rate exchange day"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                        </group>
+                        <group>
+                            <field name="server" required="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rates" name="rate">
+                            <field name="currency_ids" readonly="0"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record> 
+    <record id="res_currency_exchange_rate_view_tree" model="ir.ui.view">
+        <field name="name">res.currency.exchange.rate.view.tree</field>
+        <field name="model">res.currency.exchange.rate</field>
+        <field name="arch" type="xml">
+            <tree string="Exchange rate">
+                <field name="name"/>
+                <field name="server"/>
+            </tree>
+        </field>
+    </record>
+    <record id="res_currency_exchange_rate_action" model="ir.actions.act_window">
+        <field name="name">Exchange Rate</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.currency.exchange.rate</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="res_currency_exchange_rate_menu"
+              name="Tasas de cambio"
+              action="res_currency_exchange_rate_action" 
+              parent="account.account_banks_menu"
+              sequence="20"/>
+
+</odoo>

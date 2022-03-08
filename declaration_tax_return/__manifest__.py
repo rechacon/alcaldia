@@ -7,7 +7,8 @@
     'category': 'Tools',
     'license': 'AGPL-3',
     'summary': 'ATR',
-    'depends': ['base'
+    'depends': ['base',
+                'l10n_ve_currency_rate',
                 ],
     'data': ['security/ir.model.access.csv',
              'views/tax_return_view.xml'

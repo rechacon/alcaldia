@@ -13,9 +13,12 @@
                 </header>
                 <sheet>
                     <group col="4" colspan="2">
+                        <field name="currency_id" invisible="1"/>
+                        <field name="currency_usd_id" invisible="1"/>
                         <field name="partner_id"/>
                         <field name="name"/>
-                        <field name="amount"/>
+                        <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_usd" string="Monto" widget="monetary" options="{'currency_field': 'currency_usd_id'}"/>
                         <field name="date"/>
                         <field name="date_due"/>
                         <field name="account"/>
@@ -36,10 +39,13 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree string="account.tax.return">
+                <field name="currency_id" invisible="1"/>
+                <field name="currency_usd_id" invisible="1"/>
                 <field name="partner_id"/>
                 <field name="name"/>
                 <field name="account"/>
-                <field name="amount" sum="Total"/>
+                <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total Bs"/>
+                <field name="amount_usd" string="Monto" widget="monetary" options="{'currency_field': 'currency_usd_id'}" sum="Total USD"/>
                 <field name="date"/>
                 <field name="date_due"/>
                 <field name="template_id"/>
