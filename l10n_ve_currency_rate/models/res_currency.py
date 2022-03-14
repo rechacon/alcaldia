@@ -145,6 +145,7 @@ class ResCurrencyRate(models.Model):
     _inherit = 'res.currency.rate'
 
     sell_rate = fields.Float(string='Exchange rate', digits=(12, 4))
+    currency_id = fields.Many2one(readonly=False)
 
     @api.constrains("sell_rate")
     def set_sell_rate(self):
