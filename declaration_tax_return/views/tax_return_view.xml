@@ -24,6 +24,7 @@
                         <field name="account"/>
                         <field name="template_id"/>
                         <field name="tax_id"/>
+                        <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}"/>
 
                     </group>
                 </sheet>
@@ -51,7 +52,7 @@
                 <field name="template_id"/>
                 <field name="tax_id"/>
                 <field name="state"/>
-
+                <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}" optional="hidden"/>
             </tree>
         </field>
     </record>
@@ -85,7 +86,7 @@
         <field name="model">account.tax.return</field>
         <field name="arch" type="xml">
             <graph string="Declaración de impuesto" type="bar" sample="1" disable_linking="0">
-                    <field name="state" type="row"/>
+                <field name="state" type="row"/>
             </graph>
         </field>
     </record>
