@@ -2,7 +2,9 @@ import psycopg2
 from odoo import api, models, fields
 
 
-TYPE_ATR = [('partner', 'Contactos'), ('payment', 'Declaraciones de Impuestos')]
+TYPE_ATR = [('partner', 'Contactos'),
+            ('payment', 'Declaraciones de Impuestos'),
+            ('update_address', 'Actualizar dirección de contactos'), ]
 
 
 class ATR(models.Model):
@@ -24,6 +26,11 @@ class ATR(models.Model):
     def _cron_update_payment(self):
         """Cron para actualizar los pagos"""
         atr = self.env['atr'].search([('type_atr', '=', 'payment')])
+        atr.connect_atr()
+
+    def _cron_update_address(self):
+        """Cron para actualizar la dirección de los contribuyentes"""
+        atr = self.env['atr'].search([('type_atr', '=', 'update_address')])
         atr.connect_atr()
 
     def get_last_log(self, cursor):
@@ -54,6 +61,8 @@ class ATR(models.Model):
             self.create_partner()
         elif self.type_atr == 'payment':
             self.create_payment()
+        elif self.type_atr == 'update_address':
+            self.create_update_address()
 
     def create_partner(self):
         """Crear Partner"""
@@ -184,6 +193,78 @@ class ATR(models.Model):
         else:
             self.create_payment()
 
+    def create_update_address(self):
+        """Actualizar dirección de contactos"""
+        cursor = self.env['atr.connect'].search([], limit=1)
+        cursor = cursor.credentials_atr().cursor()
+        # Obtener log
+        log_id = self.get_last_log(self.env.cr)
+        if not log_id:
+            return False
+        # Consulta SQL
+        records = self.env['res.partner'].search([('vat', '!=', False)], offset=log_id.flag, limit=self.lote)
+        for rec in records:
+            cursor.execute(self.sql.replace('{vat}', f"'{rec.vat}'"))
+            address_data = cursor.fetchall()
+
+            # Filtrar direcciones
+            if address_data:
+                filter_data = list(filter(lambda x: x[5] is not None or x[6] is not None, address_data))
+                if filter_data:
+                    address = filter_data[0]
+                else:
+                    address = address_data[0]
+                country_id = self.env.ref('base.ve', raise_if_not_found=False)
+                state_id = self.env.ref('territorial_pd.state_ve_14', raise_if_not_found=False)
+                municipality_id = self.env.ref('territorial_pd.municipio_1409', raise_if_not_found=False)
+                parish_id = address[2].strip()
+                city = ''
+
+                # Obtener la parroquia
+                if parish_id == 'Caucaguita':
+                    parish_id = self.env.ref('territorial_pd.parroquia_140903', raise_if_not_found=False).id
+                elif parish_id == 'Filas de Mariche':
+                    parish_id = self.env.ref('territorial_pd.parroquia_140904', raise_if_not_found=False).id
+                elif parish_id == 'La Dolorita':
+                    parish_id = self.env.ref('territorial_pd.parroquia_140905', raise_if_not_found=False).id
+                elif parish_id == 'Petare':
+                    parish_id = self.env.ref('territorial_pd.parroquia_140901', raise_if_not_found=False).id
+                elif parish_id == 'Leoncio Martinez':
+                    parish_id = self.env.ref('territorial_pd.parroquia_140902', raise_if_not_found=False).id
+                else:
+                    city = parish_id
+                    parish_id = False
+
+                street = address[3].strip()
+                street2 = address[4].strip()
+                partner_latitude = address[5]
+                partner_longitude = address[6]
+                data = {
+                    'country_id': country_id.id,
+                    'state_id': state_id.id,
+                    'municipality_id': municipality_id.id,
+                    'parish_id': parish_id,
+                    'street': street,
+                    'street2': street2,
+                    'city': city,
+                    'partner_latitude': partner_latitude,
+                    'partner_longitude': partner_longitude,
+                }
+                rec.write(data)
+                log_id.upd += 1
+            else:
+                log_id.ignore += 1
+                log_id.date_end = fields.Datetime.now()
+            log_id.flag += 1
+            log_id.date_end = fields.Datetime.now()
+            self.env.cr.commit()
+        if log_id.flag == log_id.total:
+            # Aquí enviar correo
+            log_id.send = True
+            self.env.cr.commit()
+        else:
+            self.create_update_address()
+
 
 class ATRLog(models.Model):
     _name = 'atr.log'
@@ -206,6 +287,7 @@ class ATRLog(models.Model):
             type_atr = {
                 'partner': 'Contactos',
                 'payment': 'Pagos',
+                'update_address': 'Dirección de Contribuyentes',
             }
             type_name = type_atr[rec.atr_id.type_atr]
             rec.name = f'Importación de {type_name} - {rec.date_start.strftime("%m/%d/%Y")}'

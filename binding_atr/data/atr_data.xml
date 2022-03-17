@@ -79,5 +79,37 @@ LEFT JOIN tecnologia.fee_tax ON fee_tax.id_fee_type = fee_type.id
 LEFT JOIN tax_type ON CASE WHEN tax.id_tax_type ISNULL THEN fee_tax.id_tax_type ELSE tax.id_tax_type END = tax_type.id
 WHERE invoice.status IN(1,4,6) AND firm_name not ilike '%prueba%'</field>
 	    </record>
+        <record id="atr_update_address" model="atr">
+            <field name="name">Conexión a Dirección de Contribuyentes</field>
+            <field name="type_atr">update_address</field>
+            <field name="sql">SELECT 
+    TRIM(t.rif),
+    firm_name AS contribuyente, 
+    regexp_replace(COALESCE(p.name,''), ';', ':', 'g') AS parroquia, 
+    regexp_replace(COALESCE(s.name,''), ';', ':', 'g') AS sector,
+    CONCAT(regexp_replace(regexp_replace(a.address,';',':'),'\n',' '),
+       regexp_replace(a.street,'\n',' '),' ',
+       regexp_replace(a.name,'\n',' '),' ',
+       regexp_replace(a.floor_number,'\n',' '),' ',
+       regexp_replace(a.unit_number,'\n',' ')) AS direccion,
+    lat,
+    long
+FROM tax tx
+INNER JOIN taxpayer t ON t.id = tx.id_taxpayer 
+INNER JOIN tax_address ta ON ta.id_tax = tx.id
+INNER JOIN address a ON a.id = ta.id_address AND a.main
+INNER JOIN parish p on p.id = a.id_parish
+LEFT JOIN sector s on s.id = a.id_sector 
+LEFT JOIN tecnologia.inf_additional_statement_form_ae ias ON ias.id_tax = tx.id AND (ias.id IN (SELECT max(inf_additional_statement_form_ae.id)
+           FROM tecnologia.inf_additional_statement_form_ae
+          GROUP BY id_tax))
+WHERE firm_name not ilike '%prueba%' AND NOT tx.canceled AND NOT tx.removed
+AND TRIM(t.rif) = {vat} -- PARA UN CONTRIBUYENTE EN ESPECÍFICO
+AND t.active AND NOT deleted -- SOLO PARA CONTRIBUYENTES ACTIVOS
+ORDER BY firm_name, tax_account_number</field>
+            <field name="sql_count">SELECT COUNT(*)
+FROM res_partner
+WHERE vat IS NOT NULL AND active = True</field>
+        </record>
 	</data>
 </odoo>

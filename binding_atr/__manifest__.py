@@ -9,12 +9,14 @@
     'summary': 'ATR',
     'depends': ['base',
                 'contacts',
-                'declaration_tax_return'
+                'declaration_tax_return',
+                'territorial_pd',
                 ],
     'data': [
         'security/ir.model.access.csv',
         'data/atr_data.xml',
         'data/ir_cron.xml',
+        'data/res_country.xml',
         'views/atr_views.xml',
         'views/partner_views.xml',
     ],
