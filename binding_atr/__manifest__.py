@@ -16,9 +16,9 @@
         'security/ir.model.access.csv',
         'data/atr_data.xml',
         'data/ir_cron.xml',
-        'data/res_country.xml',
         'views/atr_views.xml',
         'views/partner_views.xml',
+        'data/res_country.xml',
     ],
     'external_dependencies': {
         'python': ['psycopg2'],
