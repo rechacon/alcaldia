@@ -103,13 +103,25 @@
          </field>
     </record>
 
+    <record id="account_tax_return_view_map" model="ir.ui.view">
+        <field name="name">account.tax.return.view.map</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <map res_partner="partner_id" panel_title="Contribuyentes">
+                <field name="name" string="Planilla"/>
+                <field name="partner_id" string="Contribuyente"/>
+            </map>
+        </field>
+    </record>
+
     <!-- ACTION: Declaración de impuesto -->
     <record id="action_account_tax_return" model="ir.actions.act_window">
         <field name="name">Declaración de impuesto</field>
         <field name="res_model">account.tax.return</field>
-        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="view_mode">tree,form,graph,pivot,map</field>
         <field name="context">{
             'graph_groupbys': ['state'],
+            'tree_groupbys': ['partner_id'],
         }</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
