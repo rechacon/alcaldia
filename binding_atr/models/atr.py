@@ -43,6 +43,7 @@ class ATR(models.Model):
             date = max(self.log_ids.mapped('create_date')).strftime('%Y-%m-%d')
             date_now = fields.Datetime.now().strftime('%Y-%m-%d')
             log_id = self.log_ids.filtered(lambda x: x.create_date.strftime('%Y-%m-%d') == date)
+            log_id.total = total
             if log_id.total != log_id.flag and date == date_now:
                 return log_id
             if log_id.total == log_id.flag and date == date_now:
