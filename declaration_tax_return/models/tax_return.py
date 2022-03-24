@@ -17,6 +17,9 @@ class AccountTaxReturn(models.Model):
     partner_id = fields.Many2one('res.partner', 'Contribuyente')
     currency_id = fields.Many2one('res.currency', 'VES', default=_set_currency_id)
     currency_usd_id = fields.Many2one('res.currency', 'USD', default=_set_currency_usd_id)
+    type_tax = fields.Selection([('payment', 'Pagos'), ('tax', 'Impuesto')], 'Tipo de registro')
+    id_tax = fields.Integer('ID del impuesto')
+    concept = fields.Char('Concepto')
     name = fields.Char('Planilla')
     amount = fields.Float('Monto Bs.')
     amount_usd = fields.Float('Monto USD')
@@ -27,6 +30,15 @@ class AccountTaxReturn(models.Model):
     template_id = fields.Many2one('account.template.type', 'Tipo de planilla')
     tax_id = fields.Many2one('account.declaration.tax.type', 'Tipo de impuesto')
     state = fields.Selection([('pending', 'Pendiente'), ('payment', 'Pagada')], 'Estatus')
+
+    def name_get(self):
+        result = []
+        for record in self:
+            if record.type_tax == 'tax':
+                result.append((record.id, record.account))
+                return result
+        result.append((record.id, record.name))
+        return result
 
     def _compute_get_rate(self):
         """Obtener tasa de cambio"""

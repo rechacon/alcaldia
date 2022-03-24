@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
 
-    <!-- VISTA FORM: Declaración de impuesto -->
+    <!-- VISTA FORM: Planilla de pagos -->
     <record id="view_account_tax_return_form" model="ir.ui.view">
         <field name="name">account.tax.return.form</field>
         <field name="model">account.tax.return</field>
@@ -31,9 +31,9 @@
             </form>
         </field>
     </record>
-    <!-- FIN VISTA FORM: Declaración de impuesto -->
+    <!-- FIN VISTA FORM: Planilla de pagos -->
 
-    <!-- VISTA TREE: Declaración de impuesto -->
+    <!-- VISTA TREE: Planilla de pagos -->
     <record id="view_account_tax_return_tree" model="ir.ui.view">
         <field name="name">account.tax.return.tree</field>
         <field name="model">account.tax.return</field>
@@ -56,13 +56,13 @@
             </tree>
         </field>
     </record>
-    <!-- FIN VISTA TREE: Declaración de impuesto -->
+    <!-- FIN VISTA TREE: Planilla de pagos -->
 
     <record id="view_account_tax_return_search" model="ir.ui.view">
         <field name="name">account.tax.return.search</field>
         <field name="model">account.tax.return</field>
         <field name="arch" type="xml">
-            <search string="Declaración de impuestos">
+            <search string="Planilla de pagoss">
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="account"/>
@@ -75,7 +75,7 @@
                 <filter name="group_by_date" string="Emisión" context="{'group_by':'date'}"/>
                 <filter name="group_by_date_due" string="Vencimiento" context="{'group_by':'date_due'}"/>
                 <filter name="group_by_state" string="Estatus" context="{'group_by':'state'}"/>
-                <filter name="group_by_template_id" string="Tipo de plantilla" context="{'group_by':'template_id'}"/>
+                <filter name="group_by_template_id" string="Tipo de Planilla" context="{'group_by':'template_id'}"/>
                 <filter name="group_by_tax_id" string="Tipo de impuesto" context="{'group_by':'tax_id'}"/>
             </search>
         </field>
@@ -85,7 +85,7 @@
         <field name="name">account.tax.return.view.graph</field>
         <field name="model">account.tax.return</field>
         <field name="arch" type="xml">
-            <graph string="Declaración de impuesto" type="bar" sample="1" disable_linking="0">
+            <graph string="Planilla de pagos" type="bar" sample="1" disable_linking="0">
                 <field name="state" type="row"/>
             </graph>
         </field>
@@ -95,7 +95,7 @@
          <field name="name">account.tax.return.pivot</field>
          <field name="model">account.tax.return</field>
          <field name="arch" type="xml">
-             <pivot string="Declaración de impuesto" disable_linking="0" sample="1">
+             <pivot string="Planilla de pagos" disable_linking="0" sample="1">
                  <field name="state" type="row"/>
                  <field name="tax_id" type="col"/>
                  <!-- <field name="template_id" type="col"/> -->
@@ -114,15 +114,104 @@
         </field>
     </record>
 
-    <!-- ACTION: Declaración de impuesto -->
+    <!-- ACTION: Planilla de pagos -->
     <record id="action_account_tax_return" model="ir.actions.act_window">
+        <field name="name">Planilla de pagos</field>
+        <field name="res_model">account.tax.return</field>
+        <field name="view_mode">tree,form,graph,pivot,map</field>
+        <field name="context">{
+            'graph_groupbys': ['state'],
+            'tree_groupbys': ['partner_id'],
+            'default_type_tax': 'payment',
+        }</field>
+        <field name="domain">[('type_tax', '!=', 'tax')]</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click para crear un nuevo registro
+          </p>
+        </field>
+    </record>
+    <!-- FIN ACTION: Planilla de pagos -->
+
+    <!-- VISTA FORM: Declaración de impuesto -->
+    <record id="view_account_tax_return_tax_form" model="ir.ui.view">
+        <field name="name">account.tax.return.form</field>
+        <field name="model">account.tax.return</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.tax.return">
+                <header>
+                    <field name="state" widget="statusbar" options="{'clickable':True}"/>
+                </header>
+                <sheet>
+                    <group col="4" colspan="2">
+                        <field name="currency_id" invisible="1"/>
+                        <field name="currency_usd_id" invisible="1"/>
+                        <field name="partner_id"/>
+                        <field name="account"/>
+                        <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        <field name="amount_usd" string="Monto" widget="monetary" options="{'currency_field': 'currency_usd_id'}"/>
+                        <field name="date"/>
+                        <field name="date_due"/>
+                        <field name="concept"/>
+                        <field name="template_id"/>
+                        <field name="tax_id"/>
+                        <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}"/>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- FIN VISTA FORM: Declaración de impuesto -->
+
+    <!-- VISTA TREE: Declaración de impuesto -->
+    <record id="view_account_tax_return_tax_tree" model="ir.ui.view">
+        <field name="name">account.tax.return.tree</field>
+        <field name="model">account.tax.return</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.tax.return">
+                <field name="currency_id" invisible="1"/>
+                <field name="currency_usd_id" invisible="1"/>
+                <field name="partner_id"/>
+                <field name="account"/>
+                <field name="concept"/>
+                <field name="amount" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Total Bs"/>
+                <field name="amount_usd" string="Monto" widget="monetary" options="{'currency_field': 'currency_usd_id'}" sum="Total USD"/>
+                <field name="date"/>
+                <field name="date_due"/>
+                <field name="template_id"/>
+                <field name="tax_id"/>
+                <field name="state"/>
+                <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}" optional="hidden"/>
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Declaración de impuesto -->
+
+    <record id="account_tax_return_tax_view_map" model="ir.ui.view">
+        <field name="name">account.tax.return.view.map</field>
+        <field name="model">account.tax.return</field>
+        <field name="arch" type="xml">
+            <map res_partner="partner_id" panel_title="Contribuyentes">
+                <field name="name" string="Cuenta"/>
+                <field name="partner_id" string="Contribuyente"/>
+            </map>
+        </field>
+    </record>
+
+    <!-- ACTION: Declaración de impuesto -->
+    <record id="action_account_tax_return_tax" model="ir.actions.act_window">
         <field name="name">Declaración de impuesto</field>
         <field name="res_model">account.tax.return</field>
         <field name="view_mode">tree,form,graph,pivot,map</field>
         <field name="context">{
             'graph_groupbys': ['state'],
             'tree_groupbys': ['partner_id'],
+            'default_type_tax': 'tax',
         }</field>
+        <field name="domain">[('type_tax', '=', 'tax')]</field>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
             Click para crear un nuevo registro
@@ -130,6 +219,25 @@
         </field>
     </record>
     <!-- FIN ACTION: Declaración de impuesto -->
+
+    <record id="action_account_tax_return_tax1" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_account_tax_return_tax_form"/>
+        <field name="act_window_id" ref="action_account_tax_return_tax"/>
+    </record>
+    <record id="action_account_tax_return_tax2" model="ir.actions.act_window.view">
+        <field eval="0" name="sequence"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_account_tax_return_tax_tree"/>
+        <field name="act_window_id" ref="action_account_tax_return_tax"/>
+    </record>
+    <record id="action_account_tax_return_tax3" model="ir.actions.act_window.view">
+        <field eval="1" name="sequence"/>
+        <field name="view_mode">map</field>
+        <field name="view_id" ref="account_tax_return_tax_view_map"/>
+        <field name="act_window_id" ref="action_account_tax_return_tax"/>
+    </record>
 
 <!-- ==================================================================== -->
         
@@ -229,22 +337,28 @@
         
 
 <!-- ====================== MENUS ====================== -->
-    <menuitem name="Declaración de impuestos"
+    <menuitem name="Declaraciones de impuestos"
               id="menu_tax_return"
               web_icon="declaration_tax_return,static/description/icon.png"
               sequence="60"/>
+
+        <menuitem name="Declaración de impuestos"
+                  id="menu_account_tax_return_tax"
+                  action="action_account_tax_return_tax"
+                  parent="menu_tax_return"
+                  sequence="10"/>
         
-        <menuitem name="Declaración de impuesto"
+        <menuitem name="Planilla de pagos"
                   id="menu_account_tax_return"
                   action="action_account_tax_return"
                   parent="menu_tax_return"
-                  sequence="10"/>
+                  sequence="20"/>
 
         <menuitem name="Configuración"
                   id="menu_account_tax_return_config"
                   action="action_account_tax_return"
                   parent="menu_tax_return"
-                  sequence="10"/>
+                  sequence="99"/>
         
         <menuitem name="Tipo de planilla"
                   id="menu_account_template_type"

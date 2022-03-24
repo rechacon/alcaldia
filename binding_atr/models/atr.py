@@ -3,7 +3,8 @@ from odoo import api, models, fields
 
 
 TYPE_ATR = [('partner', 'Contactos'),
-            ('payment', 'Declaraciones de Impuestos'),
+            ('payment', 'Planillas de pagos'),
+            ('tax', 'Declaraciones de Impuestos'),
             ('update_address', 'Actualizar dirección de contactos'), ]
 
 
@@ -26,6 +27,11 @@ class ATR(models.Model):
     def _cron_update_payment(self):
         """Cron para actualizar los pagos"""
         atr = self.env['atr'].search([('type_atr', '=', 'payment')])
+        atr.connect_atr()
+
+    def _cron_update_tax(self):
+        """Cron para actualizar las declaraciones"""
+        atr = self.env['atr'].search([('type_atr', '=', 'tax')])
         atr.connect_atr()
 
     def _cron_update_address(self):
@@ -64,6 +70,14 @@ class ATR(models.Model):
             self.create_payment()
         elif self.type_atr == 'update_address':
             self.create_update_address()
+        elif self.type_atr == 'tax':
+            self.create_tax()
+
+    def parser_number(self, number):
+        """Parsear número telefónico"""
+        if number and number[0] == '0':
+            number = '+58' + number[1:]
+        return number
 
     def create_partner(self):
         """Crear Partner"""
@@ -87,6 +101,9 @@ class ATR(models.Model):
             email_second = rec[5].strip().replace(',', '').replace(' ', '') if rec[5] else ''
             mobile = rec[6].strip().replace(',', '').replace(' ', '') if rec[6] else ''
             phone = rec[7].strip().replace(',', '').replace(' ', '') if rec[7] else ''
+            # Parsear números telefónicos
+            mobile = self.parser_number(mobile)
+            phone = self.parser_number(phone)
             values = {
                 'vat': vat,
                 'name': name,
@@ -121,7 +138,7 @@ class ATR(models.Model):
             self.create_partner()
 
     def create_payment(self):
-        """Crear Partner"""
+        """Crear planilla de pagos"""
         cursor = self.env['atr.connect'].search([], limit=1)
         cursor = cursor.credentials_atr().cursor()
         # Obtener log
@@ -152,6 +169,7 @@ class ATR(models.Model):
                 tax_id = tax_id.create({'name': rec[8]})
             state = 'payment' if rec[9] == 'PAGADA' else 'pending'
             partner_id = self.env['res.partner'].search([('vat', '=', vat)])
+            type_tax = 'payment'
             if not partner_id:
                 log_id.ignore += 1
                 log_id.flag += 1
@@ -169,6 +187,7 @@ class ATR(models.Model):
                 'state': state,
                 'template_id': template_id.id,
                 'tax_id': tax_id.id,
+                'type_tax': type_tax,
             }
             print(f'\n{values}\n')
 
@@ -179,6 +198,7 @@ class ATR(models.Model):
                 del values['partner_id']
                 del values['name']
                 del values['account']
+                del values['type_tax']
                 declaration_id.write(values)
                 log_id.upd += 1
             else:
@@ -193,6 +213,90 @@ class ATR(models.Model):
             self.env.cr.commit()
         else:
             self.create_payment()
+
+    def create_tax(self):
+        """Crear Declaraciones de impuestos"""
+        cursor = self.env['atr.connect'].search([], limit=1)
+        cursor = cursor.credentials_atr().cursor()
+        # Obtener log
+        log_id = self.get_last_log(cursor)
+        if not log_id:
+            return False
+        # Consulta SQL
+        cursor.execute(self.sql.replace('{offset}', str(log_id.flag)).replace('{limit}', str(self.lote)))
+        records = cursor.fetchall()
+        # Objetos
+        declaration_id = self.env['account.tax.return']
+        template_id = self.env['account.template.type']
+        tax_id = self.env['account.declaration.tax.type']
+        for rec in records:
+            id_tax = rec[0]
+            vat = rec[1].strip().replace(',', '').replace(' ', '')
+            account = rec[3].strip().replace(',', '').replace(' ', '')
+            amount = rec[4]
+            concept = rec[5].strip().replace(',', '').replace(' ', '')
+            date = rec[6]
+            date_due = rec[7]
+            if template_id.search([('name', '=', rec[8])]):
+                template_id = template_id.search([('name', '=', rec[8])])
+            else:
+                template_id = template_id.create({'name': rec[8]})
+            if tax_id.search([('name', '=', rec[9])]):
+                tax_id = tax_id.search([('name', '=', rec[9])])
+            else:
+                tax_id = tax_id.create({'name': rec[9]})
+            state = 'payment' if rec[10] == 'PAGADA' else 'pending'
+            type_tax = 'tax'
+            name = account
+            partner_id = self.env['res.partner'].search([('vat', '=', vat)])
+            if not partner_id:
+                log_id.ignore += 1
+                log_id.flag += 1
+                log_id.date_end = fields.Datetime.now()
+                self.env.cr.commit()
+                continue
+
+            values = {
+                'partner_id': partner_id.id,
+                'name': name,
+                'amount': amount,
+                'date': date,
+                'date_due': date_due,
+                'account': account,
+                'state': state,
+                'template_id': template_id.id,
+                'tax_id': tax_id.id,
+                'id_tax': id_tax,
+                'concept': concept,
+                'type_tax': type_tax,
+            }
+            print(f'\n{values}\n')
+
+            if declaration_id.search([('id_tax', '=', id_tax)]) and date.year < 2022:
+                log_id.ignore += 1
+            elif declaration_id.search(['&', ('id_tax', '=', id_tax), ('state', '=', 'payment')]):
+                log_id.ignore += 1
+            elif declaration_id.search([('id_tax', '=', id_tax)]):
+                declaration_id = declaration_id.search([('id_tax', '=', id_tax)])
+                del values['id_tax']
+                del values['partner_id']
+                del values['name']
+                del values['account']
+                del values['type_tax']
+                declaration_id.write(values)
+                log_id.upd += 1
+            else:
+                declaration_id = declaration_id.create(values)
+                log_id.qty += 1
+            log_id.flag += 1
+            log_id.date_end = fields.Datetime.now()
+            self.env.cr.commit()
+        if log_id.flag == log_id.total:
+            # Aquí enviar correo
+            log_id.send = True
+            self.env.cr.commit()
+        else:
+            self.create_tax()
 
     def create_update_address(self):
         """Actualizar dirección de contactos"""
@@ -288,6 +392,7 @@ class ATRLog(models.Model):
             type_atr = {
                 'partner': 'Contactos',
                 'payment': 'Pagos',
+                'tax': 'Impuestos',
                 'update_address': 'Dirección de Contribuyentes',
             }
             type_name = type_atr[rec.atr_id.type_atr]

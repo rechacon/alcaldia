@@ -32,7 +32,7 @@ WHERE firm_name not ilike '%prueba%' AND u.id IS NOT NULL
 -- AND t.active AND NOT deleted -- SOLO PARA CONTRIBUYENTES ACTIVOS</field>
 	    </record>
 	    <record id="atr_payment" model="atr">
-	        <field name="name">Conexión a Declaraciones de Impuestos</field>
+	        <field name="name">Conexión a Planillas de Pagos</field>
 	        <field name="type_atr">payment</field>
 	        <field name="sql">SELECT
     rif,
@@ -110,6 +110,40 @@ ORDER BY firm_name, tax_account_number</field>
             <field name="sql_count">SELECT COUNT(*)
 FROM res_partner
 WHERE vat IS NOT NULL AND active = True</field>
+        </record>
+        <record id="atr_tax" model="atr">
+            <field name="name">Conexión a Declaraciones de Impuestos</field>
+            <field name="type_atr">tax</field>
+            <field name="sql">SELECT transaction.id,
+rif,
+firm_name AS contribuyente,
+tax_account_number AS planilla,
+transaction.amount AS monto,
+concept,
+application_date AS emision,
+transaction.expiry_date AS vencimiento,
+'IMPUESTOS',
+tax_type.name as tipo_impuesto,
+CASE
+    WHEN (transaction.debt_status = 1 OR transaction.debt_status = 2) THEN 'PENDIENTE'
+    ELSE 'PAGADA'
+END AS estatus_planilla
+FROM transaction
+LEFT JOIN public.tax ON transaction.id_tax = tax.id
+LEFT JOIN taxpayer ON tax.id_taxpayer = taxpayer.id
+LEFT JOIN tax_type ON  tax.id_tax_type  = tax_type.id
+WHERE transaction.canceled=false AND taxpayer.firm_name not ilike '%prueba%'
+and transaction.id_transaction_type=1
+ORDER BY 1 ASC
+OFFSET {offset} LIMIT {limit}</field>
+            <field name="sql_count">SELECT
+COUNT(*)
+FROM transaction
+LEFT JOIN public.tax ON transaction.id_tax = tax.id
+LEFT JOIN taxpayer ON tax.id_taxpayer = taxpayer.id
+LEFT JOIN tax_type ON  tax.id_tax_type  = tax_type.id
+WHERE transaction.canceled=false AND taxpayer.firm_name not ilike '%prueba%'
+and transaction.id_transaction_type=1</field>
         </record>
 	</data>
 </odoo>
