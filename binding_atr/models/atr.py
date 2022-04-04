@@ -231,11 +231,24 @@ class ATR(models.Model):
         tax_id = self.env['account.declaration.tax.type']
         for rec in records:
             id_tax = rec[0]
+            date = rec[6]
             vat = rec[1].strip().replace(',', '').replace(' ', '')
+            partner_id = self.env['res.partner'].search([('vat', '=', vat)])
+            # Primer caso para ignorar un registro
+            if not partner_id:
+                log_id.ignore += 1
+                log_id.flag += 1
+                log_id.date_end = fields.Datetime.now()
+                self.env.cr.commit()
+                continue
+            # Segundo caso para ignorar un registro
+            if declaration_id.search([('id_tax', '=', id_tax)]) and date.year < 2022:
+                log_id.ignore += 1
+            elif declaration_id.search(['&', ('id_tax', '=', id_tax), ('state', '=', 'payment')]):
+                log_id.ignore += 1
             account = rec[3].strip().replace(',', '').replace(' ', '')
             amount = rec[4]
             concept = rec[5].strip().replace(',', '').replace(' ', '')
-            date = rec[6]
             date_due = rec[7]
             if template_id.search([('name', '=', rec[8])]):
                 template_id = template_id.search([('name', '=', rec[8])])
@@ -248,13 +261,6 @@ class ATR(models.Model):
             state = 'payment' if rec[10] == 'PAGADA' else 'pending'
             type_tax = 'tax'
             name = account
-            partner_id = self.env['res.partner'].search([('vat', '=', vat)])
-            if not partner_id:
-                log_id.ignore += 1
-                log_id.flag += 1
-                log_id.date_end = fields.Datetime.now()
-                self.env.cr.commit()
-                continue
 
             values = {
                 'partner_id': partner_id.id,
@@ -272,11 +278,7 @@ class ATR(models.Model):
             }
             print(f'\n{values}\n')
 
-            if declaration_id.search([('id_tax', '=', id_tax)]) and date.year < 2022:
-                log_id.ignore += 1
-            elif declaration_id.search(['&', ('id_tax', '=', id_tax), ('state', '=', 'payment')]):
-                log_id.ignore += 1
-            elif declaration_id.search([('id_tax', '=', id_tax)]):
+            if declaration_id.search([('id_tax', '=', id_tax)]):
                 declaration_id = declaration_id.search([('id_tax', '=', id_tax)])
                 del values['id_tax']
                 del values['partner_id']
@@ -295,8 +297,9 @@ class ATR(models.Model):
             # Aquí enviar correo
             log_id.send = True
             self.env.cr.commit()
-        else:
-            self.create_tax()
+        # else:
+            # Comentado para hacer que se importe una vez y ya
+            # self.create_tax()
 
     def create_update_address(self):
         """Actualizar dirección de contactos"""
