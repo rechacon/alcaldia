@@ -19,6 +19,10 @@
 	                    <field name="type_atr" readonly="1"/>
 	                    <field name="lote" required="1"/>
 	                </group>
+	                <group attrs="{'invisible': [('type_atr', '!=', 'tax')]}">
+	                    <field name="csv" filename="file_name"/>
+	                    <field name="file_name" invisible="1"/>
+	                </group>
 	                <notebook>
 	                	<page string="SQL">
 		                    <field name="sql" required="1" colspan="4" widget="ace" />
@@ -76,6 +80,7 @@
 			<field name="port"/>
 			<field name="password" password="True"/>
 			<field name="active" widget="boolean_toggle"/>
+			<field name="type"/>
 		</tree>
 		</field>
 	</record>

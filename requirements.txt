@@ -1,0 +1,3 @@
+pandas
+multiprocesspandas
+odoo_import_export_client

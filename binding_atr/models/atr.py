@@ -1,4 +1,5 @@
 import psycopg2
+import xmlrpc.client
 from odoo import api, models, fields
 
 
@@ -81,7 +82,7 @@ class ATR(models.Model):
 
     def create_partner(self):
         """Crear Partner"""
-        cursor = self.env['atr.connect'].search([], limit=1)
+        cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
         cursor = cursor.credentials_atr().cursor()
         # Obtener log
         log_id = self.get_last_log(cursor)
@@ -139,7 +140,7 @@ class ATR(models.Model):
 
     def create_payment(self):
         """Crear planilla de pagos"""
-        cursor = self.env['atr.connect'].search([], limit=1)
+        cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
         cursor = cursor.credentials_atr().cursor()
         # Obtener log
         log_id = self.get_last_log(cursor)
@@ -214,96 +215,9 @@ class ATR(models.Model):
         else:
             self.create_payment()
 
-    def create_tax(self):
-        """Crear Declaraciones de impuestos"""
-        cursor = self.env['atr.connect'].search([], limit=1)
-        cursor = cursor.credentials_atr().cursor()
-        # Obtener log
-        log_id = self.get_last_log(cursor)
-        if not log_id:
-            return False
-        # Consulta SQL
-        cursor.execute(self.sql.replace('{offset}', str(log_id.flag)).replace('{limit}', str(self.lote)))
-        records = cursor.fetchall()
-        # Objetos
-        declaration_id = self.env['account.tax.return']
-        template_id = self.env['account.template.type']
-        tax_id = self.env['account.declaration.tax.type']
-        for rec in records:
-            id_tax = rec[0]
-            date = rec[6]
-            vat = rec[1].strip().replace(',', '').replace(' ', '')
-            partner_id = self.env['res.partner'].search([('vat', '=', vat)])
-            # Primer caso para ignorar un registro
-            if not partner_id:
-                log_id.ignore += 1
-                log_id.flag += 1
-                log_id.date_end = fields.Datetime.now()
-                self.env.cr.commit()
-                continue
-            # Segundo caso para ignorar un registro
-            if declaration_id.search([('id_tax', '=', id_tax)]) and date.year < 2022:
-                log_id.ignore += 1
-            elif declaration_id.search(['&', ('id_tax', '=', id_tax), ('state', '=', 'payment')]):
-                log_id.ignore += 1
-            account = rec[3].strip().replace(',', '').replace(' ', '')
-            amount = rec[4]
-            concept = rec[5].strip().replace(',', '').replace(' ', '')
-            date_due = rec[7]
-            if template_id.search([('name', '=', rec[8])]):
-                template_id = template_id.search([('name', '=', rec[8])])
-            else:
-                template_id = template_id.create({'name': rec[8]})
-            if tax_id.search([('name', '=', rec[9])]):
-                tax_id = tax_id.search([('name', '=', rec[9])])
-            else:
-                tax_id = tax_id.create({'name': rec[9]})
-            state = 'payment' if rec[10] == 'PAGADA' else 'pending'
-            type_tax = 'tax'
-            name = account
-
-            values = {
-                'partner_id': partner_id.id,
-                'name': name,
-                'amount': amount,
-                'date': date,
-                'date_due': date_due,
-                'account': account,
-                'state': state,
-                'template_id': template_id.id,
-                'tax_id': tax_id.id,
-                'id_tax': id_tax,
-                'concept': concept,
-                'type_tax': type_tax,
-            }
-            print(f'\n{values}\n')
-
-            if declaration_id.search([('id_tax', '=', id_tax)]):
-                declaration_id = declaration_id.search([('id_tax', '=', id_tax)])
-                del values['id_tax']
-                del values['partner_id']
-                del values['name']
-                del values['account']
-                del values['type_tax']
-                declaration_id.write(values)
-                log_id.upd += 1
-            else:
-                declaration_id = declaration_id.create(values)
-                log_id.qty += 1
-            log_id.flag += 1
-            log_id.date_end = fields.Datetime.now()
-            self.env.cr.commit()
-        if log_id.flag == log_id.total:
-            # Aquí enviar correo
-            log_id.send = True
-            self.env.cr.commit()
-        # else:
-            # Comentado para hacer que se importe una vez y ya
-            # self.create_tax()
-
     def create_update_address(self):
         """Actualizar dirección de contactos"""
-        cursor = self.env['atr.connect'].search([], limit=1)
+        cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
         cursor = cursor.credentials_atr().cursor()
         # Obtener log
         log_id = self.get_last_log(self.env.cr)
@@ -412,11 +326,23 @@ class ATRConnect(models.Model):
     user = fields.Char('Usuario', required=True)
     password = fields.Char(required=True)
     port = fields.Char('Puerto')
+    type = fields.Selection([('odoo', 'Odoo'), ('atr', 'ATR')], 'Tipo', required=True)
     active = fields.Boolean('Activo', default=True)
 
     @api.constrains('active')
     def check_records(self):
         """Chequear que solo exista una credencial activa"""
+
+    def credentials_odoo(self):
+        """Obtener sesion xmlrpc"""
+        url = self.server
+        name_bd = self.name_bd
+        username = self.user
+        password = self.password
+        common = xmlrpc.client.ServerProxy('{}/xmlrpc/2/common'.format(url))
+        uid = common.authenticate(name_bd, username, password, {})
+        session = xmlrpc.client.ServerProxy('{}/xmlrpc/2/object'.format(url))
+        return session, name_bd, uid, password
 
     def credentials_atr(self):
         """Credenciales ATR"""

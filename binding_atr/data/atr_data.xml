@@ -134,7 +134,7 @@ LEFT JOIN taxpayer ON tax.id_taxpayer = taxpayer.id
 LEFT JOIN tax_type ON  tax.id_tax_type  = tax_type.id
 WHERE transaction.canceled=false AND taxpayer.firm_name not ilike '%prueba%'
 and transaction.id_transaction_type=1 and extract(year from application_date) = 2022
-ORDER BY 1 ASC
+ORDER BY contribuyente ASC
 OFFSET {offset} LIMIT {limit}</field>
             <field name="sql_count">SELECT
 COUNT(*)
