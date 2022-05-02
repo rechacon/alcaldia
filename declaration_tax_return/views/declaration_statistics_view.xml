@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<odoo>
+    <!-- VISTA FORM: Estadisticas de declaraciones por cliente-->
+    <record id="view_account_declaration_statistics_form" model="ir.ui.view">
+        <field name="name">account.declaration.statistics.form</field>
+        <field name="model">account.declaration.statistics</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.declaration.statistics">
+                <group col="4" colspan="2">
+                    <field name="partner_id"/>
+                    <field name="total_tax"/>
+                    <field name="total_payment"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <!-- fin VISTA FORM: Estadisticas de declaraciones por cliente -->
+
+    <!-- VISTA TREE: Estadisticas de declaraciones por cliente-->
+    <record id="view_account_declaration_statistics_tree" model="ir.ui.view">
+        <field name="name">account.declaration.statistics.tree</field>
+        <field name="model">account.declaration.statistics</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.declaration.statistics">
+                <field name="partner_id"/>
+                <field name="total_tax"/>
+                <field name="total_payment"/>
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Estadisticas de declaraciones por cliente -->
+
+    <!--VISTA ACTION: Estadisticas de declaraciones por cliente-->
+    <record id="action_account_declaration_statistics" model="ir.actions.act_window">
+        <field name="name">Declaraciones por Cliente</field>
+        <field name="res_model">account.declaration.statistics</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click para crear un nuevo Registro
+            </p>
+        </field>
+    </record>
+    <!--FIN  VISTA ACTION: Estadisticas de declaraciones por cliente-->
+
+    <!--VISTA MENU: Estadisticas de declaraciones por cliente-->
+    <menuitem name="Estadisticas"
+              id="menu_account_declaration_statistics"
+              action="action_account_declaration_statistics"
+              parent="menu_tax_return"
+              sequence="20"/>
+    <!--FIN VISTA MENU: Estadisticas de declaraciones por cliente-->
+</odoo>

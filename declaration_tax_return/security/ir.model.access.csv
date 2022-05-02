@@ -4,3 +4,4 @@
 "access_account_declaration_tax_type","account.declaration.tax.type","model_account_declaration_tax_type","base.group_user",1,1,1,1
 "access_account_template_type_statistics","account.template.type.statistics","model_account_template_type_statistics","base.group_user",1,1,1,1
 "access_account_declaration_tax_type_statistics","account_declaration_tax_type_statistics","model_account_declaration_tax_type_statistics","base.group_user",1,1,1,1
+"access_account_declaration_statistics","account.declaration.statistics","model_account_declaration_statistics","base.group_user",1,1,1,1
