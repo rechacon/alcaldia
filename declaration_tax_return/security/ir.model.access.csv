@@ -2,3 +2,5 @@
 "access_account_tax_return","account.tax.return","model_account_tax_return","base.group_user",1,1,1,1
 "access_account_template_type","account.template.type","model_account_template_type","base.group_user",1,1,1,1
 "access_account_declaration_tax_type","account.declaration.tax.type","model_account_declaration_tax_type","base.group_user",1,1,1,1
+"access_account_template_type_statistics","account.template.type.statistics","model_account_template_type_statistics","base.group_user",1,1,1,1
+"access_account_declaration_tax_type_statistics","account_declaration_tax_type_statistics","model_account_declaration_tax_type_statistics","base.group_user",1,1,1,1

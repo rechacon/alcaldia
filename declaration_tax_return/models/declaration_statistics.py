@@ -9,8 +9,16 @@ class AccountDeclarationStatistics(models.Model):
 class AccountTemplateTypeStatistics(models.Model):
     _name = 'account.template.type.statistics'
     _description = 'Estadisticas de tipo de planilla'
+    
+    name_id = fields.Many2one('account.template.type', 'Tipo')
+    total = fields.float('Total')
+    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
 
 
 class AccountTaxTypeStatistics(models.Model):
     _name = 'account.declaration.tax.type.statistics'
     _description = 'Estadisticas de tipo de impuesto'
+    
+    name_id = fields.Many2one('account.template.type', 'Tipo')
+    total = fields.float('Total')
+    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
