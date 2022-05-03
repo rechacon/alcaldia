@@ -8,6 +8,8 @@ class AccountDeclarationStatistics(models.Model):
     partner_id = fields.Many2one('res.partner', 'Contribuyente')
     total_tax = fields.Integer('Total de Declaraciones')
     total_payment = fields.Integer('Total de Plantillas de Pago')
+    template_statistics_ids = fields.One2many('account.template.type.statistics','statistics_id','Estadística por Plantilla')
+    type_statistics_ids = fields.One2many('account.declaration.tax.type.statistics','statistics_id','Estadística por Impuesto')
     
 class AccountTemplateTypeStatistics(models.Model):
     _name = 'account.template.type.statistics'
@@ -25,3 +27,4 @@ class AccountTaxTypeStatistics(models.Model):
     name_id = fields.Many2one('account.template.type', 'Tipo')
     total = fields.Float('Total')
     statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
+
