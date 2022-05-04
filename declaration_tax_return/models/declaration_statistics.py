@@ -25,6 +25,6 @@ class AccountTaxTypeStatistics(models.Model):
     _name = 'account.declaration.tax.type.statistics'
     _description = 'Estadisticas de tipo de impuesto'
 
-    name = fields.Many2one('account.template.type', 'Tipo')
+    name = fields.Many2one('account.declaration.tax.type', 'Tipo')
     total = fields.Float('Total')
     statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
