@@ -11,10 +11,24 @@
                     <field name="partner_id"/>
                     <field name="total_tax"/>
                     <field name="total_payment"/>
-                </group>
-                <group col="4" colspan="2">
-                    <field name="template_statistics_ids"/>
-                    <field name="type_statistics_ids"/>
+                    <notebook>
+                        <page string="Plantillas">
+                            <field name="template_statistics_ids" colspan="4" nolabel="1">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                    <field name="total"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Impuestos">
+                            <field name="type_statistics_ids" colspan="4" nolabel="1">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                    <field name="total"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </group>
             </form>
         </field>
