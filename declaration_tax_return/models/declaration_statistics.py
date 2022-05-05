@@ -27,7 +27,7 @@ class AccountDeclarationStatistics(models.Model):
 
     partner_id = fields.Many2one('res.partner', 'Contribuyente')
     total_tax = fields.Integer('Declaraciones', compute='_compute_total_tax')
-    total_payment = fields.Integer('Planillas de Pago')
+    total_payment = fields.Integer('Planillas de Pago', compute='_compute_total_payment')
     template_statistics_ids = fields.One2many('account.template.type.statistics', 'statistics_id', 'Estadística por Plantilla')
     type_statistics_ids = fields.One2many('account.declaration.tax.type.statistics', 'statistics_id', 'Estadística por Impuesto')
 
@@ -39,13 +39,20 @@ class AccountDeclarationStatistics(models.Model):
                 rec.total_tax = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '=', 'tax')])
 
 
+    def _compute_total_payment(self):
+        """Obtiene el total de todos los pagos del contribuyente"""
+        for rec in self:
+            rec.total_payment = 0
+            if rec.partner_id:
+                rec.total_payment = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '=', 'payment')])
+
 class AccountTemplateTypeStatistics(models.Model):
     _name = 'account.template.type.statistics'
     _description = 'Estadisticas de tipo de planilla'
 
     name = fields.Many2one('account.template.type', 'Tipo')
     total_tax = fields.Integer('Total declaraciones', compute='_compute_total_tax')
-    total_payment = fields.Integer('Total planillas de pagos')
+    total_payment = fields.Integer('Total planillas de pagos', compute= '_compute_total_payment')
     statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
 
     def _compute_total_tax(self):
@@ -55,12 +62,34 @@ class AccountTemplateTypeStatistics(models.Model):
             if rec.statistics_id.partner_id:
                 rec.total_tax = self.env['account.tax.return'].search_count([('partner_id', '=', rec.statistics_id.partner_id.id), ('type_tax', '=', 'tax'), ('template_id', '=', rec.name.id)])
 
+    def _compute_total_payment(self):
+        """Calcula el total de declaraciones por tipo de impuesto"""
+        for rec in self:
+            rec.total_payment = 0
+            if rec.statistics_id.partner_id:
+                rec.total_payment = self.env['account.tax.return'].search_count([('partner_id', '=', rec.statistics_id.partner_id.id), ('type_tax', '=', 'payment'), ('template_id', '=', rec.name.id)])
+
 
 class AccountTaxTypeStatistics(models.Model):
     _name = 'account.declaration.tax.type.statistics'
     _description = 'Estadisticas de tipo de impuesto'
 
     name = fields.Many2one('account.declaration.tax.type', 'Tipo')
-    total_tax = fields.Integer('Total declaraciones')
-    total_payment = fields.Integer('Total planillas de pagos')
+    total_tax = fields.Integer('Total declaraciones', compute='_compute_total_tax')
+    total_payment = fields.Integer('Total planillas de pagos', compute= '_compute_total_payment')
     statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
+
+    def _compute_total_tax(self):
+        """Calcula el total de declaraciones por tipo de impuesto"""
+        for rec in self:
+            rec.total_tax = 0
+            if rec.statistics_id.partner_id:
+                rec.total_tax = self.env['account.tax.return'].search_count([('partner_id', '=', rec.statistics_id.partner_id.id), ('type_tax', '=', 'tax'), ('tax_id', '=', rec.name.id)])
+
+    
+    def _compute_total_payment(self):
+        """Calcula el total de declaraciones por tipo de impuesto"""
+        for rec in self:
+            rec.total_payment = 0
+            if rec.statistics_id.partner_id:
+                rec.total_payment = self.env['account.tax.return'].search_count([('partner_id', '=', rec.statistics_id.partner_id.id), ('type_tax', '=', 'payment'), ('tax_id', '=', rec.name.id)])
