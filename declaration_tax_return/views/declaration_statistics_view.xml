@@ -7,29 +7,34 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="account.declaration.statistics">
-                <group col="4" colspan="2">
-                    <field name="partner_id"/>
-                    <field name="total_tax"/>
-                    <field name="total_payment"/>
-                </group>
-                <notebook>
-                    <page string="Plantillas">
-                        <field name="template_statistics_ids" colspan="4" nolabel="1">
-                            <tree editable="top">
-                                <field name="name"/>
-                                <field name="total"/>
-                            </tree>
-                        </field>
-                    </page>
-                    <page string="Impuestos">
-                        <field name="type_statistics_ids" colspan="4" nolabel="1">
-                            <tree editable="top">
-                                <field name="name"/>
-                                <field name="total"/>
-                            </tree>
-                        </field>
-                    </page>
-                </notebook>
+                <sheet>
+                    <group col="4" colspan="2">
+                        <field name="partner_id" colspan="4"/>
+                        <separator string="Totales" colspan="4"/>
+                        <field name="total_tax"/>
+                        <field name="total_payment"/>
+                    </group>
+                    <notebook>
+                        <page string="Planillas">
+                            <field name="template_statistics_ids" colspan="4" nolabel="1">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                    <field name="total_tax"/>
+                                    <field name="total_payment"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Impuestos">
+                            <field name="type_statistics_ids" colspan="4" nolabel="1">
+                                <tree editable="top">
+                                    <field name="name"/>
+                                    <field name="total_tax"/>
+                                    <field name="total_payment"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
             </form>
         </field>
     </record>
