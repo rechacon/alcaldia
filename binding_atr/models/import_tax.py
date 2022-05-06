@@ -92,6 +92,7 @@ uid = 2"""
         """Crear Declaraciones de impuestos"""
         start = time.time()
         cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
+        company_id = cursor.company_id
         cursor = cursor.credentials_atr()
         # Obtener log
         log_id = self.get_last_log(cursor.cursor())
@@ -112,6 +113,7 @@ uid = 2"""
         df_tax['name'] = df_tax['account'].values
         df_tax['type_tax'] = 'tax'
         df_tax['id'] = df_tax['id_tax'].map('tax_{}'.format).values
+        df_tax['company_id'] = company_id.id
 
         # Cambiar valores de las columnas según una condición
         df_tax.loc[df_tax.state == 'PAGADA', 'state'] = 'payment'
