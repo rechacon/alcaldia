@@ -53,6 +53,7 @@
                 <field name="tax_id"/>
                 <field name="state"/>
                 <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}" optional="hidden"/>
+                <field name="company_id" optional="show"/>
             </tree>
         </field>
     </record>
@@ -72,6 +73,7 @@
                 <filter string="Monto mayor a 1000" name="gt_1000" domain="[('amount', '>=', 1000)]"/>
                 <filter name="group_by_account" string="Cuenta" context="{'group_by':'account'}"/>
                 <filter name="group_by_partner_id" string="Contribuyente" context="{'group_by':'partner_id'}"/>
+                <filter name="group_by_company_id" string="Alcaldía" context="{'group_by':'company_id'}"/>
                 <filter name="group_by_date" string="Emisión" context="{'group_by':'date'}"/>
                 <filter name="group_by_date_due" string="Vencimiento" context="{'group_by':'date_due'}"/>
                 <filter name="group_by_state" string="Estatus" context="{'group_by':'state'}"/>
@@ -185,6 +187,7 @@
                 <field name="tax_id"/>
                 <field name="state"/>
                 <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}" optional="hidden"/>
+                <field name="company_id" optional="show"/>
             </tree>
         </field>
     </record>
