@@ -13,7 +13,7 @@
             <field name="model_id" ref="binding_atr.model_atr" />
             <field name="binding_model_id" ref="binding_atr.model_atr" />
             <field name="code">model._cron_update_partner()</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record forcecreate="True" id="_cron_update_payment" model="ir.cron">
             <field name="name">Actualizar Pagos ATR</field>
@@ -27,7 +27,7 @@
             <field name="model_id" ref="binding_atr.model_atr" />
             <field name="binding_model_id" ref="binding_atr.model_atr" />
             <field name="code">model._cron_update_payment()</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
         <record forcecreate="True" id="_cron_update_tax" model="ir.cron">
             <field name="name">Actualizar Declaraciones de Impuestos ATR</field>
@@ -41,7 +41,7 @@
             <field name="model_id" ref="binding_atr.model_atr" />
             <field name="binding_model_id" ref="binding_atr.model_atr" />
             <field name="code">model._cron_update_tax()</field>
-            <field name="active" eval="False"/><!-- Esto no -->
+            <field name="active" eval="False"/>
         </record>
         <record forcecreate="True" id="_cron_update_address" model="ir.cron">
             <field name="name">Actualizar Dirección de los Contribuyentes</field>
@@ -55,7 +55,7 @@
             <field name="model_id" ref="binding_atr.model_atr" />
             <field name="binding_model_id" ref="binding_atr.model_atr" />
             <field name="code">model._cron_update_address()</field>
-            <field name="active" eval="False"/>
+            <field name="active" eval="True"/>
         </record>
     </data>
 </odoo>
