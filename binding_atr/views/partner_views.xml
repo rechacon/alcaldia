@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_atr_inherit_form" model="ir.ui.view">
+        <field name="name">res.partner.view.inherit.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button" type="object" name="view_declarations" icon="fa-th-list">
+                    <field string="Declaraciones" name="count_declaration" widget="statinfo"/>
+                </button>
+            </div>
+           <field name="vat" position="before">
+                <field name="partner_latitude"/>
+                <field name="partner_longitude"/>
+           </field>
+           <field name="vat" position="after">
+               <field name="type_person"/>
+           </field>
+           <field name="website" position="before">
+                <field name="email_second" widget="email"/>
+            </field>
+        </field>
+    </record>
+    <record id="ve_partner_address_form" model="ir.ui.view">
+        <field name="name">ve.res.partner.address.form</field>
+        <field name="model">res.partner</field>
+        <field name="priority" eval="900"/>
+        <field name="arch" type="xml">
+            <form>
+                <div class="o_address_format">
+                    <field name="street" placeholder="Dirección..." class="o_address_street"/>
+                    <field name="street2" placeholder="Sector..." class="o_address_street"/>
+                    <field name="city" placeholder="Ciudad" class="o_address_city"/>
+                    <field name="country_id" placeholder="País" class="o_address_state" options='{"no_open": True, "no_create": True}'/>
+                    <field name="zip" placeholder="C.P." class="o_address_zip"/>
+                    <field name="state_id" placeholder="Estado" options="{'no_open': True, 'no_quick_create': True, 'no_create': 'True'}" context="{'default_country_id': country_id}"/>
+                    <field name="municipality_id" options="{'no_open': True, 'no_quick_create': True, 'no_create': 'True'}" nolabel="1" placeholder="Municipio" string="Municipality" domain="[('state_id', '=', state_id)]" attrs="{'invisible': [('country_id', '!=', %(base.ve)s)]}"/>
+                    <field name="parish_id" options="{'no_open': True, 'no_quick_create': True, 'no_create': 'True'}" placeholder="Parroquia" domain="[('municipality_id', '=', municipality_id)]" nolabel="0" attrs="{'invisible': [('country_id', '!=', %(base.ve)s)]}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+</odoo>

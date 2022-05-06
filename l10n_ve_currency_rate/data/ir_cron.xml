@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data >
+        <record id="_cron_update_price_product" model="ir.cron">
+            <field name="name">Actualizar Producto</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(datetime.now(pytz.timezone('UTC')) + timedelta(days=1)).strftime('%Y-%m-%d 09:30:00')" />
+            <field name="doall" eval="False"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="priority">2</field>
+            <field name="state">code</field>
+            <field name="model_id" ref="l10n_ve_currency_rate.model_res_currency_exchange_rate" />
+            <field name="binding_model_id" ref="l10n_ve_currency_rate.model_res_currency_exchange_rate" />
+            <field name="code">model._cron_update_product()</field>
+            <field name="active" eval="True"/>
+        </record>
+        <record id="_cron_update_price_product_1PM" model="ir.cron">
+            <field name="name">Actualizar Producto (1:00PM)</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(datetime.now(pytz.timezone('UTC')) + timedelta(days=1)).strftime('%Y-%m-%d 13:30:00')" />
+            <field name="doall" eval="False"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="priority">2</field>
+            <field name="state">code</field>
+            <field name="model_id" ref="l10n_ve_currency_rate.model_res_currency_exchange_rate" />
+            <!-- <field name="binding_model_id" ref="l10n_ve_currency_rate.model_res_currency_exchange_rate" /> -->
+            <field name="code">model._cron_update_product()</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

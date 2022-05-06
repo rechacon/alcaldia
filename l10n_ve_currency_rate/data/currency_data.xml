@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <function name="write" model="ir.model.data">
+            <function name="search" model="ir.model.data">
+                <value eval="[('module', '=', 'base'), ('name', '=', 'VEF')]"/>
+            </function>
+            <value eval="{'noupdate': False}"/>
+        </function>
+        <record id="base.VEF" model="res.currency">
+            <field name="name">VES</field>
+            <field name="symbol">Bs.</field>
+            <field name="decimal_places">2</field>
+        </record>
+    </data>
+</odoo>
