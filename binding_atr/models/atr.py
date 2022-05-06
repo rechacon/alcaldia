@@ -327,6 +327,7 @@ class ATRConnect(models.Model):
     password = fields.Char(required=True)
     port = fields.Char('Puerto')
     type = fields.Selection([('odoo', 'Odoo'), ('atr', 'ATR')], 'Tipo', required=True)
+    company_id = fields.Many2one('res.company', 'Alcaldía')
     active = fields.Boolean('Activo', default=True)
 
     @api.constrains('active')

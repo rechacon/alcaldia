@@ -15,6 +15,7 @@ class AccountTaxReturn(models.Model):
         return ves
 
     partner_id = fields.Many2one('res.partner', 'Contribuyente')
+    company_id = fields.Many2one('res.company', 'Alcaldía')
     currency_id = fields.Many2one('res.currency', 'VES', default=_set_currency_id)
     currency_usd_id = fields.Many2one('res.currency', 'USD', default=_set_currency_usd_id)
     type_tax = fields.Selection([('payment', 'Pagos'), ('tax', 'Impuesto')], 'Tipo de registro')

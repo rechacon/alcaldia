@@ -81,6 +81,7 @@
 			<field name="password" password="True"/>
 			<field name="active" widget="boolean_toggle"/>
 			<field name="type"/>
+			<field name="company_id"/>
 		</tree>
 		</field>
 	</record>
