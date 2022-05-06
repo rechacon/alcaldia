@@ -141,6 +141,7 @@ class ATR(models.Model):
     def create_payment(self):
         """Crear planilla de pagos"""
         cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
+        company_id = cursor.company_id
         cursor = cursor.credentials_atr().cursor()
         # Obtener log
         log_id = self.get_last_log(cursor)
@@ -189,6 +190,7 @@ class ATR(models.Model):
                 'template_id': template_id.id,
                 'tax_id': tax_id.id,
                 'type_tax': type_tax,
+                'company_id': company_id.id,
             }
             print(f'\n{values}\n')
 
@@ -327,7 +329,7 @@ class ATRConnect(models.Model):
     password = fields.Char(required=True)
     port = fields.Char('Puerto')
     type = fields.Selection([('odoo', 'Odoo'), ('atr', 'ATR')], 'Tipo', required=True)
-    company_id = fields.Many2one('res.company', 'Alcaldía')
+    company_id = fields.Many2one('res.company', 'Alcaldía', required=True)
     active = fields.Boolean('Activo', default=True)
 
     @api.constrains('active')
