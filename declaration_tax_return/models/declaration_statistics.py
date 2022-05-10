@@ -90,6 +90,7 @@ class AccountDeclarationStatistics(models.Model):
                 count += 1
             if count == 100:
                 self.env.cr.commit()
+                count = 1
 
 
 class AccountTemplateTypeStatistics(models.Model):
