@@ -80,9 +80,10 @@ class AccountDeclarationStatistics(models.Model):
     def _cron_create_statistics(self):
         """Cron para crear estadísticas de todos los contribuyentes"""
         statistics = self.env['account.declaration.statistics']
-        partners_ids = set(statistics.search([]).ids)
+        partners_ids = set(statistics.search([]).mapped('partner_id'))
         partner_exists = set(self.env['res.partner'].search([('vat', '!=', False)]).ids)
         ids = partners_ids ^ partner_exists  # Obtener solo los valores distintos entre los 2 conjuntos
+        print(f'\n\n{len(ids)} {len(partners_ids)} {len(partner_exists)}\n\n')
         count = 1
         for rec in ids:
             if rec not in partners_ids:
