@@ -80,10 +80,9 @@ class AccountDeclarationStatistics(models.Model):
     def _cron_create_statistics(self):
         """Cron para crear estadísticas de todos los contribuyentes"""
         statistics = self.env['account.declaration.statistics']
-        partners_ids = set(statistics.search([]).mapped('partner_id'))
+        partners_ids = set(statistics.search([]).mapped('partner_id').ids)
         partner_exists = set(self.env['res.partner'].search([('vat', '!=', False)]).ids)
         ids = partners_ids ^ partner_exists  # Obtener solo los valores distintos entre los 2 conjuntos
-        print(f'\n\n{len(ids)} {len(partners_ids)} {len(partner_exists)}\n\n')
         count = 1
         for rec in ids:
             if rec not in partners_ids:
@@ -101,7 +100,7 @@ class AccountTemplateTypeStatistics(models.Model):
     name = fields.Many2one('account.template.type', 'Tipo')
     total_tax = fields.Integer('Total declaraciones', compute='_compute_total_tax')
     total_payment = fields.Integer('Total planillas de pagos', compute='_compute_total_payment')
-    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
+    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística', ondele="cascade")
 
     def _compute_total_tax(self):
         """Calcula el total de declaraciones por tipo de planilla"""
@@ -125,7 +124,7 @@ class AccountTaxTypeStatistics(models.Model):
     name = fields.Many2one('account.declaration.tax.type', 'Tipo')
     total_tax = fields.Integer('Total declaraciones', compute='_compute_total_tax')
     total_payment = fields.Integer('Total planillas de pagos', compute='_compute_total_payment')
-    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística')
+    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística', ondele="cascade")
 
     def _compute_total_tax(self):
         """Calcula el total de declaraciones por tipo de planilla"""
