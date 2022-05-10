@@ -13,6 +13,12 @@
                         <separator string="Totales" colspan="4"/>
                         <field name="total_tax"/>
                         <field name="total_payment"/>
+                        <separator string="Estatus de Pagos por Planilla" colspan="4"/>
+                        <field name="status_payment_payment"/>
+                        <field name="status_payment_pending"/>
+                        <separator string="Estatus de Pagos por Declaraciones" colspan="4"/>
+                        <field name="status_tax_payment"/>
+                        <field name="status_tax_pending"/>
                     </group>
                     <notebook>
                         <page string="Planillas">

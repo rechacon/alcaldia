@@ -30,6 +30,10 @@ class AccountDeclarationStatistics(models.Model):
     total_payment = fields.Integer('Planillas de Pago', compute='_compute_total_payment')
     template_statistics_ids = fields.One2many('account.template.type.statistics', 'statistics_id', 'Estadística por Plantilla')
     type_statistics_ids = fields.One2many('account.declaration.tax.type.statistics', 'statistics_id', 'Estadística por Impuesto')
+    status_payment_payment = fields.Integer('Pagado', compute='_compute_status_payment_payment')
+    status_payment_pending = fields.Integer('Pendiente', compute='_compute_status_payment_pending')
+    status_tax_payment = fields.Integer('Pagado', compute='_compute_status_tax_payment')
+    status_tax_pending = fields.Integer('Pendiente', compute='_compute_status_tax_pending')
 
     def _compute_total_tax(self):
         """Obtiene el total de todas las declaraciones del contribuyente"""
@@ -44,6 +48,34 @@ class AccountDeclarationStatistics(models.Model):
             rec.total_payment = 0
             if rec.partner_id:
                 rec.total_payment = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '!=', 'tax')])
+
+    def _compute_status_payment_payment(self):
+        """Obtiene el total de estatus de pagos del contribuyente por planillas de pago"""
+        for rec in self:
+            rec.status_payment_payment = 0
+            if rec.partner_id:
+                rec.status_payment_payment = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '!=', 'tax'), ('state', '=', 'payment')])
+
+    def _compute_status_payment_pending(self):
+        """Obtiene el total de estatus de pagos pendientes del contribuyente por planillas de pago"""
+        for rec in self:
+            rec.status_payment_pending = 0
+            if rec.partner_id:
+                rec.status_payment_pending = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '!=', 'tax'), ('state', '=', 'pending')])
+
+    def _compute_status_tax_payment(self):
+        """Obtiene el total de estatus de pagos del contribuyente por declaraciones"""
+        for rec in self:
+            rec.status_tax_payment = 0
+            if rec.partner_id:
+                rec.status_tax_payment = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '=', 'tax'), ('state', '=', 'payment')])
+
+    def _compute_status_tax_pending(self):
+        """Obtiene el total de estatus de pagos pendientes del contribuyente por declaraciones"""
+        for rec in self:
+            rec.status_tax_pending = 0
+            if rec.partner_id:
+                rec.status_tax_pending = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '=', 'tax'), ('state', '=', 'pending')])
 
 
 class AccountTemplateTypeStatistics(models.Model):
