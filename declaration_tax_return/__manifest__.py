@@ -11,6 +11,7 @@
                 'l10n_ve_currency_rate',
                 ],
     'data': ['security/ir.model.access.csv',
+             'data/ir_cron.xml',
              'views/tax_return_view.xml',
              'views/declaration_statistics_view.xml'
              ],

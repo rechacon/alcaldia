@@ -30,10 +30,10 @@ class AccountDeclarationStatistics(models.Model):
     total_payment = fields.Integer('Planillas de Pago', compute='_compute_total_payment')
     template_statistics_ids = fields.One2many('account.template.type.statistics', 'statistics_id', 'Estadística por Plantilla')
     type_statistics_ids = fields.One2many('account.declaration.tax.type.statistics', 'statistics_id', 'Estadística por Impuesto')
-    status_payment_payment = fields.Integer('Pagado', compute='_compute_status_payment_payment')
-    status_payment_pending = fields.Integer('Pendiente', compute='_compute_status_payment_pending')
-    status_tax_payment = fields.Integer('Pagado', compute='_compute_status_tax_payment')
-    status_tax_pending = fields.Integer('Pendiente', compute='_compute_status_tax_pending')
+    status_payment_payment = fields.Integer('Pagado (Pagos)', compute='_compute_status_payment_payment')
+    status_payment_pending = fields.Integer('Pendiente (Pagos)', compute='_compute_status_payment_pending')
+    status_tax_payment = fields.Integer('Pagado (Declaración)', compute='_compute_status_tax_payment')
+    status_tax_pending = fields.Integer('Pendiente (Declaración)', compute='_compute_status_tax_pending')
 
     def _compute_total_tax(self):
         """Obtiene el total de todas las declaraciones del contribuyente"""
@@ -76,6 +76,20 @@ class AccountDeclarationStatistics(models.Model):
             rec.status_tax_pending = 0
             if rec.partner_id:
                 rec.status_tax_pending = self.env['account.tax.return'].search_count([('partner_id', '=', rec.partner_id.id), ('type_tax', '=', 'tax'), ('state', '=', 'pending')])
+
+    def _cron_create_statistics(self):
+        """Cron para crear estadísticas de todos los contribuyentes"""
+        statistics = self.env['account.declaration.statistics']
+        partners_ids = set(statistics.search([]).ids)
+        partner_exists = set(self.env['res.partner'].search([('vat', '!=', False)]).ids)
+        ids = partners_ids ^ partner_exists  # Obtener solo los valores distintos entre los 2 conjuntos
+        count = 1
+        for rec in ids:
+            if rec not in partners_ids:
+                statistics.create({'partner_id': rec})
+                count += 1
+            if count == 100:
+                self.env.cr.commit()
 
 
 class AccountTemplateTypeStatistics(models.Model):
