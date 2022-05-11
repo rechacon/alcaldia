@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="municipal_comparison_graphic_form" model="ir.ui.view">
+        <field name="name">wizard.reports.form</field>
+        <field name="model">wizard.reports</field>
+        <field name="arch" type="xml">
+            <form string="Comparacion Municipal">
+                <group>
+                    <label for="date_start" string="Fechas"/>
+                    <div class="o_row">
+                        <field name="date_start"  class="oe_inline" placeholder="Inicio"/>
+                        <i class="fa fa-angle-right mx-1" aria-label="Arrow icon" title="a"/>
+                        <field name="date_end" class="oe_inline" placeholder="Fin"/>
+                    </div>
+                </group>
+                <footer>
+                    <button name="create_report_municipal_comparison_graphic" string="Generar informe gráfico" type="object" class="btn-primary"/>
+                    <button string="Cerrar" class="btn-primary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- <act_window id="action_municipal_comparison"
+        name="Generar Informe de expedientes"
+        res_model="wizard.crm.subject"
+        view_mode="form" target="new"/> -->
+
+    <record id="action_municipal_comparison" model="ir.actions.act_window">
+        <field name="name">Comparación municipal</field>
+        <field name="res_model">wizard.reports</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="report_municipal_comparison_action" model="ir.actions.report">
+        <field name="name">Generar informe de comparación municipal</field>
+        <field name="model">wizard.reports</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">declaration_tax_return.report_municipal_comparison</field>
+        <field name="report_file">declaration_tax_return.report_municipal_comparison</field>
+        <field name="print_report_name">'Comparación Municipal y Estadistícas - (%s | %s)' % (object.date_start, object.date_end)</field>
+        <field name="binding_type">report</field>
+    </record>
+
+    <menuitem name="Informes"
+              id="menu_wizard_reports"
+              parent="declaration_tax_return.menu_tax_return"
+              sequence="30"/>
+
+    <menuitem name="Comparación Municipal"
+              id="menu_municipal_comparison"
+              action="action_municipal_comparison"
+              parent="declaration_tax_return.menu_wizard_reports"
+              sequence="10"/>
+
+</odoo>

@@ -13,7 +13,13 @@
     'data': ['security/ir.model.access.csv',
              'data/ir_cron.xml',
              'views/tax_return_view.xml',
-             'views/declaration_statistics_view.xml'
+             'views/declaration_statistics_view.xml',
+
+             # Reports
+             'report/report_municipal_comparison.xml',
+
+             # Wizards
+             'wizard/wizard_reports_view.xml',
              ],
     'demo': [],
     'css': [],
