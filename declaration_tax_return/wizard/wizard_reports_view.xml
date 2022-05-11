@@ -42,8 +42,6 @@
         <field name="report_file">declaration_tax_return.report_municipal_comparison</field>
         <field name="print_report_name">'Comparación Municipal y Estadistícas - (%s | %s)' % (object.date_start, object.date_end)</field>
         <field name="binding_type">report</field>
-        <!-- <field name="target">new</field> -->
-        <!-- <field name="sequence" eval="1"/> -->
     </record>
 
     <menuitem name="Informes"
