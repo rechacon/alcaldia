@@ -5,6 +5,12 @@
              <t t-call="web.basic_layout">
                 <t t-foreach="docs" t-as="o">
                     <h1>Hola Mundo</h1>
+                    <h5>Ejemplo de un gráfico</h5>
+                    <!-- Aquí guardamos el grafico que construye el metodo  get_graphic en la variable graphic -->
+                    <t t-set="graphic" t-value="o.get_graphic()"/>
+                    <t t-if="graphic">
+                        <img t-attf-src="data:img/*;base64,{{graphic}}" alt="Example" class="img img-fluid w-75"/>
+                    </t>
                 </t>
             </t>
         </t>
