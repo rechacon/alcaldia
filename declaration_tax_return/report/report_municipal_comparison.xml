@@ -3,32 +3,606 @@
     <template id="report_municipal_comparison" name="Comparacion Municipal">
         <t t-call="web.html_container">
              <t t-call="web.basic_layout">
+                 <style>
+                    table {
+                        border: 2px solid #1f4e78;
+                        border-collapse: collapse;
+                        font-size: 12px;
+                    }
+                     h5{
+                      color:#273d69;
+                     }
+                    th, td {
+                      border: 1px solid black;
+                      border-collapse: collapse;
+                      padding: 1px;
+                      font-size: 10px;
+                    }
+                     .exampleone {
+                      background-color: teal;
+                      color: white;
+                    }
+                    </style>
                 <t t-foreach="docs" t-as="o">
-                    <h1>Hola Mundo</h1>
-                    <h5>Ejemplo de un gráfico</h5>
-                    <!-- Aquí guardamos el grafico que construye el metodo  get_graphic en la variable graphic -->
-                    <t t-set="graphic" t-value="o.get_graphic()"/>
-                    <t t-if="graphic">
-                        <img t-attf-src="data:img/*;base64,{{graphic}}" alt="Example" class="img img-fluid w-75"/>
-                    </t>
+                    <div>
+                        <h5>1. RECAUDACIÓN MENSUAL POR MUNICIPIO (Bs.)</h5>
+                        <table style="width:100%;font-size: 12px;">
+                            <tr>
+                                <th>Periodo</th>
+                                <th>Alcaldia 1</th>
+                                <th>Alcaldia 2</th>
+                                <th>Alcaldia 3</th>
+                                <th>Alcaldia 4</th>
+                                <th>Alcaldia 5</th>
+                                <th>Alcaldia 6</th>
+                                <th>Alcaldia 7</th>
+                                <th>Alcaldia 8</th>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                        </table>
+                        <table style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <t t-set="graphic" t-value="docs.retun_graph_base64(users)"/>
+                                            <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>
+
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div align="center">
+                                            <t t-set="graphic" t-value="docs.retun_graph_base64(users)"/>
+                                            <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+
+                        </div>
+                    <div style="margin-top:15px;">
+                        <h5>2. RECAUDACIÓN VS META MENSUAL, MARZO DE 2022 (Bs.)</h5>
+                        <table style="width:100%;font-size: 12px;">
+                            <tr>
+                                <th class="exampleone">RECAUDACIÓN 24-mar-22 </th>
+                                <th>Alcaldia 1</th>
+                                <th>Alcaldia 2</th>
+                                <th>Alcaldia 3</th>
+                                <th>Alcaldia 4</th>
+                                <th>Alcaldia 5</th>
+                                <th>Alcaldia 6</th>
+                                <th>Alcaldia 7</th>
+                                <th>Alcaldia 8</th>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                        </table>
+                    <table style="width:100%">
+                            <thead>
+                                <tr>
+                                    <td>
+                                        <div align="center">
+                                            <t t-set="graphic" t-value="docs.retun_graph_base64_2(users)"/>
+                                            <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div style="margin-top:150px;">
+                        <h5>3. INDICADORES MACROECONÓMICOS</h5>
+                    <table style="width:100%;font-size: 12px;">
+                        <tr>
+                            <th class="exampleone">Fecha Mes Año</th>
+                                <th>Alcaldia 1</th>
+                                <th>Alcaldia 2</th>
+                                <th>Alcaldia 3</th>
+                                <th>Alcaldia 4</th>
+                                <th>Alcaldia 5</th>
+                                <th>Alcaldia 6</th>
+                                <th>Alcaldia 7</th>
+                                <th>Alcaldia 8</th>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                    </table>
+                    <table style="width:100%">
+                            <thead>
+                                <tr style="background-color: #132864;">
+                                    <td>
+                                        <div align="center">
+                                            <t t-set="graphic" t-value="docs.retun_graph_base64_3(users)"/>
+                                            <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div style="margin-top:30px;">
+                        <h5>4. RECAUDACIÓN MENSUAL EXPRESADA EN $ (SEGÚN TIPO DE CAMBIO PROMEDIO DEL MES)</h5>
+                        <table style="width:100%">
+                            <tr>
+                             <th class="exampleone">Fecha Mes Año</th>
+                                <th>Alcaldia 1</th>
+                                <th>Alcaldia 2</th>
+                                <th>Alcaldia 3</th>
+                                <th>Alcaldia 4</th>
+                                <th>Alcaldia 5</th>
+                                <th>Alcaldia 6</th>
+                                <th>Alcaldia 7</th>
+                                <th>Alcaldia 8</th>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                            <tr>
+                                <td>ene-21</td>
+                                <td>ND</td>
+                                <td>250.862</td>
+                                <td>208.316</td>
+                                <td>142.298</td>
+                                <td>ND</td>
+                                <td>931.527</td>
+                                <td>1.597.006</td>
+                                <td>2.179.727</td>
+                            </tr>
+                    </table>
+                    <table style="width:100%">
+                            <thead>
+                                <tr style="background-color: #555555a1;" >
+                                    <td >
+                                        <div align="center" >
+                                            <t t-set="graphic" t-value="docs.retun_graph_base64_4(users)"/>
+                                            <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <div align="center" >
+                                            <t t-set="graphic" t-value="docs.retun_graph_base64_4(users)"/>
+                                            <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div >
                 </t>
             </t>
         </t>
     </template>
-
-    <!-- <record id="base_magnetic.paperformat_picking" model="report.paperformat">
-        <field name="name">PaperFormat Albaran</field>
-        <field name="default" eval="True" />
-        <field name="format">A4</field>
-        <field name="page_height">0</field>
-        <field name="page_width">0</field>
-        <field name="orientation">Portrait</field>
-        <field name="margin_top">102</field>
-        <field name="margin_bottom">40</field>
-        <field name="margin_left">6</field>
-        <field name="margin_right">6</field>
-        <field name="header_spacing">95</field>
-        <field name="dpi">90</field>
-    </record> -->
-
 </odoo>
