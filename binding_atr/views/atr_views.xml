@@ -82,6 +82,7 @@
 			<field name="active" widget="boolean_toggle"/>
 			<field name="type"/>
 			<field name="company_id"/>
+			<field name="logo" widget="image"/>
 		</tree>
 		</field>
 	</record>
