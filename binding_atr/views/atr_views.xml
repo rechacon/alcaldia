@@ -101,6 +101,7 @@
 		<field name="name">Conexión ATR</field>
 		<field name="res_model">atr.connect</field>
 		<field name="view_mode">tree</field>
+		<field name="domain">[('active', 'in', [False, True])]</field>
 		<field name="search_view_id" ref="atr_connect_view_search"/>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">
