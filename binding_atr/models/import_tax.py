@@ -1,9 +1,7 @@
-import base64
 import pandas as pd
 import time
 
 from multiprocesspandas import applyparallel
-from odoo_csv_tools import import_threaded
 from odoo import models, fields
 
 TEMPLATE_IDS = {}
@@ -66,28 +64,6 @@ class ATR(models.Model):
         for rec in data:
             PARTNER_IDS.update({rec[0]: rec[1]})
 
-    def import_csv_to_odoo(self):
-        """Este método es temportal"""
-        # Variables globales
-        config = """[Connection]
-hostname = localhost
-database = alcaldia
-login = admin
-password = 123
-protocol = xmlrpc
-port = 8015
-uid = 2"""
-        model = 'account.tax.return'
-        file_csv = base64.b64decode(self.csv)
-        context = "{'tracking_disable' : True}"
-        fail_file = 'fail.csv'
-        encoding = 'utf-8'
-        separator = ';'
-        ignore = False
-        import_threaded.import_data(config, model, file_csv=file_csv, context=context,
-                                    fail_file=fail_file, encoding=encoding, separator=separator,
-                                    ignore=ignore, max_connection=4, batch_size=10)
-
     def create_tax(self):
         """Crear Declaraciones de impuestos"""
         start = time.time()
@@ -112,8 +88,8 @@ uid = 2"""
         # Creando nuevas columnas
         df_tax['name'] = df_tax['account'].values
         df_tax['type_tax'] = 'tax'
+        df_tax['company_id.id'] = company_id.id
         df_tax['id'] = df_tax['id_tax'].map('tax_{}'.format).values
-        df_tax['company_id'] = company_id.id
 
         # Cambiar valores de las columnas según una condición
         df_tax.loc[df_tax.state == 'PAGADA', 'state'] = 'payment'
@@ -124,17 +100,23 @@ uid = 2"""
         self.get_tax_dict()
         self.get_partner_dict()
 
-        df_tax = df_tax.groupby(["partner_id.id"]).apply_parallel(multiprocess_data, num_processes=4)
+        total = len(df_tax)
+
+        df_tax = df_tax.groupby(["partner_id.id"]).apply_parallel(multiprocess_data, num_processes=230)
 
         # Borrar filas que no tienen partner
         df_tax.drop(df_tax.loc[df_tax['partner_id.id'] == False].index, inplace=True)
 
-        # Crear CSV
-        csv = df_tax.to_csv(sep=';', index=False)
-        b64 = base64.b64encode(csv.encode())
-        self.csv = b64
-        self.file_name = 'data.csv'
+        header = ['id_tax', 'partner_id.id', 'account', 'amount', 'concept', 'date', 'date_due', 'template_id.id', 'tax_id.id', 'state', 'name', 'type_tax', 'company_id.id', 'id']
+        self.env['account.tax.return'].load(header, df_tax.to_numpy().tolist())
+
+        import_total = len(df_tax)
+        ignore = total - import_total
+        # Establecer el log
+        log_id.date_end = fields.Datetime.now()
+        log_id.ignore += ignore
+        log_id.flag += total
+
         end = time.time()
-        # self.import_csv_to_odoo()
+
         print(f'\n\nTIME: {end - start}\n\n')
-        # data = base64.b64decode(self.csv)
