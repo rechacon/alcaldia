@@ -1,5 +1,5 @@
 from odoo import fields, models
-from mpl_toolkits.mplot3d import axes3d
+# from mpl_toolkits.mplot3d import axes3d
 import numpy as np
 import io
 import base64
