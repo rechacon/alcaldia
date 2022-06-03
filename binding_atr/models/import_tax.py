@@ -68,10 +68,9 @@ class ATR(models.Model):
     def _run_process_load(self, *list_df):
         """Aplicar el multiproceso"""
         header = ['id_tax', 'partner_id.id', 'account', 'amount', 'concept', 'date', 'date_due', 'template_id.id', 'tax_id.id', 'state', 'name', 'type_tax', 'company_id.id', 'id']
-        with api.Environment.manage():
-            with odoo.registry(self.env.cr.dbname).cursor() as new_cr:
-                new_env = api.Environment(new_cr, self.env.uid, self.env.context)
-                new_env['account.tax.return'].load(header, list_df)
+        with odoo.registry(self.env.cr.dbname).cursor() as new_cr:
+            new_env = api.Environment(new_cr, self.env.uid, self.env.context)
+            new_env['account.tax.return'].load(header, list_df)
 
     def create_tax(self):
         """Crear Declaraciones de impuestos"""
