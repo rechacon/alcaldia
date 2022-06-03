@@ -1,8 +1,9 @@
-import pandas as pd
 import time
+import threading
+import pandas as pd
+import odoo
 
-from multiprocesspandas import applyparallel
-from odoo import models, fields
+from odoo import models, fields, api
 
 TEMPLATE_IDS = {}
 TAX_IDS = {}
@@ -64,6 +65,14 @@ class ATR(models.Model):
         for rec in data:
             PARTNER_IDS.update({rec[0]: rec[1]})
 
+    def _run_process_load(self, *list_df):
+        """Aplicar el multiproceso"""
+        header = ['id_tax', 'partner_id.id', 'account', 'amount', 'concept', 'date', 'date_due', 'template_id.id', 'tax_id.id', 'state', 'name', 'type_tax', 'company_id.id', 'id']
+        with api.Environment.manage():
+            with odoo.registry(self.env.cr.dbname).cursor() as new_cr:
+                new_env = api.Environment(new_cr, self.env.uid, self.env.context)
+                new_env['account.tax.return'].load(header, list_df)
+
     def create_tax(self):
         """Crear Declaraciones de impuestos"""
         start = time.time()
@@ -102,13 +111,30 @@ class ATR(models.Model):
 
         total = len(df_tax)
 
-        df_tax = df_tax.groupby(["partner_id.id"]).apply_parallel(multiprocess_data, num_processes=230)
+        df_tax = df_tax.groupby(["partner_id.id"]).apply(multiprocess_data)
 
         # Borrar filas que no tienen partner
         df_tax.drop(df_tax.loc[df_tax['partner_id.id'] == False].index, inplace=True)
 
-        header = ['id_tax', 'partner_id.id', 'account', 'amount', 'concept', 'date', 'date_due', 'template_id.id', 'tax_id.id', 'state', 'name', 'type_tax', 'company_id.id', 'id']
-        self.env['account.tax.return'].load(header, df_tax.to_numpy().tolist())
+        # Multiproceso
+        list_df = df_tax.to_numpy().tolist()  # Convertir dataframe en lista
+        length = len(list_df)  # Longitud de las listas
+        list_1, list_2, list_3, list_4, list_5, list_6 = [list_df[i * length // 6: (i + 1) * length // 6] for i in range(6)]
+        # Separando los procesos
+        process_1 = threading.Thread(target=self._run_process_load, args=(list_1))
+        process_2 = threading.Thread(target=self._run_process_load, args=(list_2))
+        process_3 = threading.Thread(target=self._run_process_load, args=(list_3))
+        process_4 = threading.Thread(target=self._run_process_load, args=(list_4))
+        process_5 = threading.Thread(target=self._run_process_load, args=(list_5))
+        process_6 = threading.Thread(target=self._run_process_load, args=(list_6))
+
+        # Iniciando los procesos
+        process_1.start()
+        process_2.start()
+        process_3.start()
+        process_4.start()
+        process_5.start()
+        process_6.start()
 
         import_total = len(df_tax)
         ignore = total - import_total
