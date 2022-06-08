@@ -63,7 +63,7 @@ class ATR(models.Model):
             df_partner = pd.DataFrame(sql_query)  # Convertir la consulta en un dataframe
             header = ['vat', 'name', 'type_person',
                       'active', 'email', 'email_second', 'mobile',
-                      'phone']
+                      'phone', 'id']
             df_partner.columns = header  # Asignando el nuevo header
 
             # Creando nuevas columnas
@@ -82,9 +82,9 @@ class ATR(models.Model):
             total = len(df_partner)
             df_partner.drop(df_partner.loc[df_partner['vat'] == ''].index, inplace=True)
 
-            df_partner['id'] = df_partner['vat'].map('partner_{}'.format).values
-            df_partner['id'] = df_partner['id'].str.replace('-', '_')
-            df_partner['id'] = df_partner['id'].str.lower()
+            df_partner['id'] = df_partner['id'].map('partner_{}'.format).values
+            company_name = company_id.name.replace(' ', '_')
+            df_partner['id'] = df_partner['id'].str.replace('partner_', f'partner_{company_name.lower()}_')
 
             # Multiproceso
             list_df = df_partner.to_numpy().tolist()  # Convertir dataframe en lista
