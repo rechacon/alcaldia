@@ -77,6 +77,7 @@ class ATR(models.Model):
         start = time.time()
         cursor_ids = self.env['atr.connect'].search([('type', '=', 'atr')])
         for cursor in cursor_ids:
+            time. sleep(60)
             company_id = cursor.company_id
             cursor = cursor.credentials_atr()
             # Obtener log
