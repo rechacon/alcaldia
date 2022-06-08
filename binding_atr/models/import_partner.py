@@ -82,7 +82,7 @@ class ATR(models.Model):
             df_partner.drop(df_partner.loc[df_partner['vat'] == ''].index, inplace=True)
 
             df_partner['id'] = df_partner['vat'].map('partner_{}'.format).values
-            df_partner['id'] = df_partner['id'].str.lower.replace('-', '_')
+            df_partner['id'] = df_partner['id'].str.replace('-', '_').lower()
 
             # Multiproceso
             list_df = df_partner.to_numpy().tolist()  # Convertir dataframe en lista
