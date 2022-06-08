@@ -1,6 +1,6 @@
 import threading
+import time
 import pandas as pd
-import odoo
 
 from odoo import models, fields
 
@@ -51,6 +51,7 @@ class ATR(models.Model):
         """Crear Partner"""
         cursor_ids = self.env['atr.connect'].search([('type', '=', 'atr')])
         for cursor in cursor_ids:
+            time. sleep(60)
             company_id = cursor.company_id
             cursor = cursor.credentials_atr()
             # Obtener log
