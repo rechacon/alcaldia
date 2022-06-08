@@ -65,83 +65,85 @@ class ATR(models.Model):
         for rec in data:
             PARTNER_IDS.update({rec[0]: rec[1]})
 
-    def _run_process_load(self, *list_df):
+    def _run_process_load(self, header, model, list_df):
         """Aplicar el multiproceso"""
-        header = ['id_tax', 'partner_id.id', 'account', 'amount', 'concept', 'date', 'date_due', 'template_id.id', 'tax_id.id', 'state', 'name', 'type_tax', 'company_id.id', 'id']
+        header = header.split(';')
         with odoo.registry(self.env.cr.dbname).cursor() as new_cr:
             new_env = api.Environment(new_cr, self.env.uid, self.env.context)
-            new_env['account.tax.return'].load(header, list_df)
+            new_env[model].load(header, list_df)
 
     def create_tax(self):
         """Crear Declaraciones de impuestos"""
         start = time.time()
-        cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
-        company_id = cursor.company_id
-        cursor = cursor.credentials_atr()
-        # Obtener log
-        log_id = self.get_last_log(cursor.cursor())
-        if not log_id:
-            return False
-        # Consulta SQL
-        sql_query = pd.read_sql_query(self.sql.replace('{offset}', str(log_id.flag)).replace('{limit}', str(self.lote)), cursor)
+        cursor_ids = self.env['atr.connect'].search([('type', '=', 'atr')])
+        for cursor in cursor_ids:
+            company_id = cursor.company_id
+            cursor = cursor.credentials_atr()
+            # Obtener log
+            log_id = self.get_last_log(cursor.cursor(), company_id)
+            if not log_id:
+                return False
+            # Consulta SQL
+            sql_query = pd.read_sql_query(self.sql.replace('{offset}', str(log_id.flag)).replace('{limit}', str(self.lote)), cursor)
 
-        header = ['id_tax', 'partner_id.id', 'account',
-                  'amount', 'concept', 'date', 'date_due',
-                  'template_id.id', 'tax_id.id', 'state']
+            header = ['id_tax', 'partner_id.id', 'account',
+                      'amount', 'concept', 'date', 'date_due',
+                      'template_id.id', 'tax_id.id', 'state']
 
-        df_tax = pd.DataFrame(sql_query)  # Convertir la consulta en un dataframe
-        del(df_tax['contribuyente'])  # Eliminar la columna de contribuyente
-        df_tax.columns = header  # Asignando el nuevo header
+            df_tax = pd.DataFrame(sql_query)  # Convertir la consulta en un dataframe
+            del(df_tax['contribuyente'])  # Eliminar la columna de contribuyente
+            df_tax.columns = header  # Asignando el nuevo header
 
-        # Creando nuevas columnas
-        df_tax['name'] = df_tax['account'].values
-        df_tax['type_tax'] = 'tax'
-        df_tax['company_id.id'] = company_id.id
-        df_tax['id'] = df_tax['id_tax'].map('tax_{}'.format).values
+            # Creando nuevas columnas
+            df_tax['name'] = df_tax['account'].values
+            df_tax['type_tax'] = 'tax'
+            df_tax['company_id.id'] = company_id.id
+            df_tax['id'] = df_tax['id_tax'].map('tax_{}'.format).values
+            df_tax['id'] = df_tax['id'].str.replace('tax_', f'tax_{company_id.name.lower()}_')
 
-        # Cambiar valores de las columnas según una condición
-        df_tax.loc[df_tax.state == 'PAGADA', 'state'] = 'payment'
-        df_tax.loc[df_tax.state == 'PENDIENTE', 'state'] = 'pending'
+            # Cambiar valores de las columnas según una condición
+            df_tax.loc[df_tax.state == 'PAGADA', 'state'] = 'payment'
+            df_tax.loc[df_tax.state == 'PENDIENTE', 'state'] = 'pending'
 
-        # Llenar data maestra de las variables globales
-        self.get_template_dict()
-        self.get_tax_dict()
-        self.get_partner_dict()
+            # Llenar data maestra de las variables globales
+            self.get_template_dict()
+            self.get_tax_dict()
+            self.get_partner_dict()
 
-        total = len(df_tax)
+            total = len(df_tax)
 
-        df_tax = df_tax.groupby(["partner_id.id"]).apply(multiprocess_data)
+            df_tax = df_tax.groupby(["partner_id.id"]).apply(multiprocess_data)
 
-        # Borrar filas que no tienen partner
-        df_tax.drop(df_tax.loc[df_tax['partner_id.id'] == False].index, inplace=True)
+            # Borrar filas que no tienen partner
+            df_tax.drop(df_tax.loc[df_tax['partner_id.id'] == False].index, inplace=True)
 
-        # Multiproceso
-        list_df = df_tax.to_numpy().tolist()  # Convertir dataframe en lista
-        length = len(list_df)  # Longitud de las listas
-        list_1, list_2, list_3, list_4, list_5, list_6 = [list_df[i * length // 6: (i + 1) * length // 6] for i in range(6)]
-        # Separando los procesos
-        process_1 = threading.Thread(target=self._run_process_load, args=(list_1))
-        process_2 = threading.Thread(target=self._run_process_load, args=(list_2))
-        process_3 = threading.Thread(target=self._run_process_load, args=(list_3))
-        process_4 = threading.Thread(target=self._run_process_load, args=(list_4))
-        process_5 = threading.Thread(target=self._run_process_load, args=(list_5))
-        process_6 = threading.Thread(target=self._run_process_load, args=(list_6))
+            # Multiproceso
+            list_df = df_tax.to_numpy().tolist()  # Convertir dataframe en lista
+            length = len(list_df)  # Longitud de las listas
+            list_1, list_2, list_3, list_4, list_5, list_6 = [list_df[i * length // 6: (i + 1) * length // 6] for i in range(6)]
+            # Separando los procesos
+            process_1 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_1))
+            process_2 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_2))
+            process_3 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_3))
+            process_4 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_4))
+            process_5 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_5))
+            process_6 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_6))
 
-        # Iniciando los procesos
-        process_1.start()
-        process_2.start()
-        process_3.start()
-        process_4.start()
-        process_5.start()
-        process_6.start()
+            # Iniciando los procesos
+            process_1.start()
+            process_2.start()
+            process_3.start()
+            process_4.start()
+            process_5.start()
+            process_6.start()
 
-        import_total = len(df_tax)
-        ignore = total - import_total
-        # Establecer el log
-        log_id.date_end = fields.Datetime.now()
-        log_id.ignore += ignore
-        log_id.flag += total
+            import_total = len(df_tax)
+            ignore = total - import_total
+            # Establecer el log
+            log_id.date_end = fields.Datetime.now()
+            log_id.ignore += ignore
+            log_id.flag += total
 
-        end = time.time()
+            end = time.time()
 
-        print(f'\n\nTIME: {end - start}\n\n')
+            print(f'\n\nTIME: {end - start}\n\n')

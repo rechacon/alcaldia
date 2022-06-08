@@ -25,14 +25,14 @@ class Partner(models.Model):
     def _compute_count_declaration(self):
         """Contar el total de declaraciones"""
         for rec in self:
-            rec.count_declaration = self.env['account.tax.return'].search_count([('partner_id', '=', rec.id)])
+            rec.count_declaration = self.env['account.tax.return'].search_count([('partner_id', '=', rec.id), ('type_tax', '=', 'tax')])
 
     def view_declarations(self):
         """Ver declaraciones"""
         for rec in self:
-            action = self.env["ir.actions.act_window"]._for_xml_id('declaration_tax_return.action_account_tax_return')
+            action = self.env["ir.actions.act_window"]._for_xml_id('declaration_tax_return.action_account_tax_return_tax')
             ctx = eval(action['context'])
-            ctx.update({'default_partner_id': rec.id})
-            action['domain'] = [('partner_id', '=', rec.id)]
+            ctx.update({'default_partner_id': rec.id, 'default_type_tax': 'tax'})
+            action['domain'] = [('partner_id', '=', rec.id), ('type_tax', '=', 'tax')]
             action['context'] = ctx
             return action

@@ -4,8 +4,8 @@
         <record forcecreate="True" id="_cron_update_partner" model="ir.cron">
             <field name="name">Actualizar Contactos ATR</field>
             <field name="numbercall">-1</field>
-            <field name="interval_number">3</field>
-            <field name="interval_type">hours</field>
+            <field name="interval_number">20</field>
+            <field name="interval_type">minutes</field>
             <field name="doall" eval="False"/>
             <field name="user_id" ref="base.user_root"/>
             <field name="priority">2</field>
@@ -27,12 +27,12 @@
             <field name="model_id" ref="binding_atr.model_atr" />
             <field name="binding_model_id" ref="binding_atr.model_atr" />
             <field name="code">model._cron_update_payment()</field>
-            <field name="active" eval="True"/>
+            <field name="active" eval="False"/>
         </record>
         <record forcecreate="True" id="_cron_update_tax" model="ir.cron">
             <field name="name">Actualizar Declaraciones de Impuestos ATR</field>
             <field name="numbercall">-1</field>
-            <field name="interval_number">10</field>
+            <field name="interval_number">25</field>
             <field name="interval_type">minutes</field>
             <field name="doall" eval="False"/>
             <field name="user_id" ref="base.user_root"/>
@@ -55,7 +55,7 @@
             <field name="model_id" ref="binding_atr.model_atr" />
             <field name="binding_model_id" ref="binding_atr.model_atr" />
             <field name="code">model._cron_update_address()</field>
-            <field name="active" eval="True"/>
+            <field name="active" eval="False"/>
         </record>
     </data>
 </odoo>
