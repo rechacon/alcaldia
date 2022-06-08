@@ -100,7 +100,8 @@ class ATR(models.Model):
             df_tax['type_tax'] = 'tax'
             df_tax['company_id.id'] = company_id.id
             df_tax['id'] = df_tax['id_tax'].map('tax_{}'.format).values
-            df_tax['id'] = df_tax['id'].str.replace('tax_', f'tax_{company_id.name.lower()}_')
+            company_name = company_id.name.replace(' ', '_')
+            df_tax['id'] = df_tax['id'].str.replace('tax_', f'tax_{company_name.lower()}_')
 
             # Cambiar valores de las columnas según una condición
             df_tax.loc[df_tax.state == 'PAGADA', 'state'] = 'payment'
