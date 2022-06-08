@@ -67,7 +67,7 @@ class ATR(models.Model):
             df_partner.columns = header  # Asignando el nuevo header
 
             # Creando nuevas columnas
-            df_partner['company_id.id'] = 'False'
+            df_partner['company_id.id'] = company_id.id
             df_partner['is_company'] = 'True'
 
             df_partner = df_partner.groupby(["type_person"]).apply(multiprocess_partner_data)

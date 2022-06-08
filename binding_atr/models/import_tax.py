@@ -57,10 +57,10 @@ class ATR(models.Model):
         for tax in tax_ids:
             TAX_IDS.update({tax.name: tax.id})
 
-    def get_partner_dict(self):
+    def get_partner_dict(self, company_id):
         global PARTNER_IDS
         cursor = self._cr
-        cursor.execute("""SELECT vat, id FROM res_partner WHERE active = True AND vat != '' ORDER BY vat ASC""")
+        cursor.execute(f"""SELECT vat, id FROM res_partner WHERE active = True AND company_id = {company_id} AND vat != '' ORDER BY vat ASC""")
         data = cursor.fetchall()
         for rec in data:
             PARTNER_IDS.update({rec[0]: rec[1]})
@@ -110,7 +110,7 @@ class ATR(models.Model):
             # Llenar data maestra de las variables globales
             self.get_template_dict()
             self.get_tax_dict()
-            self.get_partner_dict()
+            self.get_partner_dict(company_id.id)
 
             total = len(df_tax)
 
