@@ -48,7 +48,7 @@ class ATR(models.Model):
         atr_obj = self.env['atr.log']
         if self.log_ids:
             date_now = fields.Datetime.now().strftime('%Y-%m-%d')
-            last_id = self.log_ids.filtered(lambda x: x.company_id.id == company_id.id).mapped('id')
+            last_id = self.log_ids.filtered(lambda x: x.create_date.strftime('%Y-%m-%d') == date_now and x.company_id.id == company_id.id).mapped('id')
             if not last_id:
                 new_log = atr_obj.create({
                     'date_start': fields.Datetime.now(),
