@@ -122,7 +122,7 @@ class ATR(models.Model):
             # Multiproceso
             list_df = df_tax.to_numpy().tolist()  # Convertir dataframe en lista
             length = len(list_df)  # Longitud de las listas
-            list_1, list_2, list_3, list_4, list_5, list_6, list_7, list_8, list_9 = [list_df[i * length // 6: (i + 1) * length // 6] for i in range(6)]
+            list_1, list_2, list_3, list_4, list_5, list_6, list_7, list_8, list_9 = [list_df[i * length // 9: (i + 1) * length // 9] for i in range(9)]
             # Separando los procesos
             process_1 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_1))
             process_2 = threading.Thread(target=self._run_process_load, args=(';'.join(list(df_tax.columns)), 'account.tax.return', list_2))
