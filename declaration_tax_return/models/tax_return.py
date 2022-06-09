@@ -41,6 +41,7 @@ class AccountTaxReturn(models.Model):
         result.append((record.id, record.name))
         return result
 
+    @api.depends('amount', 'sell_rate')
     def _compute_get_amount(self):
         """Obtener la tasa de cambio"""
         for rec in self:
