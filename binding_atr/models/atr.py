@@ -88,64 +88,6 @@ class ATR(models.Model):
         elif self.type_atr == 'tax':
             self.create_tax()
 
-    # def create_partner(self):
-    #     """Crear Partner"""
-    #     cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
-    #     cursor = cursor.credentials_atr().cursor()
-    #     # Obtener log
-    #     log_id = self.get_last_log(cursor)
-    #     if not log_id:
-    #         return False
-    #     # Consulta SQL
-    #     cursor.execute(self.sql.replace('{offset}', str(log_id.flag)).replace('{limit}', str(self.lote)))
-    #     records = cursor.fetchall()
-    #     # Objeto
-    #     partner_id = self.env['res.partner']
-    #     for rec in records:
-    #         vat = rec[0].strip().replace(',', '').replace(' ', '')
-    #         name = rec[1].strip().replace(',', '') if rec[1] else 'S/N'
-    #         type_person = rec[2].strip().replace(',', '').replace(' ', '')
-    #         active = True if rec[3].strip().replace(',', '').replace(' ', '') == 'ACTIVO' else False
-    #         email = rec[4].strip().replace(',', '').replace(' ', '') if rec[4] else ''
-    #         email_second = rec[5].strip().replace(',', '').replace(' ', '') if rec[5] else ''
-    #         mobile = rec[6].strip().replace(',', '').replace(' ', '') if rec[6] else ''
-    #         phone = rec[7].strip().replace(',', '').replace(' ', '') if rec[7] else ''
-    #         # Parsear números telefónicos
-    #         mobile = self.parser_number(mobile)
-    #         phone = self.parser_number(phone)
-    #         values = {
-    #             'vat': vat,
-    #             'name': name,
-    #             'type_person': type_person,
-    #             'is_company': True if type_person == 'JURIDICO' else False,
-    #             'active': active,
-    #             'email': email,
-    #             'email_second': email_second,
-    #             'mobile': mobile,
-    #             'phone': phone,
-    #         }
-    #         print(f'\n{values}\n')
-    #         if partner_id.search(['&', ('active', '=', 'False'), ('vat', '=', vat)]) and not active:
-    #             log_id.ignore += 1
-    #         elif partner_id.search([('vat', '=', vat)]):
-    #             partner_id = partner_id.search([('vat', '=', vat)])
-    #             del values['vat']
-    #             del values['name']
-    #             partner_id.write(values)
-    #             log_id.upd += 1
-    #         else:
-    #             partner_id = partner_id.create(values)
-    #             log_id.qty += 1
-    #         log_id.flag += 1
-    #         log_id.date_end = fields.Datetime.now()
-    #         self.env.cr.commit()
-    #     if log_id.flag == log_id.total:
-    #         # Aquí enviar correo
-    #         log_id.send = True
-    #         self.env.cr.commit()
-    #     else:
-    #         self.create_partner()
-
     def create_payment(self):
         """Crear planilla de pagos"""
         cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
