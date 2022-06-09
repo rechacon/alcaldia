@@ -19,10 +19,10 @@
 	                    <field name="type_atr" readonly="1"/>
 	                    <field name="lote" required="1"/>
 	                </group>
-	                <group attrs="{'invisible': [('type_atr', '!=', 'tax')]}">
+	                <!-- <group attrs="{'invisible': [('type_atr', '!=', 'tax')]}">
 	                    <field name="csv" filename="file_name"/>
 	                    <field name="file_name" invisible="1"/>
-	                </group>
+	                </group> -->
 	                <notebook>
 	                	<page string="SQL">
 		                    <field name="sql" required="1" colspan="4" widget="ace" />
@@ -44,6 +44,7 @@
 				                    <field name="date_start" readonly="1"/>
 				                    <field name="date_end" readonly="1"/>
 				                    <field name="create_date" string="Fecha" readonly="1"/>
+				                    <field name="company_id" readonly="0"/>
 		                    	</tree>
 		                    </field>
 	                	</page>
@@ -82,6 +83,7 @@
 			<field name="active" widget="boolean_toggle"/>
 			<field name="type"/>
 			<field name="company_id"/>
+			<field name="logo" widget="image"/>
 		</tree>
 		</field>
 	</record>
@@ -101,6 +103,7 @@
 		<field name="name">Conexión ATR</field>
 		<field name="res_model">atr.connect</field>
 		<field name="view_mode">tree</field>
+		<field name="domain">[('active', 'in', [False, True])]</field>
 		<field name="search_view_id" ref="atr_connect_view_search"/>
 		<field name="help" type="html">
 			<p class="o_view_nocontent_smiling_face">

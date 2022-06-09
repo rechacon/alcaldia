@@ -23,7 +23,7 @@ class AccountTaxReturn(models.Model):
     concept = fields.Char('Concepto')
     name = fields.Char('Planilla')
     amount = fields.Float('Monto Bs.')
-    amount_usd = fields.Float('Monto USD')
+    amount_usd = fields.Float('Monto USD', compute='_compute_get_amount', store=True)
     sell_rate = fields.Float('Tasa del día', compute='_compute_get_rate')
     date = fields.Date('Emisión')
     date_due = fields.Date('Vencimiento')
@@ -40,6 +40,13 @@ class AccountTaxReturn(models.Model):
                 return result
         result.append((record.id, record.name))
         return result
+
+    @api.depends('amount', 'sell_rate')
+    def _compute_get_amount(self):
+        """Obtener la tasa de cambio"""
+        for rec in self:
+            rec.amount_usd = 0
+            rec._compute_get_rate()
 
     def _compute_get_rate(self):
         """Obtener tasa de cambio"""

@@ -18,7 +18,8 @@
     u.email AS email,
     u.correo_secundario AS email2,
     u.celular AS tlf_celular,
-    u.local AS tlf_local
+    u.local AS tlf_local,
+    t.id
 FROM taxpayer t
 LEFT JOIN appweb.users_web u ON u.id_taxpayer = t.id
 WHERE firm_name not ilike '%prueba%' AND u.id IS NOT NULL

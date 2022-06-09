@@ -1,3 +1,6 @@
 pandas
 multiprocesspandas
 odoo_import_export_client
+mpl_toolkits
+numpy
+cycler

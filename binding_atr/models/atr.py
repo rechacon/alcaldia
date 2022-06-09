@@ -40,26 +40,40 @@ class ATR(models.Model):
         atr = self.env['atr'].search([('type_atr', '=', 'update_address')])
         atr.connect_atr()
 
-    def get_last_log(self, cursor):
+    def get_last_log(self, cursor, company_id=False):
         """Obtener último log"""
         # Obtener número total de registros
         cursor.execute(self.sql_count)
         total = cursor.fetchall()[0][0]
         atr_obj = self.env['atr.log']
         if self.log_ids:
-            date = max(self.log_ids.mapped('create_date')).strftime('%Y-%m-%d')
             date_now = fields.Datetime.now().strftime('%Y-%m-%d')
-            log_id = self.log_ids.filtered(lambda x: x.create_date.strftime('%Y-%m-%d') == date)
+            last_id = self.log_ids.filtered(lambda x: x.company_id.id == company_id.id).mapped('id')
+            if not last_id:
+                new_log = atr_obj.create({
+                    'date_start': fields.Datetime.now(),
+                    'atr_id': self.id,
+                    'flag': 0,
+                    'total': total,
+                    'company_id': company_id.id,
+                })
+                return new_log
+            last_id = max(last_id)
+            log_id = self.log_ids.filtered(lambda x: x.id == last_id)
+            # Obtener la fecha del ultimo id
+            date = log_id.create_date.strftime('%Y-%m-%d')
+
             log_id.total = total
-            if log_id.total != log_id.flag and date == date_now:
+            if log_id.total != log_id.flag and date == date_now and company_id.id == log_id.company_id.id:
                 return log_id
-            if log_id.total == log_id.flag and date == date_now:
+            if log_id.total == log_id.flag and date == date_now and company_id.id == log_id.company_id.id:
                 return False
         new_log = atr_obj.create({
             'date_start': fields.Datetime.now(),
             'atr_id': self.id,
             'flag': 0,
             'total': total,
+            'company_id': company_id.id,
         })
         return new_log
 
@@ -73,70 +87,6 @@ class ATR(models.Model):
             self.create_update_address()
         elif self.type_atr == 'tax':
             self.create_tax()
-
-    def parser_number(self, number):
-        """Parsear número telefónico"""
-        if number and number[0] == '0':
-            number = '+58' + number[1:]
-        return number
-
-    def create_partner(self):
-        """Crear Partner"""
-        cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
-        cursor = cursor.credentials_atr().cursor()
-        # Obtener log
-        log_id = self.get_last_log(cursor)
-        if not log_id:
-            return False
-        # Consulta SQL
-        cursor.execute(self.sql.replace('{offset}', str(log_id.flag)).replace('{limit}', str(self.lote)))
-        records = cursor.fetchall()
-        # Objeto
-        partner_id = self.env['res.partner']
-        for rec in records:
-            vat = rec[0].strip().replace(',', '').replace(' ', '')
-            name = rec[1].strip().replace(',', '') if rec[1] else 'S/N'
-            type_person = rec[2].strip().replace(',', '').replace(' ', '')
-            active = True if rec[3].strip().replace(',', '').replace(' ', '') == 'ACTIVO' else False
-            email = rec[4].strip().replace(',', '').replace(' ', '') if rec[4] else ''
-            email_second = rec[5].strip().replace(',', '').replace(' ', '') if rec[5] else ''
-            mobile = rec[6].strip().replace(',', '').replace(' ', '') if rec[6] else ''
-            phone = rec[7].strip().replace(',', '').replace(' ', '') if rec[7] else ''
-            # Parsear números telefónicos
-            mobile = self.parser_number(mobile)
-            phone = self.parser_number(phone)
-            values = {
-                'vat': vat,
-                'name': name,
-                'type_person': type_person,
-                'is_company': True if type_person == 'JURIDICO' else False,
-                'active': active,
-                'email': email,
-                'email_second': email_second,
-                'mobile': mobile,
-                'phone': phone,
-            }
-            print(f'\n{values}\n')
-            if partner_id.search(['&', ('active', '=', 'False'), ('vat', '=', vat)]) and not active:
-                log_id.ignore += 1
-            elif partner_id.search([('vat', '=', vat)]):
-                partner_id = partner_id.search([('vat', '=', vat)])
-                del values['vat']
-                del values['name']
-                partner_id.write(values)
-                log_id.upd += 1
-            else:
-                partner_id = partner_id.create(values)
-                log_id.qty += 1
-            log_id.flag += 1
-            log_id.date_end = fields.Datetime.now()
-            self.env.cr.commit()
-        if log_id.flag == log_id.total:
-            # Aquí enviar correo
-            log_id.send = True
-            self.env.cr.commit()
-        else:
-            self.create_partner()
 
     def create_payment(self):
         """Crear planilla de pagos"""
@@ -304,6 +254,7 @@ class ATRLog(models.Model):
     date_end = fields.Datetime(string='Fecha de final', )
     send = fields.Boolean(string='¿Correo enviado?')
     atr_id = fields.Many2one('atr', 'Conexión', ondelete='cascade')
+    company_id = fields.Many2one('res.company', 'Alcaldía')
 
     def _compute_get_name(self):
         """Obtener nombre"""
@@ -330,6 +281,7 @@ class ATRConnect(models.Model):
     port = fields.Char('Puerto')
     type = fields.Selection([('odoo', 'Odoo'), ('atr', 'ATR')], 'Tipo', required=True)
     company_id = fields.Many2one('res.company', 'Alcaldía', required=True)
+    logo = fields.Binary('Logo', related='company_id.logo')
     active = fields.Boolean('Activo', default=True)
 
     @api.constrains('active')
