@@ -6,8 +6,8 @@
         <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
         <field name="arch" type="xml">
             <field name="payslip_run_id" position="after">
-                <field name="monday_of_month"  invisible="1"/>
-                <field name="segunda_quincena" invisible="1"/>
+                <field name="monday_of_month"/>
+                <field name="segunda_quincena"/>
             </field>
         </field>
     </record>
