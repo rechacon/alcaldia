@@ -15,6 +15,8 @@ class WizardReports(models.TransientModel):
     _name = 'wizard.reports'
     _description = 'Wizard de Reportes Estadisticos'
 
+
+    town_hall_ids = fields.Many2many('res.company', string="Alcaldías")
     date_start = fields.Date('Fecha Inicio', required=True)
     date_end = fields.Date('Fecha Fin', required=True)
     tax_ids = fields.Many2many('account.tax.return', string="Declaraciones")
