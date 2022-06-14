@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="hr_employee_child_view_tree" model="ir.ui.view">
+        <field name="name">hr.employee.child.view.tree</field>
+        <field name="model">hr.employee.child</field>
+        <field name="arch" type="xml">
+            <tree string="Hijos/Hijas" editable="top">
+                <field name="name"/>
+                <field name="birth_date"/>
+                <field name="age"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_employee_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.employee.form.l10n.ve.payroll.form.inherit</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string='Hijos/Hijas' name="childs">
+                    <group col='4' colspan='2'>
+                        <field name="childs_ids" nolabel="1"/>
+                    </group>
+                </page>  
+            </xpath>
+        </field>
+    </record>
+</odoo>

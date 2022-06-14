@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_company_payroll_form" model="ir.ui.view">
+        <field name="name">res.company.l10n.ve.payroll.form.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_info']" position="after">
+                <page string='Nómina VE' name="payroll_ve">
+                    <group col='4' colspan='2'>
+                        <field name="salary_min"/>
+                        <field name="daily_food_bonus"/>
+                        <separator string="% Riesgo de Aporte" colspan="4"/>
+                        <field name="employer_contribution_risk" string="Patronal"/>
+                        <field name="employee_contribution_risk" string="Empleado"/>
+                    </group>
+                </page>  
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
