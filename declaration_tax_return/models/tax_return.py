@@ -32,6 +32,8 @@ class AccountTaxReturn(models.Model):
     tax_id = fields.Many2one('account.declaration.tax.type', 'Tipo de impuesto')
     state = fields.Selection([('pending', 'Pendiente'), ('payment', 'Pagada')], 'Estatus')
 
+
+
     def name_get(self):
         result = []
         for record in self:
