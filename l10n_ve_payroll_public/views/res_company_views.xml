@@ -11,7 +11,7 @@
                         <field name="salary_min"/>
                         <field name="bonus_transportation"/>
                         <field name="incentive_child"/>
-                        <field name="bonus_food"/>
+                        <field name="daily_food_bonus"/>
                         <field name="cesta_ticket"/>
                         <separator string="% Riesgo de Aporte" colspan="4"/>
                         <field name="employer_contribution_risk" string="Patronal"/>
