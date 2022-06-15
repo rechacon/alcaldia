@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <record id="hr_incentives_antiquity_view_tree" model="ir.ui.view">
+        <field name="name">hr.incentives.antiquity.view.tree</field>
+        <field name="model">hr.incentives.antiquity</field>
+        <field name="arch" type="xml">
+            <tree string="Primas de Antigüedad" editable="top">
+                <field name="year_service"/>
+                <field name="percentage_salary_basic"/>
+                <field name="percentage_compensation"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_incentives_professionalization_view_tree" model="ir.ui.view">
+        <field name="name">hr.incentives.professionalization.view.tree</field>
+        <field name="model">hr.incentives.professionalization</field>
+        <field name="arch" type="xml">
+            <tree string="Primas de Antigüedad" editable="top">
+                <field name="academic_degree_id"/>
+                <field name="percentage_salary_basic"/>
+                <field name="percentage_compensation"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

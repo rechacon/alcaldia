@@ -9,10 +9,42 @@
                 <page string='Nómina VE' name="payroll_ve">
                     <group col='4' colspan='2'>
                         <field name="salary_min"/>
-                        <field name="daily_food_bonus"/>
+                        <field name="bonus_transportation"/>
+                        <field name="incentive_child"/>
+                        <field name="bonus_food"/>
+                        <field name="cesta_ticket"/>
                         <separator string="% Riesgo de Aporte" colspan="4"/>
                         <field name="employer_contribution_risk" string="Patronal"/>
                         <field name="employee_contribution_risk" string="Empleado"/>
+                    </group>
+                </page>  
+                <page string='Primas' name="incentives">
+                    <group col='4' colspan='2'>
+                        <separator string="Antigüedad"/>
+                        <field name="incentive_antiquity_ids" nolabel="1" colspan="4"/>
+                        <separator string="Profesionalización"/>
+                        <field name="incentive_professionalization_ids" nolabel="1" colspan="4"/>
+                    </group>
+                </page>  
+                <page string='Beneficios Socio-Económico' name="socio_economico">
+                    <group col='4' colspan='2'>
+                        <separator string="Bono de Días" colspan="4"/>
+                        <field name="bonus_vacational"/>
+                        <field name="bonus_year_end"/>
+                        <separator string="Bonificación" colspan="4"/>
+                        <field name="bonus_marriage"/>
+                        <field name="bonus_death"/>
+                        <field name="bonus_school_supplies"/>
+                        <field name="bonus_toys"/>
+                        <field name="bonus_secretary"/>
+                    </group>
+                </page>  
+                <page string='Beneficios Anuales' name="anuales">
+                    <group col='4' colspan='2'>
+                        <separator string="Días" colspan="4"/>
+                        <field name="days_utilities_annual"/>
+                        <field name="days_vacation_annual"/>
+                        <field name="days_bonus_vacations"/>
                     </group>
                 </page>  
             </xpath>

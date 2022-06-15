@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="academic_degree_preescolar" model="hr.employee.academic.degree">
+            <field name="description">Preescolar</field>
+        </record>
+
+        <record id="academic_degree_primaria" model="hr.employee.academic.degree">
+            <field name="description">Primaria</field>
+        </record>
+
+        <record id="academic_degree_bachiller" model="hr.employee.academic.degree">
+            <field name="description">Bachiller</field>
+        </record>
+
+        <record id="academic_degree_tsu" model="hr.employee.academic.degree">
+            <field name="description">Técnico Superior Universitario</field>
+        </record>
+        
+        <record id="academic_degree_profesional" model="hr.employee.academic.degree">
+            <field name="description">Profesional</field>
+        </record>
+
+        <record id="academic_degree_especialista" model="hr.employee.academic.degree">
+            <field name="description">Especialista</field>
+        </record>
+
+        <record id="academic_degree_magister" model="hr.employee.academic.degree">
+            <field name="description">Magister</field>
+        </record>
+
+        <record id="academic_degree_doctor" model="hr.employee.academic.degree">
+            <field name="description">Doctor</field>
+        </record>
+
+    </data>
+</odoo>

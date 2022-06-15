@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_hr_employee_child_emp,hr.employee.child,model_hr_employee_child,base.group_user,1,1,1,1
+access_hr_employee_academic_degree_emp,hr.employee.academic.degree,model_hr_employee_academic_degree,base.group_user,1,1,1,1
+access_hr_incentives_antiquity_emp,hr.incentives.antiquity,model_hr_incentives_antiquity,base.group_user,1,1,1,1
+access_hr_incentives_professionalization_emp,hr.incentives.professionalization,model_hr_incentives_professionalization,base.group_user,1,1,1,1

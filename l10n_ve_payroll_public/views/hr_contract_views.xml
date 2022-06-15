@@ -9,6 +9,7 @@
                 <page string='Beneficios VS Días Trabajados' name="beneficios_vs_trabajados">
                     <group col='4' colspan='2'>
                         <field name="years_worked"/>
+                        <field name="years_worked_previous"/>
                         <field name="month_worked"/>
                         <field name="month_accumulated_worked"/>
                     </group>
