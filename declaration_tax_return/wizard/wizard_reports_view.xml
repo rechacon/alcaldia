@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Comparacion Municipal">
                 <group>
-                    <field name="town_hall_ids" widget="many2many_tags"/>
+                    <field name="company_ids" widget="many2many_tags"/>
                 </group>
                 <group>
                     <label for="date_start" string="Fechas"/>
@@ -15,6 +15,16 @@
                         <i class="fa fa-angle-right mx-1" aria-label="Arrow icon" title="a"/>
                         <field name="date_end" class="oe_inline" placeholder="Fin"/>
                     </div>
+                    <field name="line_ids" colspan="4">
+                        <tree>
+                            <field name="name"/>
+                            <field name="company_id"/>
+                            <field name="amount_bs"/>
+                            <field name="amount_usd"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                        </tree>
+                    </field>
                 </group>
                 <footer>
                     <button name="create_report_municipal_comparison_graphic" string="Generar informe gráfico" type="object" class="btn-primary"/>
@@ -24,17 +34,12 @@
         </field>
     </record>
 
-
-    <!-- <act_window id="action_municipal_comparison"
-        name="Generar Informe de expedientes"
-        res_model="wizard.crm.subject"
-        view_mode="form" target="new"/> -->
-
     <record id="action_municipal_comparison" model="ir.actions.act_window">
         <field name="name">Comparación municipal</field>
         <field name="res_model">wizard.reports</field>
         <field name="view_mode">form</field>
-        <field name="target">new</field>
+        <!-- <field name="target">new</field> -->
+        <field name="target">current</field>
     </record>
 
     <record id="report_municipal_comparison_action" model="ir.actions.report">

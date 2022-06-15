@@ -3,6 +3,7 @@ from odoo import fields, models
 import numpy as np
 import io
 import base64
+import datetime
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -15,23 +16,61 @@ class WizardReports(models.TransientModel):
     _name = 'wizard.reports'
     _description = 'Wizard de Reportes Estadisticos'
 
-
-    town_hall_ids = fields.Many2many('res.company', string="Alcaldías")
+    company_ids = fields.Many2many('res.company', string="Alcaldías", required=True)
     date_start = fields.Date('Fecha Inicio', required=True)
     date_end = fields.Date('Fecha Fin', required=True)
     tax_ids = fields.Many2many('account.tax.return', string="Declaraciones")
+    line_ids = fields.One2many('wizard.reports.line', 'report_id', string="Líneas")
     # payment_ids = fields.Many2many('account.tax.return', string="Planillas de pagos")
 
     def create_report_municipal_comparison_graphic(self):
         """Crear reporte del comparativo municipal"""
-        tax_ids = self.env['account.tax.return'].search(
-            [('date', '>=', self.date_start), ('date', '<=', self.date_end),
-             ('type_tax', '=', 'tax')])
-        if tax_ids:
-            self.tax_ids = [(6, 0, tax_ids.ids)]
-            action = self.env.ref(
-                'declaration_tax_return.report_municipal_comparison_action').sudo().report_action(self)
-            return action
+        values = []
+        for company in self.company_ids:
+            month_start = self.date_start.strftime("%B")  # Obtener solo el mes
+            delta = datetime.timedelta(days=1)
+            date_start = self.date_start
+
+            # Crear mes inicial
+            values.append((
+                {
+                    'company_id': company.id,
+                    'name': f'{month_start}-{str(self.date_start.year)}',
+                    'date_start': self.date_start,
+                }
+            ))
+
+            while date_start <= self.date_end:
+                if date_start.strftime("%B") != month_start:
+
+                    # Obtener fecha final
+                    last_date = f'{month_start}-{str(date_start.year)}'
+                    for val in values:
+                        if val['name'] == last_date:
+                            val['date_end'] = date_start - delta
+
+                    # Crear nuevo mes
+                    month_start = date_start.strftime("%B")
+                    values.append((
+                        {
+                            'company_id': company.id,
+                            'name': f'{month_start}-{str(self.date_start.year)}',
+                            'date_start': date_start,
+                        }
+                    ))
+                if date_start == self.date_end:
+                    # Obtener fecha final
+                    last_date = f'{month_start}-{str(date_start.year)}'
+                    for val in values:
+                        if val['name'] == last_date:
+                            val['date_end'] = self.date_end
+                date_start += delta
+
+        print(f'\n\n{values}\n\n')
+        self.line_ids = [(0, 0, val) for val in values]
+        action = self.env.ref(
+            'declaration_tax_return.report_municipal_comparison_action').sudo().report_action(self)
+        return action
 
     def retun_graph_base64(self, users):
         mpl.rc('lines', linewidth=2.)
@@ -302,3 +341,29 @@ class WizardReports(models.TransientModel):
         plt.savefig(img, dpi=100, format='png', transparent=True)
         plt.close()
         return base64.b64encode(img.getvalue())
+
+
+class WizardReportsLine(models.TransientModel):
+    _name = 'wizard.reports.line'
+    _description = 'Líneas de Reportes Estadisticos'
+
+    name = fields.Char('Período', required=True)
+    date_start = fields.Date('Fecha Inicio', required=True)
+    date_end = fields.Date('Fecha Fin', required=True)
+    company_id = fields.Many2one('res.company', 'Alcaldía', required=True)
+    report_id = fields.Many2one('wizard.reports', 'Report')
+    amount_bs = fields.Float('Monto en Bs.', compute='_compute_amount_bs')
+    amount_usd = fields.Float('Monto en $')
+
+    def _compute_amount_bs(self):
+        """Hacer la suma de todos los montos de las declaraciones en BS"""
+        for rec in self:
+            rec.amount_bs = 0
+            if rec.date_start and rec.date_end:
+                tax_ids = self.env['account.tax.return'].search(
+                    ['&', '&',
+                     ('date', '>=', rec.date_start),
+                     ('date', '<=', rec.date_end),
+                     ('type_tax', '=', 'tax'),
+                     ('company_id', '=', rec.company_id.id)]).mapped('amount')
+                rec.amount_bs = sum(tax_ids)

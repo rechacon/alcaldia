@@ -6,3 +6,4 @@
 "access_account_declaration_tax_type_statistics","account_declaration_tax_type_statistics","model_account_declaration_tax_type_statistics","base.group_user",1,1,1,1
 "access_account_declaration_statistics","account.declaration.statistics","model_account_declaration_statistics","base.group_user",1,1,1,1
 "access_wizard_reports","wizard.reports","model_wizard_reports","base.group_user",1,1,1,1
+"access_wizard_reports_line","wizard.reports.line","model_wizard_reports_line","base.group_user",1,1,1,1
