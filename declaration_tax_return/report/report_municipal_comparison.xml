@@ -1,5 +1,23 @@
 <?xml version='1.0' encoding='utf-8'?>
 <odoo>
+
+
+    <record id="paperformat_comparativo_municipal_estadisticas" model="report.paperformat">
+        <field name="name">Comparativo municipal y estadisticas</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">23</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
     <template id="report_municipal_comparison" name="Comparacion Municipal">
         <t t-call="web.html_container">
              <t t-call="web.basic_layout">
@@ -23,24 +41,41 @@
                       background-color: teal;
                       color: white;
                     }
+                     .fondo_periodo {
+                      background-color: #203764;
+                      color: #fff;
+                    }
                     </style>
                 <t t-foreach="docs" t-as="o">
                     <div>
                         <h5>1. RECAUDACIÓN MENSUAL POR MUNICIPIO (Bs.)</h5>
                         <table style="width:100%;font-size: 12px;">
                             <tr>
-                                <th>Periodo</th>
-                                <t t-foreach="o.line_ids" t-as="line">
-                                    <th>
-                                        <img t-attf-src="data:image/*;base64,{{line.company_id.logo}}"
-                                             style="width:auto; height:50px;"/>
+                                <tr>
+                                    <th style="background-color:#203764; color:#ffffff; height: 45px;">
+                                        PERIODO
                                     </th>
+                                        <t t-foreach="o._date_range()" t-as="d">
+                                    <td style="width: 15%">
+                                        <span t-esc="d" t-options='{"widget": "uppercase"}' />
+                                    </td>
+                                        </t>
+                                </tr>
+                                <t t-foreach="o.company_ids" t-as="alcaldia">
+                                    <tr>
+                                        <th>
+                                            <img t-attf-src="data:image/*;base64,{{alcaldia.logo}}"
+                                                style="width:auto; height:50px;"/>
+                                        </th>
+                                       <t t-foreach="o.line_ids" t-if="alcaldia == l.company_id" t-as="l">
+                                            <td>
+                                                <span t-if="l.amount_bs != 0" t-field='l.amount_bs' t-options='{"widget": "float","precision":0}' />
+                                                <span t-elif="l.amount_bs == 0">ND</span>
+                                            </td>
+                                        </t>
+                                    </tr>
                                 </t>
                             </tr>
-                                <t t-foreach="o.line_ids" t-as="line">
-                                    <!-- <td><span t-field='line.name'/></td>
-                                    <td><span t-field='line.amount_bs'/></td> -->
-                                </t>
                         </table>
                         <br/>
                         <table style="width:100%">

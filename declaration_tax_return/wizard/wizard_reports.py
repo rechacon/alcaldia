@@ -10,6 +10,8 @@ import matplotlib as mpl
 from cycler import cycler
 import matplotlib.ticker as mtick
 import matplotlib.patheffects as path_effects
+import pandas as pd
+import datetime as dt 
 
 
 class WizardReports(models.TransientModel):
@@ -22,6 +24,16 @@ class WizardReports(models.TransientModel):
     tax_ids = fields.Many2many('account.tax.return', string="Declaraciones")
     line_ids = fields.One2many('wizard.reports.line', 'report_id', string="Líneas")
     # payment_ids = fields.Many2many('account.tax.return', string="Planillas de pagos")
+    
+    
+    
+    
+   
+
+    def _date_range(self):
+        """Imprimir las Fechas"""
+        month_list = [i.strftime("%b-%y") for i in pd.period_range(start=self.date_start, end=self.date_end, freq='M')]
+        return month_list
 
     def create_report_municipal_comparison_graphic(self):
         """Crear reporte del comparativo municipal"""
@@ -367,3 +379,4 @@ class WizardReportsLine(models.TransientModel):
                      ('type_tax', '=', 'tax'),
                      ('company_id', '=', rec.company_id.id)]).mapped('amount')
                 rec.amount_bs = sum(tax_ids)
+

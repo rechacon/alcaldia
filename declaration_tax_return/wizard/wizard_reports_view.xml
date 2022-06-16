@@ -15,7 +15,8 @@
                         <i class="fa fa-angle-right mx-1" aria-label="Arrow icon" title="a"/>
                         <field name="date_end" class="oe_inline" placeholder="Fin"/>
                     </div>
-                    <field name="line_ids" colspan="4">
+
+                    <field name="line_ids" colspan="4" invisible="1">
                         <tree>
                             <field name="name"/>
                             <field name="company_id"/>
@@ -38,8 +39,8 @@
         <field name="name">Comparación municipal</field>
         <field name="res_model">wizard.reports</field>
         <field name="view_mode">form</field>
-        <!-- <field name="target">new</field> -->
-        <field name="target">current</field>
+         <field name="target">new</field>
+<!--        <field name="target">current</field>-->
     </record>
 
     <record id="report_municipal_comparison_action" model="ir.actions.report">
@@ -50,7 +51,19 @@
         <field name="report_file">declaration_tax_return.report_municipal_comparison</field>
         <field name="print_report_name">'Comparación Municipal y Estadistícas - (%s | %s)' % (object.date_start, object.date_end)</field>
         <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_comparativo_municipal_estadisticas" />
     </record>
+
+
+
+
+
+
+
+
+
+
+
 
     <menuitem name="Informes"
               id="menu_wizard_reports"
