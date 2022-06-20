@@ -14,6 +14,8 @@
              'data/ir_cron.xml',
              'views/tax_return_view.xml',
              'views/declaration_statistics_view.xml',
+             'views/monthly_goal_view.xml',
+
 
              # Reports
              'report/report_municipal_comparison.xml',
