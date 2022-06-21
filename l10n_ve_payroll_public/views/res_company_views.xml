@@ -45,11 +45,11 @@
                         <field name="days_utilities_annual"/>
                         <field name="days_vacation_annual"/>
                         <field name="days_bonus_vacations"/>
-<!--                         <field name="antiquity"/>
+                        <field name="antiquity"/>
                         <field name="antiquity_accumulated"/>
                         <field name="day_additional_vacational"/>
                         <field name="day_additional_bonus_vacational"/>
-                        <field name="antiquity_dismissal"/> -->
+                        <field name="antiquity_dismissal"/>
                     </group>
                 </page>  
             </xpath>
