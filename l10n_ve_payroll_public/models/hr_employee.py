@@ -10,6 +10,7 @@ class HrEmployee(models.Model):
     childs_ids = fields.One2many('hr.employee.child', 'employee_id', string='Hijos(a)')
     children = fields.Integer(compute='get_number_children', store=True)
     academic_degree_id = fields.Many2one('hr.employee.academic.degree', string='Grado Académico')
+    sector_laboral_id = fields.Many2one('hr.employee.sector.laboral', string='Sector Laboral')
 
     @api.depends('childs_ids.age')
     def get_number_children(self):
@@ -59,6 +60,14 @@ class HrEmployeeChild(models.Model):
 class HrEmployeeAcademicDegree(models.Model):
     _name = 'hr.employee.academic.degree'
     _description = 'Grado Académico de los Empleados'
+    _rec_name = 'description'
+
+    description = fields.Char(string='Descripción', required=True)
+
+
+class HrEmployeeSectorLaboral(models.Model):
+    _name = 'hr.employee.sector.laboral'
+    _description = 'Sectores Laborales de los Empleados'
     _rec_name = 'description'
 
     description = fields.Char(string='Descripción', required=True)

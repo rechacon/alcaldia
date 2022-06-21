@@ -13,6 +13,7 @@
     'external_dependencies': {},
     "data": ['security/ir.model.access.csv',
              'data/data_academic_degree.xml',
+             'data/data_sector_laboral.xml',
              'data/ir.cron.xml',
              'views/hr_incentives_views.xml',
              'views/res_company_views.xml',

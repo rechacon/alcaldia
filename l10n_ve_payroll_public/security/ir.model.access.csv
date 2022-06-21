@@ -3,3 +3,4 @@ access_hr_employee_child_emp,hr.employee.child,model_hr_employee_child,base.grou
 access_hr_employee_academic_degree_emp,hr.employee.academic.degree,model_hr_employee_academic_degree,base.group_user,1,1,1,1
 access_hr_incentives_antiquity_emp,hr.incentives.antiquity,model_hr_incentives_antiquity,base.group_user,1,1,1,1
 access_hr_incentives_professionalization_emp,hr.incentives.professionalization,model_hr_incentives_professionalization,base.group_user,1,1,1,1
+access_hr_employee_sector_laboral_emp,hr.employee.sector.laboral,model_hr_employee_sector_laboral,base.group_user,1,1,1,1

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="sector_laboral_alto_nivel" model="hr.employee.sector.laboral">
+            <field name="description">Alto Nivel</field>
+        </record>
+
+        <record id="sector_laboral_administrativo" model="hr.employee.sector.laboral">
+            <field name="description">Administrativo</field>
+        </record>
+
+        <record id="sector_laboral_docente" model="hr.employee.sector.laboral">
+            <field name="description">Docente</field>
+        </record>
+
+        <record id="sector_laboral_medico" model="hr.employee.sector.laboral">
+            <field name="description">Médico</field>
+        </record>
+    </data>
+</odoo>
