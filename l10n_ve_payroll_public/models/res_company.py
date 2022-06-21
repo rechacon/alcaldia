@@ -23,7 +23,7 @@ class ResCompany(models.Model):
     days_utilities_annual = fields.Integer(string='Utilidades Anuales')
     days_vacation_annual = fields.Integer(string='Vacacionales Anuales')
     days_bonus_vacations = fields.Integer(string='Bonos Vacacionales')
-    antiquity = fields.Integer(string='Antigüedad')
+    # antiquity = fields.Integer(string='Antigüedad')
     antiquity_accumulated = fields.Integer(string='Antigüedad Acumulada')
     day_additional_vacational = fields.Integer(string='Día Adicional Vacacional')
     day_additional_bonus_vacational = fields.Integer(string='Día Adicional Bono Vacacional')
