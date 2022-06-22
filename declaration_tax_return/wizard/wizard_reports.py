@@ -11,8 +11,16 @@ from cycler import cycler
 import matplotlib.ticker as mtick
 import matplotlib.patheffects as path_effects
 import pandas as pd
-import datetime as dt 
+import datetime as dt
 
+MONTHS = [('01', 'Enero'), ('02', 'Febrero'), ('03', 'Marzo'), ('04', 'Abril'),
+          ('05', 'Mayo'), ('06', 'Junio'), ('07', 'Julio'), ('08', 'Agosto'),
+          ('09', 'Septiembre'), ('10', 'Octubre'), ('11', 'Noviembre'),
+          ('12', 'Diciembre')]
+
+YEARS = [('01', '2020'), ('02', '2021'), ('03', '2022'), ('04', '2023'),
+          ('05', '2024'), ('06', '2025'), ('07', '2026'), ('08', '2027'),
+          ('09', '2028'), ('10', '2029'), ('11', '2030'), ('12', '2031')]
 
 class WizardReports(models.TransientModel):
     _name = 'wizard.reports'
@@ -23,10 +31,10 @@ class WizardReports(models.TransientModel):
     date_end = fields.Date('Fecha Fin', required=True)
     tax_ids = fields.Many2many('account.tax.return', string="Declaraciones")
     line_ids = fields.One2many('wizard.reports.line', 'report_id', string="Líneas")
+    month = fields.Selection(MONTHS, 'Mes', required=True)
+    year = fields.Selection(YEARS, 'Años', required=True)
+    goal_ids = fields.Many2many('account.tax.return.monthly.line', string="Metas")
     # payment_ids = fields.Many2many('account.tax.return', string="Planillas de pagos")
-    
-    
-    
     
    
 
@@ -366,6 +374,8 @@ class WizardReportsLine(models.TransientModel):
     report_id = fields.Many2one('wizard.reports', 'Report')
     amount_bs = fields.Float('Monto en Bs.', compute='_compute_amount_bs')
     amount_usd = fields.Float('Monto en $')
+    goal_id = fields.Many2one('wizard.reports', 'Report')
+    
 
     def _compute_amount_bs(self):
         """Hacer la suma de todos los montos de las declaraciones en BS"""

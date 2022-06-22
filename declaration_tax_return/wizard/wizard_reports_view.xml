@@ -8,15 +8,16 @@
                 <group>
                     <field name="company_ids" widget="many2many_tags"/>
                 </group>
-                <group>
+                <group col="4" colspan="2">
                     <label for="date_start" string="Fechas"/>
                     <div class="o_row">
                         <field name="date_start"  class="oe_inline" placeholder="Inicio"/>
                         <i class="fa fa-angle-right mx-1" aria-label="Arrow icon" title="a"/>
                         <field name="date_end" class="oe_inline" placeholder="Fin"/>
                     </div>
+                    
 
-                    <field name="line_ids" colspan="4" invisible="1">
+                    <field name="line_ids" colspan="4" invisible="0">
                         <tree>
                             <field name="name"/>
                             <field name="company_id"/>
@@ -26,6 +27,20 @@
                             <field name="date_end"/>
                         </tree>
                     </field>
+                    <separator string="Meta Mensual" colspan="8"/>
+                    <field name="month" />
+                    <field name="year" />
+                    
+                    <field name="goal_ids" colspan="4" invisible="0">
+                        <tree>
+                            <field name="company_id"/>
+                            <field name="goal"/>
+                            <field name="raised"/>
+                            <field name="pending"/>
+                            <field name="accomplished"/>
+                        </tree>
+                    </field>
+
                 </group>
                 <footer>
                     <button name="create_report_municipal_comparison_graphic" string="Generar informe gráfico" type="object" class="btn-primary"/>

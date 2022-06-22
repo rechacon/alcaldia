@@ -79,7 +79,7 @@
                         </table>
                         <br/>
                         <table style="width:100%">
-                            <thead>
+                           <thead>
                                 <tr>
                                     <td>
                                         <div align="center">
@@ -97,80 +97,59 @@
                                 </tr>
                             </thead>
                         </table>
-
-                        </div>
-<!--                    <div style="margin-top:15px;">-->
-<!--                        <h5>2. RECAUDACIÓN VS META MENSUAL, MARZO DE 2022 (Bs.)</h5>-->
-<!--                        <table style="width:100%;font-size: 12px;">-->
-<!--                            <tr>-->
-<!--                                <th class="exampleone">RECAUDACIÓN 24-mar-22 </th>-->
-<!--                                <th>Alcaldia 1</th>-->
-<!--                                <th>Alcaldia 2</th>-->
-<!--                                <th>Alcaldia 3</th>-->
-<!--                                <th>Alcaldia 4</th>-->
-<!--                                <th>Alcaldia 5</th>-->
-<!--                                <th>Alcaldia 6</th>-->
-<!--                                <th>Alcaldia 7</th>-->
-<!--                                <th>Alcaldia 8</th>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td>ene-21</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>250.862</td>-->
-<!--                                <td>208.316</td>-->
-<!--                                <td>142.298</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>931.527</td>-->
-<!--                                <td>1.597.006</td>-->
-<!--                                <td>2.179.727</td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td>ene-21</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>250.862</td>-->
-<!--                                <td>208.316</td>-->
-<!--                                <td>142.298</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>931.527</td>-->
-<!--                                <td>1.597.006</td>-->
-<!--                                <td>2.179.727</td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td>ene-21</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>250.862</td>-->
-<!--                                <td>208.316</td>-->
-<!--                                <td>142.298</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>931.527</td>-->
-<!--                                <td>1.597.006</td>-->
-<!--                                <td>2.179.727</td>-->
-<!--                            </tr>-->
-<!--                            <tr>-->
-<!--                                <td>ene-21</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>250.862</td>-->
-<!--                                <td>208.316</td>-->
-<!--                                <td>142.298</td>-->
-<!--                                <td>ND</td>-->
-<!--                                <td>931.527</td>-->
-<!--                                <td>1.597.006</td>-->
-<!--                                <td>2.179.727</td>-->
-<!--                            </tr>-->
-<!--                        </table>-->
-<!--                    <table style="width:100%">-->
-<!--                            <thead>-->
-<!--                                <tr>-->
-<!--                                    <td>-->
-<!--                                        <div align="center">-->
-<!--                                            <t t-set="graphic" t-value="docs.retun_graph_base64_2(users)"/>-->
-<!--                                            <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>-->
-<!--                                        </div>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                            </thead>-->
-<!--                        </table>-->
-<!--                    </div>-->
+                        <br/>
+                     <!--   </div>
+                     <div style="margin-top:15px;">-->
+                        <h5>2. RECAUDACIÓN VS META MENSUAL, (Bs.)</h5>
+                         <table style="width:100%;font-size: 12px;">
+                            <tr>
+                                <tr>
+                                    <th style="background-color:#203764; color:#ffffff; height: 45px;">
+                                        RECAUDACION
+                                    </th>
+                                    <td style="width: 15%">
+                                        <span>ESTIMADO</span>
+                                    </td>
+                                    <td style="width: 15%">
+                                        <span>RECAUDADO</span>
+                                    </td>
+                                    <td style="width: 15%">
+                                        <span>PENDIENTE</span>
+                                    </td>
+                                    <td style="width: 15%">
+                                        <span>% LOGRADO (META DEL MES)</span>
+                                    </td>
+                                </tr>
+                                <t t-foreach="o.company_ids" t-as="alcaldia">
+                                    <tr>
+                                        <th>
+                                            <img t-attf-src="data:image/*;base64,{{alcaldia.logo}}"
+                                                style="width:auto; height:50px;"/>
+                                        </th>
+                                  <!-- <t t-foreach="o.goal_ids" t-if="alcaldia == g.company_id" t-as="g">-->
+                                       <t t-set="g" t-value="o.goal_ids"  />
+                                            <td><span t-esc='g.goal'  t-options='{"widget": "float","precision":0}' /></td>
+                                            <td><span t-esc='g.raised'  t-options='{"widget": "float","precision":0}' /></td>
+                                            <td><span t-esc='g.pending'  t-options='{"widget": "float","precision":0}' /></td>
+                                            <td><span t-esc='g.accomplished' t-options='{"widget": "float","precision":0}' /></td>
+                                       <!-- </t>-->
+                                    </tr>
+                                </t> 
+                             </tr>
+                       </table>
+                       <table style="width:100%">
+                           <thead>
+                               <tr>
+                                   <td>
+                                       <div align="center">
+                                           <t t-set="graphic" t-value="docs.retun_graph_base64_2(users)"/>
+                                           <img t-attf-src="data:img/*;base64,{{graphic}}" class="img img-fluid"/>
+                                       </div>
+                                   </td>
+                               </tr>
+                           </thead>
+                        </table>
+                     </div>
 <!--                    <div style="margin-top:150px;">-->
 <!--                        <h5>3. INDICADORES MACROECONÓMICOS</h5>-->
 <!--                    <table style="width:100%;font-size: 12px;">-->
