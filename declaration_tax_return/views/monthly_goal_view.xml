@@ -19,6 +19,40 @@
         </field>
     </record>
 
+    <record id="view_account_tax_return_monthly_line_tree" model="ir.ui.view">
+        <field name="name">account.tax.return.monthly.line.tree</field>
+        <field name="model">account.tax.return.monthly.line</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree editable="top" create="false">
+                <field name="name" readonly="1"/>
+                <field name="month" readonly="1"/>
+                <field name="year" readonly="1"/>
+                <field name="goal"/>
+                <field name="raised"/>
+                <field name="pending"/>
+                <field name="accomplished"/>
+                <field name="company_id" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_account_tax_return_monthly_line_search" model="ir.ui.view">
+        <field name="name">account.tax.return.monthly.line.search</field>
+        <field name="model">account.tax.return.monthly.line</field>
+        <field name="arch" type="xml">
+            <search string="Meta por mes">
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="month"/>
+                <field name="year"/>
+                <filter name="group_by_company_id" string="Alcaldía" context="{'group_by':'company_id'}"/>
+                <filter name="group_by_year" string="Año" context="{'group_by':'year'}"/>
+                <filter name="group_by_month" string="Mes" context="{'group_by':'month'}"/>
+            </search>
+        </field>
+    </record>
+
     <!-- VISTA FORM: Tipo de meta mensual account_tax_return_monthly_goal_form-->
     <record id="view_account_tax_return_monthly_goal_form" model="ir.ui.view">
         <field name="name">account.tax.return.monthly.goal.form</field>
@@ -27,16 +61,22 @@
         <field name="arch" type="xml">
             <form string="Meta Mensual Form">
                 <sheet>
+                    <h1>
+                        <field name="name" readonly="1"/>
+                    </h1>
                     <group col="4" colspan="2">
                         <field name="company_ids" widget="many2many_tags"/>
-                        <field name="name"/>
-                        <field name="year_records"/>
-                        <field name="line_ids">
-                            <tree>
-                                <field name="company_id"/>
-                                <field name="raised"/>
+                        <field name="year"/>
+                        <separator string="Líneas" colspan="4"/>
+                        <field name="line_ids" colspan="4" nolabel="1">
+                            <tree editable="top" create="false" limit="12">
+                                <field name="month" readonly="1"/>
+                                <field name="year" readonly="1"/>
                                 <field name="goal"/>
+                                <field name="raised"/>
+                                <field name="pending"/>
                                 <field name="accomplished"/>
+                                <field name="company_id" readonly="1"/>
                             </tree>
                         </field>
                     </group>
@@ -52,42 +92,45 @@
         <field name="model">account.tax.return.monthly.goal</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="company_ids" widget="many2many_tags"/>
                 <field name="name"/>
-                <field name="year_records"/>
-                        <field name="line_ids">
-                            <form>
-                                <field name="company_id"/>
-                                <field name="raised"/>
-                                <field name="goal"/>
-                                <field name="accomplished"/>
-                            </form>
-                        </field>
+                <field name="company_ids" widget="many2many_tags"/>
             </tree>
         </field>
     </record>
 
-  <!-- ====================== action account_tax_return_monthly_line ====================== -->
+  <!-- ====== action account_tax_return_monthly_line ====== -->
     <record id="action_account_tax_return_monthly_line" model="ir.actions.act_window">
-        <field name="name">Meta Mensual Line</field>
+        <field name="name">Por Mes</field>
         <field name="res_model">account.tax.return.monthly.line</field>
-        <field name="view_mode">form</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{'search_default_group_by_company_id': 1, 'search_default_group_by_year': 1}</field>
     </record>
 
-  <!-- ====================== action de account_tax_return_monthly_goal ====================== -->
+  <!-- ====== action de account_tax_return_monthly_goal ====== -->
     <record id="action_account_tax_return_monthly_goal" model="ir.actions.act_window">
-        <field name="name">Meta Mensual</field>
+        <field name="name">Global</field>
         <field name="res_model">account.tax.return.monthly.goal</field>
         <field name="view_mode">tree,form</field>
     </record>
 
 
-    <!-- ====================== MENUS ====================== -->
+    <!-- ====== MENUS ====== -->
 
     <menuitem name="Meta Mensual"
               id="menu_account_tax_return_monthly_goal"
-              action="action_account_tax_return_monthly_goal"
               parent="menu_tax_return"
               sequence="21"/>
+
+    <menuitem name="Global"
+              id="menu_goal_global"
+              action="action_account_tax_return_monthly_goal"
+              parent="menu_account_tax_return_monthly_goal"
+              sequence="10"/>
+
+    <menuitem name="Por mes"
+              id="menu_goal_month"
+              action="action_account_tax_return_monthly_line"
+              parent="menu_account_tax_return_monthly_goal"
+              sequence="20"/>
 
 </odoo>
