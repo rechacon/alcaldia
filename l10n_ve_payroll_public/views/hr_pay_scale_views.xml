@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+    <record id="hr_pay_scale_administrative_view_tree" model="ir.ui.view">
+        <field name="name">hr.pay.scale.administrative.view.tree</field>
+        <field name="model">hr.pay.scale.administrative</field>
+        <field name="arch" type="xml">
+            <tree string="Escala Salarial Administrativa" editable="top">
+                <field name="description" required="1"/>
+                <field name="grade" required="1"/>
+                <field name="wage" required="1"/>
+                <field name="wage_compensate" required="1"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="tag_activo" model="hr.employee.category">
+            <field name="name">Activo</field>
+        </record>
+
+    </data>
+</odoo>

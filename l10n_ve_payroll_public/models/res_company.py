@@ -28,3 +28,4 @@ class ResCompany(models.Model):
     day_additional_vacational = fields.Integer(string='Día Adicional Vacacional')
     day_additional_bonus_vacational = fields.Integer(string='Día Adicional Bono Vacacional')
     antiquity_dismissal = fields.Integer(string='Antigüedad Despido')
+    pay_scale_administrative_ids = fields.One2many('hr.pay.scale.administrative', 'company_id', string='Escala Salarial Administrativa')

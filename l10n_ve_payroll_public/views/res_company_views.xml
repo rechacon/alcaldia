@@ -52,6 +52,12 @@
                         <field name="antiquity_dismissal"/>
                     </group>
                 </page>  
+                <page string='Escalas Salariales' name="escala_salarial">
+                    <group col='4' colspan='2'>
+                        <separator string="Administrativa" colspan="4"/>
+                        <field name="pay_scale_administrative_ids" nolabel="1"/>
+                    </group>
+                </page>  
             </xpath>
 
         </field>

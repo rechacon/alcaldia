@@ -9,6 +9,8 @@
                 <field name="birth_date"/>
                 <field name="academic_degree_id"/>
                 <field name="age"/>
+                <field name="certificate"/>
+                <field name="constancy"/>
             </tree>
         </field>
     </record>
@@ -34,17 +36,32 @@
                         <field name="childs_ids" nolabel="1"/>
                     </group>
                 </page>  
+                <page string='Beneficios VS Días Trabajados' name="beneficios_vs_trabajados">
+                    <group col='4' colspan='2'>
+                        <field name="years_worked" readonly="1"/>
+                        <field name="years_worked_previous"/>
+                        <field name="month_worked" readonly="1"/>
+                        <field name="month_accumulated_worked" readonly="1"/>
+                        <button name="get_annio_mes" string="Calcular Años y Mes" type="object" class="oe_highlight"/>
+                    </group>
+                </page>  
             </xpath>
             <xpath expr="//field[@name='certificate']" position="replace">
                 <field name="academic_degree_id"/>
             </xpath>
+            <xpath expr="//field[@name='job_title']" position="replace"></xpath>
+            <xpath expr="//field[@name='job_id']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
             <xpath expr="//group[@name='has_work_permit']" position="before">
                 <group string="Sector">
-                    <field name="sector_laboral_id"/>
+                    <field name="sector_laboral_id" string="Tabla Salarial"/>
                 </group>
             </xpath>
         </field>
     </record>
+
+
 
     <record id="hr_employee_academic_degree_action" model="ir.actions.act_window">
         <field name="name">Grado Académico</field>
@@ -66,15 +83,15 @@
     </record>
 
     <record id="hr_employee_sector_laboral_action" model="ir.actions.act_window">
-        <field name="name">Sector Laboral</field>
+        <field name="name">Tabla Salarial</field>
         <field name="res_model">hr.employee.sector.laboral</field>
         <field name="view_mode">tree</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">Sin Sector Laboral</p>
+            <p class="o_view_nocontent_smiling_face">Sin Tabla Salarial</p>
         </field>
     </record>
 
     <menuitem id="hr_employee_academic_degree_menu" name="Grado Académico" action="hr_employee_academic_degree_action" parent="hr.hr_menu_configuration" groups="base.group_user" sequence="10"/>
-    <menuitem id="hr_employee_sector_laboral_menu" name="Sectores Laborales" action="hr_employee_sector_laboral_action" parent="hr.hr_menu_configuration" groups="base.group_user" sequence="20"/>
+    <menuitem id="hr_employee_sector_laboral_menu" name="Tabla Salarial" action="hr_employee_sector_laboral_action" parent="hr.hr_menu_configuration" groups="base.group_user" sequence="20"/>
 
 </odoo>
