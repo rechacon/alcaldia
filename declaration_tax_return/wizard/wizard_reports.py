@@ -3,7 +3,6 @@ from odoo import fields, models
 import numpy as np
 import io
 import base64
-import datetime
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -11,16 +10,13 @@ from cycler import cycler
 import matplotlib.ticker as mtick
 import matplotlib.patheffects as path_effects
 import pandas as pd
-import datetime as dt
+from datetime import datetime, timedelta
 
 MONTHS = [('01', 'Enero'), ('02', 'Febrero'), ('03', 'Marzo'), ('04', 'Abril'),
           ('05', 'Mayo'), ('06', 'Junio'), ('07', 'Julio'), ('08', 'Agosto'),
           ('09', 'Septiembre'), ('10', 'Octubre'), ('11', 'Noviembre'),
           ('12', 'Diciembre')]
 
-YEARS = [('01', '2020'), ('02', '2021'), ('03', '2022'), ('04', '2023'),
-          ('05', '2024'), ('06', '2025'), ('07', '2026'), ('08', '2027'),
-          ('09', '2028'), ('10', '2029'), ('11', '2030'), ('12', '2031')]
 
 class WizardReports(models.TransientModel):
     _name = 'wizard.reports'
@@ -32,11 +28,9 @@ class WizardReports(models.TransientModel):
     tax_ids = fields.Many2many('account.tax.return', string="Declaraciones")
     line_ids = fields.One2many('wizard.reports.line', 'report_id', string="Líneas")
     month = fields.Selection(MONTHS, 'Mes', required=True)
-    year = fields.Selection(YEARS, 'Años', required=True)
+    year = fields.Selection([(str(i), str(i)) for i in range(2020, int(datetime.now().year) + 10)], 'Años', required=True)
     goal_ids = fields.Many2many('account.tax.return.monthly.line', string="Metas")
     # payment_ids = fields.Many2many('account.tax.return', string="Planillas de pagos")
-    
-   
 
     def _date_range(self):
         """Imprimir las Fechas"""
@@ -48,7 +42,7 @@ class WizardReports(models.TransientModel):
         values = []
         for company in self.company_ids:
             month_start = self.date_start.strftime("%B")  # Obtener solo el mes
-            delta = datetime.timedelta(days=1)
+            delta = timedelta(days=1)
             date_start = self.date_start
 
             # Crear mes inicial
@@ -86,8 +80,12 @@ class WizardReports(models.TransientModel):
                             val['date_end'] = self.date_end
                 date_start += delta
 
-        print(f'\n\n{values}\n\n')
         self.line_ids = [(0, 0, val) for val in values]
+        self.goal_ids = [(6, 0, self.env['account.tax.return.monthly.line'].search([
+            '&', '&',
+            ('month', '=', self.month), ('year', '=', self.year),
+            ('company_id', 'in', self.company_ids.ids)
+        ]).ids)]
         action = self.env.ref(
             'declaration_tax_return.report_municipal_comparison_action').sudo().report_action(self)
         return action

@@ -17,8 +17,8 @@
                     </div>
                     
 
-                    <field name="line_ids" colspan="4" invisible="0">
-                        <tree>
+                    <field name="line_ids" colspan="4" invisible="0" nolabel="1">
+                        <tree create="0" delete="0">
                             <field name="name"/>
                             <field name="company_id"/>
                             <field name="amount_bs"/>
@@ -27,12 +27,14 @@
                             <field name="date_end"/>
                         </tree>
                     </field>
-                    <separator string="Meta Mensual" colspan="8"/>
+                    <!-- <separator string="Meta Mensual" colspan="4"/> -->
+                    <h4 colspan="4">Meta Mensual</h4>
+                    <newline/>
                     <field name="month" />
                     <field name="year" />
                     
-                    <field name="goal_ids" colspan="4" invisible="0">
-                        <tree>
+                    <field name="goal_ids" colspan="4" invisible="0" nolabel="1">
+                        <tree create="0" delete="0">
                             <field name="company_id"/>
                             <field name="goal"/>
                             <field name="raised"/>
