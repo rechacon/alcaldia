@@ -56,6 +56,8 @@
             <xpath expr="//group[@name='has_work_permit']" position="before">
                 <group string="Sector">
                     <field name="sector_laboral_id" string="Tabla Salarial"/>
+                    <field name="description" invisible="1"/>
+                    <field name="scale_administrative_id" attrs="{'invisible':[('description','!=','Administrativo')], 'required': [('description','=','Administrativo')]}"/>
                 </group>
             </xpath>
         </field>

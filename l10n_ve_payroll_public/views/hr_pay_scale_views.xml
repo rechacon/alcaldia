@@ -8,6 +8,7 @@
             <tree string="Escala Salarial Administrativa" editable="top">
                 <field name="description" required="1"/>
                 <field name="grade" required="1"/>
+                <field name="step" required="1"/>
                 <field name="wage" required="1"/>
                 <field name="wage_compensate" required="1"/>
             </tree>

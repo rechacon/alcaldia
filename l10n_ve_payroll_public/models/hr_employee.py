@@ -11,6 +11,8 @@ class HrEmployee(models.Model):
     children = fields.Integer(compute='get_number_children', store=True)
     academic_degree_id = fields.Many2one('hr.employee.academic.degree', string='Grado Académico')
     sector_laboral_id = fields.Many2one('hr.employee.sector.laboral', string='Sector Laboral')
+    scale_administrative_id = fields.Many2one('hr.pay.scale.administrative', string='Escala Administrativa')
+    description = fields.Char(string='Descripción', related='sector_laboral_id.description')
 
     @api.model
     def get_active(self):
