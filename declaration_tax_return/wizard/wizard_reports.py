@@ -153,6 +153,7 @@ class WizardReports(models.TransientModel):
 
 
     def retun_graph_base64_2(self, users):
+        
         # Definiendo el tamaño de la fuente a utilizar en el eje Y y en la leyenda
         mpl.rc('lines', linewidth=2.)
         # fondo de la grafica
@@ -172,51 +173,54 @@ class WizardReports(models.TransientModel):
         mpl.rc('grid', linewidth=1.0)
         # fondo de la grafica total
         mpl.rc('figure', facecolor='#0b1870', edgecolor='k')
-        width = 0.35
         fontsize = '8'
         # Define ancho de las bars
-        ancho_barras = 0.25
-
+        #ancho_barras = 0.25
+        height = 0.3
         small = '7'
         plt.rc('xtick', labelsize=small)
         plt.rc('legend', fontsize=small)
-        # Definiendo las tuplas
-
-        municipality = ['EL TIGRE', 'EL HATILLO', 'MANEIRO', 'LECHERIA',
-                        'SAN DIEGO', 'BARUTA', 'CHACAO', 'SUCRE']
-        raised = [20, 35, 30, 35, 27, 40, 5, 1]
-        pending = [25, 32, 34, 20, 25, 10, 14, 28]
         
         bold = {'weight':'bold'}
 
-        # Especificando la barra que debe ir en el eje X
-        bottom_raised = raised
-
         # Definiendo los valores que deben contener las barras bajo el valor de las tuplas correspondientes
-        fig, ax = plt.subplots(figsize=(11, 3))
-        p1 = ax.bar(municipality, raised, color='#3b569c', label='RECAUDADO')
-        p2 = ax.bar(municipality, pending, bottom=bottom_raised,
-                    color='#d9e7fa', label='PENDIENTE')
+        xvalue = []
+        yvalue = []
+        yvalue2 = []
+
+        for goal in self.goal_ids:
+            municipality = goal.company_id.name
+            xvalue.append(municipality)
+            raised = goal.raised
+            yvalue.append(raised)
+            pending = goal.pending
+            yvalue2.append(pending)
+            #accomplished = goal.accomplished
+            
+        #fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(15, 7))
+        p1 = ax.bar(xvalue, yvalue, width=0.5, color='#3b569c')
+        p2 = ax.bar(xvalue, yvalue2, width=0.5, bottom=yvalue, color='#d9e7fa')
 
         # Asignando valores dentro de las barras
-        ax.bar_label(p1, color='white', label_type='center', weight='bold')
-        ax.bar_label(p2, color='#1371f0', label_type='center', weight='bold')
+        ax.bar_label(p1, fmt='%d', color='white', label_type='center', weight='bold', label='RECAUDADO')
+        ax.bar_label(p2, fmt='%d', color='#1371f0', label_type='center', weight='bold', label='PENDIENTE')
 
         # Funciones de formateo para mostrar en el eje Y valores en %
-        fmt = '%.0f%%'
-        xticks = mtick.FormatStrFormatter(fmt)
-        ax.yaxis.set_major_formatter(xticks)
-
+        #fmt = '%.0f%%'
+        #yticks = mtick.FormatStrFormatter(fmt)
+        #ax.yaxis.set_major_formatter(yticks)
+        ax.yaxis.set_major_formatter(mtick.PercentFormatter())
+        
         # Definiendo parametros en la leyenda para ajustar la posicion de la misma
-        legend = ax.legend(handles=[p2], frameon=False,
-                           bbox_to_anchor=(0.7, -0.06), prop=bold)
+        legend = ax.legend(handles=[p2], frameon=False, bbox_to_anchor=(0.7, -0.06), prop=bold)
         ax.add_artist(legend)
         ax.legend(handles=[p1], frameon=False, bbox_to_anchor=(0.4, -0.06), prop=bold)
         ax.set_axisbelow(True)
         ax.yaxis.grid(color='white')
 
         # Definiendo en el eje y la secuencia en porcentajes
-        ax.set_yticks([0, 25, 50, 75, 100])
+        #ax.set_yticklabels(yticks)
 
         # Asignando el color del background a la grafica y el color dentro de la misma
         fig.patch.set_facecolor('#e7e6e6')
