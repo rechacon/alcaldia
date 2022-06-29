@@ -24,6 +24,7 @@
              'views/hr_department_views.xml',
              'views/hr_payslip_views.xml',
              'views/hr_contract_views.xml',
+             'report/hr_employee_constancy.xml',
              'wizard/hr_payroll_payslips_by_employees_views.xml'],
     "installable": True,
     'license': 'LGPL-3',
