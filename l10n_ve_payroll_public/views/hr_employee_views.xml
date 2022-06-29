@@ -15,6 +15,15 @@
         </field>
     </record>
 
+    <record id="hr_employee_child_action" model="ir.actions.act_window">
+        <field name="name">Hijos/Hijas</field>
+        <field name="res_model">hr.employee.child</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Sin Hijos/Hijas</p>
+        </field>
+    </record>
+
     <record id="hr_employee_academic_degree_view_tree" model="ir.ui.view">
         <field name="name">hr.employee.academic.degree.view.tree</field>
         <field name="model">hr.employee.academic.degree</field>
@@ -63,8 +72,6 @@
         </field>
     </record>
 
-
-
     <record id="hr_employee_academic_degree_action" model="ir.actions.act_window">
         <field name="name">Grado Académico</field>
         <field name="res_model">hr.employee.academic.degree</field>
@@ -95,5 +102,6 @@
 
     <menuitem id="hr_employee_academic_degree_menu" name="Grado Académico" action="hr_employee_academic_degree_action" parent="hr.hr_menu_configuration" groups="base.group_user" sequence="10"/>
     <menuitem id="hr_employee_sector_laboral_menu" name="Tabla Salarial" action="hr_employee_sector_laboral_action" parent="hr.hr_menu_configuration" groups="base.group_user" sequence="20"/>
+    <menuitem id="hr_employee_childres_menu" name="Hijos/Hijas" action="hr_employee_child_action" parent="hr.hr_menu_configuration" groups="base.group_user" sequence="30"/>
 
 </odoo>
