@@ -196,15 +196,25 @@ class WizardReports(models.TransientModel):
             pending = goal.pending
             yvalue2.append(pending)
             #accomplished = goal.accomplished
-            
+        
+        y1 = yvalue
+        y2 = yvalue2
+        
+        totals = [i+j for i,j in zip(yvalue, yvalue2)]
+        yvalue = [i / j * 100 for i,j in zip(yvalue, totals)]
+        yvalue2 = [i / j * 100 for i,j in zip(yvalue2, totals)]
+        
+        
         #fig, ax = plt.subplots()
         fig, ax = plt.subplots(figsize=(15, 7))
         p1 = ax.bar(xvalue, yvalue, width=0.5, color='#3b569c')
         p2 = ax.bar(xvalue, yvalue2, width=0.5, bottom=yvalue, color='#d9e7fa')
 
+
+        
         # Asignando valores dentro de las barras
-        ax.bar_label(p1, fmt='%d', color='white', label_type='center', weight='bold', label='RECAUDADO')
-        ax.bar_label(p2, fmt='%d', color='#1371f0', label_type='center', weight='bold', label='PENDIENTE')
+        ax.bar_label(p1, labels =[f'{x:,.0f}' for x in y1], color='white', label_type='center', weight='bold', label='RECAUDADO')
+        ax.bar_label(p2, labels =[f'{x:,.0f}' for x in y2], color='#1371f0', label_type='center', weight='bold', label='PENDIENTE')
 
         # Funciones de formateo para mostrar en el eje Y valores en %
         #fmt = '%.0f%%'
@@ -226,6 +236,7 @@ class WizardReports(models.TransientModel):
         fig.patch.set_facecolor('#e7e6e6')
         ax.set_facecolor('#767272')
 
+        
         img = io.BytesIO()
         plt.savefig(img, dpi=100, format='png', transparent=False)
         plt.close()

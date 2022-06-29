@@ -131,7 +131,7 @@
                                             <td><span t-esc='g.goal'  t-options='{"widget": "float","precision":0}' /></td>
                                             <td><span t-esc='g.raised'  t-options='{"widget": "float","precision":0}' /></td>
                                             <td><span t-esc='g.pending'  t-options='{"widget": "float","precision":0}' /></td>
-                                            <td><span t-esc='g.accomplished' t-options='{"widget": "float","precision":0}' /></td>
+                                            <td><span t-esc='g.accomplished' t-options='{"widget": "float","precision":0}' />%</td>
                                        </t>
                                     </tr>
                                 </t> 
