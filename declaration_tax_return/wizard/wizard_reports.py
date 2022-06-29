@@ -195,23 +195,19 @@ class WizardReports(models.TransientModel):
             yvalue.append(raised)
             pending = goal.pending
             yvalue2.append(pending)
-            #accomplished = goal.accomplished
+            # accomplished = goal.accomplished
         
         y1 = yvalue
         y2 = yvalue2
-        
-        totals = [i+j for i,j in zip(yvalue, yvalue2)]
-        yvalue = [i / j * 100 for i,j in zip(yvalue, totals)]
-        yvalue2 = [i / j * 100 for i,j in zip(yvalue2, totals)]
-        
-        
-        #fig, ax = plt.subplots()
+
+        totals = [i + j for i, j in zip(yvalue, yvalue2)]
+        yvalue = [i / j * 100 for i, j in zip(yvalue, totals)]
+        yvalue2 = [i / j * 100 for i, j in zip(yvalue2, totals)]
+
         fig, ax = plt.subplots(figsize=(15, 7))
         p1 = ax.bar(xvalue, yvalue, width=0.5, color='#3b569c')
         p2 = ax.bar(xvalue, yvalue2, width=0.5, bottom=yvalue, color='#d9e7fa')
 
-
-        
         # Asignando valores dentro de las barras
         ax.bar_label(p1, labels =[f'{x:,.0f}' for x in y1], color='white', label_type='center', weight='bold', label='RECAUDADO')
         ax.bar_label(p2, labels =[f'{x:,.0f}' for x in y2], color='#1371f0', label_type='center', weight='bold', label='PENDIENTE')
@@ -360,14 +356,14 @@ class WizardReports(models.TransientModel):
         # Asignando valores dentro de las barras
         ax.bar_label(bar1, color='white', weight='bold')
         ax.bar_label(bar2, color='white', weight='bold')
-        
+
         # Color de fondo de la grafica
         ax.set_facecolor('#555555a1')
         plt.grid(axis='y', color='white', linewidth='0.8')
 
         ax.spines["bottom"].set_color("white")
         ax.spines["top"].set_color("#888")
-        
+
         # permite colocar las barras de color solido
         ax.set_axisbelow(True)
         img = io.BytesIO()
@@ -388,7 +384,6 @@ class WizardReportsLine(models.TransientModel):
     amount_bs = fields.Float('Monto en Bs.', compute='_compute_amount_bs')
     amount_usd = fields.Float('Monto en $')
     goal_id = fields.Many2one('wizard.reports', 'Report')
-    
 
     def _compute_amount_bs(self):
         """Hacer la suma de todos los montos de las declaraciones en BS"""
@@ -402,4 +397,3 @@ class WizardReportsLine(models.TransientModel):
                      ('type_tax', '=', 'tax'),
                      ('company_id', '=', rec.company_id.id)]).mapped('amount')
                 rec.amount_bs = sum(tax_ids)
-
