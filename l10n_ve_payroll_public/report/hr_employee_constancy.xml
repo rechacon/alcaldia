@@ -2,13 +2,11 @@
 <odoo>
     <record id="hr_employee_constancy" model="ir.actions.report">
         <field name="name">Constancia de Trabajo</field>
-        <field name="model">hr.employee</field>
+        <field name="model">hr_constancy_work</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">l10n_ve_payroll_public.print_employee_constancy</field>
         <field name="report_file">l10n_ve_payroll_public.print_employee_constancy</field>
-        <field name="print_report_name">'Constancia - %s' % (object.name).replace('/', '')</field>
-        <field name="binding_model_id" ref="model_hr_employee"/>
-        <field name="binding_type">report</field>
+        <field name="print_report_name">'Constancia - %s' % (object.employee_id.name).replace('/', '')</field>
     </record>
 
     <template id="print_employee_constancy">
@@ -26,8 +24,8 @@
                 <br/>
                 <strong><p style="text-align:left; font-size:25px;">A Quien Pueda Interesar</p></strong>
                 <br/>
-                <p style="text-align:justify; font-size:20px;">Por medio de la presente se hace constar que el Sr(a) <strong><span t-esc="employee.name"/></strong>, portador de la Cédula de Identidad N° <strong><span t-esc="employee.identification_id"/></strong>, presta sus servicios en la Alcaldía del Municipio San Diego desde el <strong><span t-esc="employee.first_contract_date.strftime('%d-%m-%-Y')"/></strong>. Actualmente se desempeña como <strong><span t-esc="employee.job_id.name"/></strong>, devengando una  remuneración mensual que asciende a la suma de <strong><span><t t-esc="'{0:,.2f}'.format(employee.job_id.wage)"/></span> Bs.S</strong></p>
-                <p style="text-align:justify; font-size:20px;">Adicionalmente, recibe un monto total mensual de <strong><span><t t-esc="'{0:,.2f}'.format(employee.job_id.wage_compensate)"/></span> Bs.S</strong> por concepto de beneficios no salariales.</p>
+                <p style="text-align:justify; font-size:20px;">Por medio de la presente se hace constar que el Sr(a) <strong><span t-esc="employee.employee_id.name"/></strong>, portador de la Cédula de Identidad N° <strong><span t-esc="employee.employee_id.identification_id"/></strong>, presta sus servicios en la Alcaldía del Municipio San Diego desde el <strong><span t-esc="employee.employee_id.first_contract_date.strftime('%d-%m-%-Y')"/></strong>. Actualmente se desempeña como <strong><span t-esc="employee.employee_id.job_id.name"/></strong>, devengando una  remuneración mensual que asciende a la suma de <strong><span><t t-esc="'{0:,.2f}'.format(employee.employee_id.job_id.wage)"/></span> Bs.S</strong></p>
+                <p style="text-align:justify; font-size:20px;">Adicionalmente, recibe un monto total mensual de <strong><span><t t-esc="'{0:,.2f}'.format(employee.employee_id.job_id.wage_compensate)"/></span> Bs.S</strong> por concepto de beneficios no salariales.</p>
                 <p style="text-align:justify; font-size:20px;">Constancia que se expide a petición de la parte interesada en Valencia, el <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d de %B del %Y.')"/></strong></p>
                 <p style="text-align:justify; font-size:20px;">Atentamente</p>
                 <br/>

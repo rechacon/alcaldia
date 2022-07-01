@@ -5,6 +5,10 @@
         <record id="tag_activo" model="hr.employee.category">
             <field name="name">Activo</field>
         </record>
+        
+        <record id="tag_jubilado" model="hr.employee.category">
+            <field name="name">Jubilado</field>
+        </record>
 
     </data>
 </odoo>

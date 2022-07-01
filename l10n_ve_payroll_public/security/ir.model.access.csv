@@ -5,3 +5,4 @@ access_hr_incentives_antiquity_emp,hr.incentives.antiquity,model_hr_incentives_a
 access_hr_incentives_professionalization_emp,hr.incentives.professionalization,model_hr_incentives_professionalization,base.group_user,1,1,1,1
 access_hr_employee_sector_laboral_emp,hr.employee.sector.laboral,model_hr_employee_sector_laboral,base.group_user,1,1,1,1
 access_hr_pay_scale_administrative_emp,hr.pay.scale.administrative,model_hr_pay_scale_administrative,base.group_user,1,1,1,1
+access_hr_constancy_work_emp,hr_constancy_work,model_hr_constancy_work,base.group_user,1,1,1,1
