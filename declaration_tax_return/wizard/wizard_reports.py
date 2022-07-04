@@ -382,7 +382,7 @@ class WizardReportsLine(models.TransientModel):
     company_id = fields.Many2one('res.company', 'Alcaldía', required=True)
     report_id = fields.Many2one('wizard.reports', 'Report')
     amount_bs = fields.Float('Monto en Bs.', compute='_compute_amount_bs')
-    amount_usd = fields.Float('Monto en $')
+    amount_usd = fields.Float('Monto en $', compute='_compute_amount_dollar')
     goal_id = fields.Many2one('wizard.reports', 'Report')
 
     def _compute_amount_bs(self):
@@ -397,3 +397,17 @@ class WizardReportsLine(models.TransientModel):
                      ('type_tax', '=', 'tax'),
                      ('company_id', '=', rec.company_id.id)]).mapped('amount')
                 rec.amount_bs = sum(tax_ids)
+
+
+    def _compute_amount_dollar(self):
+        """Hacer la suma de todos los montos de las declaraciones en $"""
+        for rec in self:
+            rec.amount_usd = 0
+            if rec.date_start and rec.date_end:
+                tax_ids = self.env['account.tax.return'].search(
+                    ['&', '&',
+                     ('date', '>=', rec.date_start),
+                     ('date', '<=', rec.date_end),
+                     ('type_tax', '=', 'tax'),
+                     ('company_id', '=', rec.company_id.id)]).mapped('amount_usd')
+                rec.amount_usd = sum(tax_ids)
