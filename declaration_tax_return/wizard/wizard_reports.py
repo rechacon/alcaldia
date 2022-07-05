@@ -21,6 +21,7 @@ MONTHS = [('01', 'Enero'), ('02', 'Febrero'), ('03', 'Marzo'), ('04', 'Abril'),
 class WizardReports(models.TransientModel):
     _name = 'wizard.reports'
     _description = 'Wizard de Reportes Estadisticos'
+    
 
     company_ids = fields.Many2many('res.company', string="Alcaldías", required=True)
     date_start = fields.Date('Fecha Inicio', required=True)
