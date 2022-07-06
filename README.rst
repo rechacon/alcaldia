@@ -79,6 +79,6 @@ Contribuyentes
 ~~~~~~~~~~~~~~
 
 * Alejandro Yende VE <alyendedev@gmail.com>
-* 
+* Johan Morey VE <johan.alex1030@gmail.com>
 * Gabriel Antunez VE <antunezgabrielc32@gmail.com>
 * Moiśes Sira VE <msira270997@gmail.com>
