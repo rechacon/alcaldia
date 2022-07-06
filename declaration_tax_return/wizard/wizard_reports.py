@@ -331,39 +331,34 @@ class WizardReports(models.TransientModel):
         date_means = [20, 34, 30, 35, 27]
         date2_means = [25, 32, 34, 20, 25]
 
-        x = np.arange(len(labels))  # the label locations
-        width = 0.35  # the width of the bars
+        valuex = []
+        valuey = []
+        valuey2 = []
+        for line in self.line_ids:
+            municipality = line.company_id.name
+            valuex.append(municipality)
+            amount_usd = line.amount_usd
+            valuey.append(amount_usd)
+            valuey2 = valuey[-1]
+                
+        #valuey2 = valuey
+
+        #x = np.arange(len(labels)) # the label locations
+        #width = 0.35 # the width of the bars
 
         fig, ax = plt.subplots(figsize=(10, 4))
-
-        bar1 = ax.bar(x - width / 2, date_means, width, color='#d9dadb',
-                      label='Fecha 1')
-        bar2 = ax.bar(x + width / 2, date2_means, width, color='#265182',
-                      label='Fecha 2')
-
-        # Leyenda que figura en la parte superior izquierda de la tabla
-        ax.set_ylabel('MILES')
-        ax.yaxis.set_label_coords(-0.1, 1.02)
-        # ax.set_xticks(x, labels)
-
-        # Leyenda de cada barra
-        first_legend = ax.legend(handles=[bar1], loc='upper center',
-                                 fontsize='8', frameon=False,
-                                 bbox_to_anchor=(0.1, 1.1))
-        ax.add_artist(first_legend)
-        ax.legend(handles=[bar2], loc='upper left', fontsize='8',
-                  frameon=False, bbox_to_anchor=(0.3, 1.1))
-
-        # Asignando valores dentro de las barras
-        ax.bar_label(bar1, color='white', weight='bold')
-        ax.bar_label(bar2, color='white', weight='bold')
+        barhs = plt.barh(valuex, valuey2)
+        ax.bar_label(barhs, fmt='%d')
+        plt.xlabel('Ejemplo')
+        plt.title('Titulo Ejemplo')
+        ax.invert_yaxis()
 
         # Color de fondo de la grafica
         ax.set_facecolor('#555555a1')
         plt.grid(axis='y', color='white', linewidth='0.8')
 
-        ax.spines["bottom"].set_color("white")
-        ax.spines["top"].set_color("#888")
+        #ax.spines["bottom"].set_color("white")
+        #ax.spines["top"].set_color("#888")
 
         # permite colocar las barras de color solido
         ax.set_axisbelow(True)
