@@ -51,6 +51,7 @@
                         <field name="years_worked_previous"/>
                         <field name="month_worked" readonly="1"/>
                         <field name="month_accumulated_worked" readonly="1"/>
+                        <field name="day_vacational_worked" readonly="1"/>
                         <button name="get_annio_mes" string="Calcular Años y Mes" type="object" class="oe_highlight"/>
                     </group>
                 </page>  

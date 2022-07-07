@@ -25,6 +25,7 @@ class HrEmployee(models.Model):
     wage = fields.Float(related='job_id.wage', store=True)
     wage_compensate = fields.Float(string='Salario Compensatorio', digits=(12, 2), related='job_id.wage_compensate', store=True)
     years_worked_previous = fields.Integer(string='Años Servicios Anteriores', default=0)
+    day_vacational_worked = fields.Integer(string='Dias Vacacional Acumulado')
 
     @api.model
     def _cron_update_years_month_worked(self):
@@ -53,6 +54,12 @@ class HrEmployee(models.Model):
             self.years_worked = relativedelta(datetime.now(), contract[0].date_start).years + self.years_worked_previous
             self.month_worked = relativedelta(datetime.now(), contract[0].date_start).months
             self.month_accumulated_worked = ((relativedelta(datetime.now(), contract[0].date_start).years + self.years_worked_previous) * 12) + relativedelta(datetime.now(), contract[0].date_start).months
+            if self.years_worked < 0:
+                self.day_vacational_worked = 0
+            elif self.years_worked >= 1 and self.years_worked <= 16:
+                self. day_vacational_worked = 14 + self.years_worked
+            elif self.years_worked > 16:
+                self. day_vacational_worked = 30
 
 
 class HrEmployeeChild(models.Model):
