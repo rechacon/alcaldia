@@ -9,4 +9,5 @@
 "access_wizard_reports_line","wizard.reports.line","model_wizard_reports_line","base.group_user",1,1,1,1
 "access_account_tax_return_monthly_goal","account.tax.return.monthly.goal","model_account_tax_return_monthly_goal","base.group_user",1,1,1,1
 "access_account_tax_return_monthly_line","account.tax.return.monthly.line","model_account_tax_return_monthly_line","base.group_user",1,1,1,1
+"access_account_tax_classifier","account.tax.classifier","model_account_tax_classifier","base.group_user",1,1,1,1
 

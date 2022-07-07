@@ -110,7 +110,7 @@ AND t.active AND NOT deleted -- SOLO PARA CONTRIBUYENTES ACTIVOS
 ORDER BY firm_name, tax_account_number</field>
             <field name="sql_count">SELECT COUNT(*)
 FROM res_partner
-WHERE vat IS NOT NULL AND active = True</field>
+WHERE vat IS NOT NULL AND active = True AND company_id = {company_id}</field>
         </record>
         <record id="atr_tax" model="atr">
             <field name="name">Conexión a Declaraciones de Impuestos</field>

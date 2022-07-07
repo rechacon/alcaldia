@@ -334,17 +334,15 @@ class WizardReports(models.TransientModel):
         valuex = []
         valuey = []
         valuey2 = []
+        last_month = max(self.line_ids.mapped('date_start'))  # Obtener último mes
+        line_last_month = {line.company_id.name: line.amount_usd for line in self.line_ids.filtered(lambda x: x.date_start == last_month)}
+
         for line in self.line_ids:
             municipality = line.company_id.name
             valuex.append(municipality)
             amount_usd = line.amount_usd
             valuey.append(amount_usd)
             valuey2 = valuey[-1]
-                
-        #valuey2 = valuey
-
-        #x = np.arange(len(labels)) # the label locations
-        #width = 0.35 # the width of the bars
 
         fig, ax = plt.subplots(figsize=(10, 4))
         barhs = plt.barh(valuex, valuey2)

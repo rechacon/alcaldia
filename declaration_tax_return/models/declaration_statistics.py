@@ -100,7 +100,7 @@ class AccountTemplateTypeStatistics(models.Model):
     name = fields.Many2one('account.template.type', 'Tipo')
     total_tax = fields.Integer('Total declaraciones', compute='_compute_total_tax')
     total_payment = fields.Integer('Total planillas de pagos', compute='_compute_total_payment')
-    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística', ondele="cascade")
+    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística', ondelete="cascade")
 
     def _compute_total_tax(self):
         """Calcula el total de declaraciones por tipo de planilla"""
@@ -124,7 +124,7 @@ class AccountTaxTypeStatistics(models.Model):
     name = fields.Many2one('account.declaration.tax.type', 'Tipo')
     total_tax = fields.Integer('Total declaraciones', compute='_compute_total_tax')
     total_payment = fields.Integer('Total planillas de pagos', compute='_compute_total_payment')
-    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística', ondele="cascade")
+    statistics_id = fields.Many2one('account.declaration.statistics', 'Estadística', ondelete="cascade")
 
     def _compute_total_tax(self):
         """Calcula el total de declaraciones por tipo de planilla"""

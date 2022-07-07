@@ -43,7 +43,7 @@ class ATR(models.Model):
     def get_last_log(self, cursor, company_id=False):
         """Obtener último log"""
         # Obtener número total de registros
-        cursor.execute(self.sql_count)
+        cursor.execute(self.sql_count.replace('{company_id}', str(company_id.id)))
         total = cursor.fetchall()[0][0]
         atr_obj = self.env['atr.log']
         if self.log_ids:
@@ -166,78 +166,6 @@ class ATR(models.Model):
             self.env.cr.commit()
         else:
             self.create_payment()
-
-    def create_update_address(self):
-        """Actualizar dirección de contactos"""
-        cursor = self.env['atr.connect'].search([('type', '=', 'atr')], limit=1)
-        cursor = cursor.credentials_atr().cursor()
-        # Obtener log
-        log_id = self.get_last_log(self.env.cr)
-        if not log_id:
-            return False
-        # Consulta SQL
-        records = self.env['res.partner'].search([('vat', '!=', False)], offset=log_id.flag, limit=self.lote)
-        for rec in records:
-            cursor.execute(self.sql.replace('{vat}', f"'{rec.vat}'"))
-            address_data = cursor.fetchall()
-
-            # Filtrar direcciones
-            if address_data:
-                filter_data = list(filter(lambda x: x[5] is not None or x[6] is not None, address_data))
-                if filter_data:
-                    address = filter_data[0]
-                else:
-                    address = address_data[0]
-                country_id = self.env.ref('base.ve', raise_if_not_found=False)
-                state_id = self.env.ref('territorial_pd.state_ve_14', raise_if_not_found=False)
-                municipality_id = self.env.ref('territorial_pd.municipio_1409', raise_if_not_found=False)
-                parish_id = address[2].strip()
-                city = ''
-
-                # Obtener la parroquia
-                if parish_id == 'Caucaguita':
-                    parish_id = self.env.ref('territorial_pd.parroquia_140903', raise_if_not_found=False).id
-                elif parish_id == 'Filas de Mariche':
-                    parish_id = self.env.ref('territorial_pd.parroquia_140904', raise_if_not_found=False).id
-                elif parish_id == 'La Dolorita':
-                    parish_id = self.env.ref('territorial_pd.parroquia_140905', raise_if_not_found=False).id
-                elif parish_id == 'Petare':
-                    parish_id = self.env.ref('territorial_pd.parroquia_140901', raise_if_not_found=False).id
-                elif parish_id == 'Leoncio Martinez':
-                    parish_id = self.env.ref('territorial_pd.parroquia_140902', raise_if_not_found=False).id
-                else:
-                    city = parish_id
-                    parish_id = False
-
-                street = address[3].strip()
-                street2 = address[4].strip()
-                partner_latitude = address[5]
-                partner_longitude = address[6]
-                data = {
-                    'country_id': country_id.id,
-                    'state_id': state_id.id,
-                    'municipality_id': municipality_id.id,
-                    'parish_id': parish_id,
-                    'street': street,
-                    'street2': street2,
-                    'city': city,
-                    'partner_latitude': partner_latitude,
-                    'partner_longitude': partner_longitude,
-                }
-                rec.write(data)
-                log_id.upd += 1
-            else:
-                log_id.ignore += 1
-                log_id.date_end = fields.Datetime.now()
-            log_id.flag += 1
-            log_id.date_end = fields.Datetime.now()
-            self.env.cr.commit()
-        if log_id.flag == log_id.total:
-            # Aquí enviar correo
-            log_id.send = True
-            self.env.cr.commit()
-        else:
-            self.create_update_address()
 
 
 class ATRLog(models.Model):

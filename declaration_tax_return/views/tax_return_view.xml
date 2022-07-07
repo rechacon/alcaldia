@@ -158,6 +158,9 @@
                         <field name="concept"/>
                         <field name="template_id"/>
                         <field name="tax_id"/>
+                        <field name="classifier_id"/>
+                        <field name="aliquot"/>
+                        <field name="income"/>
                         <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}"/>
 
                     </group>
@@ -185,6 +188,9 @@
                 <field name="date_due"/>
                 <field name="template_id"/>
                 <field name="tax_id"/>
+                <field name="classifier_id"/>
+                <field name="aliquot"/>
+                <field name="income"/>
                 <field name="state"/>
                 <field name="sell_rate" widget="monetary" options="{'currency_field': 'currency_usd_id'}" optional="hidden"/>
                 <field name="company_id" optional="show"/>
@@ -337,6 +343,55 @@
     <!-- FIN ACTION: Tipo de impuesto -->
 
 <!-- ==================================================================== -->
+
+
+    <!-- VISTA FORM: Clasificador de impuesto -->
+    <record id="view_account_tax_classifier_form" model="ir.ui.view">
+        <field name="name">account.tax.classifier.form</field>
+        <field name="model">account.tax.classifier</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.tax.classifier">
+            <group col="4" colspan="2">
+                <field name="code"/>
+                <field name="name"/>
+
+            </group>
+            </form>
+        </field>
+    </record>
+    <!-- FIN VISTA FORM: Clasificador de impuesto -->
+
+    <!-- VISTA TREE: Clasificador de impuesto -->
+    <record id="view_account_tax_classifier_tree" model="ir.ui.view">
+        <field name="name">account.tax.classifier.tree</field>
+        <field name="model">account.tax.classifier</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.tax.classifier" editable="top">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Clasificador de impuesto -->
+
+    <!-- ACTION: Clasificador de impuesto -->
+    <record id="action_account_tax_classifier" model="ir.actions.act_window">
+        <field name="name">Clasificador de impuestos</field>
+        <field name="res_model">account.tax.classifier</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+          <p class="oe_view_nocontent_create">
+            Click para crear un nuevo registro
+          </p>
+        </field>
+    </record>
+    <!-- FIN ACTION: Clasificador de impuesto -->
+
+<!-- ==================================================================== -->
         
 
 <!-- ====================== MENUS ====================== -->
@@ -374,5 +429,11 @@
                   action="action_account_tax_type"
                   parent="menu_account_tax_return_config"
                   sequence="20"/>
+
+        <menuitem name="Clasificador de impuesto"
+                  id="menu_account_tax_classifier"
+                  action="action_account_tax_classifier"
+                  parent="menu_account_tax_return_config"
+                  sequence="30"/>
 
 </odoo>
