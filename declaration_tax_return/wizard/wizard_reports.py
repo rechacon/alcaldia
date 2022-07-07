@@ -326,37 +326,32 @@ class WizardReports(models.TransientModel):
         mpl.rc('xtick', color='k')
         mpl.rc('ytick', color='k')
         mpl.rc('text', color='k')
-
-        labels = ['EJ1', 'EJ2', 'EJ3', 'EJ4', 'EJ5']
-        date_means = [20, 34, 30, 35, 27]
-        date2_means = [25, 32, 34, 20, 25]
-
+        
         valuex = []
         valuey = []
-        valuey2 = []
         last_month = max(self.line_ids.mapped('date_start'))  # Obtener último mes
         line_last_month = {line.company_id.name: line.amount_usd for line in self.line_ids.filtered(lambda x: x.date_start == last_month)}
 
-        for line in self.line_ids:
+        for line in self.line_ids.filtered(lambda x: x.date_start == last_month):
             municipality = line.company_id.name
             valuex.append(municipality)
             amount_usd = line.amount_usd
             valuey.append(amount_usd)
-            valuey2 = valuey[-1]
+            
+        month_format = datetime.strftime(last_month, "%B-%Y")
 
         fig, ax = plt.subplots(figsize=(10, 4))
-        barhs = plt.barh(valuex, valuey2)
-        ax.bar_label(barhs, fmt='%d')
-        plt.xlabel('Ejemplo')
-        plt.title('Titulo Ejemplo')
+        barhs = plt.barh(valuex, valuey, color='#98afcf')
+        ax.bar_label(barhs, labels =[f'{x:,.0f}' for x in valuey])
+        plt.title(month_format)
         ax.invert_yaxis()
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        plt.ticklabel_format(style='plain', axis='x')
 
         # Color de fondo de la grafica
         ax.set_facecolor('#555555a1')
         plt.grid(axis='y', color='white', linewidth='0.8')
-
-        #ax.spines["bottom"].set_color("white")
-        #ax.spines["top"].set_color("#888")
 
         # permite colocar las barras de color solido
         ax.set_axisbelow(True)
