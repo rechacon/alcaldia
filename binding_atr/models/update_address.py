@@ -18,7 +18,6 @@ class ATR(models.Model):
                 cursor.execute(sql.replace('{vat}', f"'{rec.vat}'"))
                 address_data = cursor.fetchall()
                 print(f'\n\n{address_data}\n\n')
-                break
                 # Filtrar direcciones
                 if address_data:
                     filter_data = list(filter(lambda x: x[5] is not None or x[6] is not None, address_data))
