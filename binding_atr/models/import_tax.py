@@ -8,6 +8,7 @@ from odoo import models, fields, api
 TEMPLATE_IDS = {}
 TAX_IDS = {}
 PARTNER_IDS = {}
+CLASSIFIER_IDS = {}
 
 
 def get_template(x):
@@ -32,10 +33,20 @@ def get_partner(x):
     return False
 
 
+def get_classifier(x):
+    if x is not None:
+        x = x.strip().replace('\n', '')
+    classifier_id = CLASSIFIER_IDS.get(x, False)
+    if classifier_id:
+        return classifier_id
+    return False
+
+
 def multiprocess_data(x):
     x['template_id.id'] = x['template_id.id'].transform(get_template)
     x['tax_id.id'] = x['tax_id.id'].transform(get_tax)
     x['partner_id.id'] = x['partner_id.id'].transform(get_partner)
+    x['tax_classifier_code'] = x['tax_classifier_code'].transform(get_classifier)
     return x
 
 
@@ -65,6 +76,32 @@ class ATR(models.Model):
         for rec in data:
             PARTNER_IDS.update({rec[0]: rec[1]})
 
+    def get_tax_classifier_dict(self, df_classifier):
+        global CLASSIFIER_IDS
+        classifier_ids = self.env['account.tax.classifier'].sudo().search([])
+        df_classifier.columns = ['code', 'name']
+
+        # Borrar datos nulos
+        df_classifier = df_classifier.dropna()
+        # Borrar duplicados
+        df_classifier = df_classifier.drop_duplicates()
+        # Reemplazar saltos de línea
+        df_classifier = df_classifier.replace(to_replace='\n', value='')
+        # Borrar los clasificadores ya creados
+        df_classifier.drop(df_classifier.loc[df_classifier['code'].isin(classifier_ids.mapped('code'))].index, inplace=True)
+        df_classifier = df_classifier.to_dict('index')
+
+        # Crear clasificadores
+        if df_classifier:
+            df_classifier = [value for key, value in df_classifier.items()]
+            self.env['account.tax.classifier'].sudo().create(df_classifier)
+
+        # Nuevos clasificadores
+        classifier_ids = self.env['account.tax.classifier'].sudo().search([])
+
+        for classifier in classifier_ids:
+            CLASSIFIER_IDS.update({classifier.code: classifier.id})
+
     def _run_process_load(self, header, model, list_df):
         """Aplicar el multiproceso"""
         header = header.split(';')
@@ -89,7 +126,9 @@ class ATR(models.Model):
 
             header = ['id_tax', 'partner_id.id', 'account',
                       'amount', 'concept', 'date', 'date_due',
-                      'template_id.id', 'tax_id.id', 'state']
+                      'template_id.id', 'tax_id.id', 'state',
+                      'tax_classifier_code', 'tax_classifier_name',
+                      'aliquot', 'income']
 
             df_tax = pd.DataFrame(sql_query)  # Convertir la consulta en un dataframe
             del(df_tax['contribuyente'])  # Eliminar la columna de contribuyente
@@ -108,6 +147,9 @@ class ATR(models.Model):
             df_tax.loc[df_tax.state == 'PENDIENTE', 'state'] = 'pending'
 
             # Llenar data maestra de las variables globales
+            tax_classifier = df_tax[['tax_classifier_code', 'tax_classifier_name']]
+            self.get_tax_classifier_dict(tax_classifier)
+            del(df_tax['tax_classifier_name'])  # Eliminar la columna
             self.get_template_dict()
             self.get_tax_dict()
             self.get_partner_dict(company_id.id)
@@ -118,6 +160,8 @@ class ATR(models.Model):
 
             # Borrar filas que no tienen partner
             df_tax.drop(df_tax.loc[df_tax['partner_id.id'] == False].index, inplace=True)
+
+            df_tax = df_tax.rename(columns={"tax_classifier_code": "classifier_id.id"})
 
             # Multiproceso
             list_df = df_tax.to_numpy().tolist()  # Convertir dataframe en lista

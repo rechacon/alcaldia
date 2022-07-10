@@ -79,6 +79,7 @@
                 <filter name="group_by_state" string="Estatus" context="{'group_by':'state'}"/>
                 <filter name="group_by_template_id" string="Tipo de Planilla" context="{'group_by':'template_id'}"/>
                 <filter name="group_by_tax_id" string="Tipo de impuesto" context="{'group_by':'tax_id'}"/>
+                <filter name="group_by_classifier_id" string="Clasificador de impuesto" context="{'group_by':'classifier_id'}"/>
             </search>
         </field>
     </record>

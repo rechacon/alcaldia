@@ -123,28 +123,83 @@ transaction.amount AS monto,
 concept,
 application_date AS emision,
 transaction.expiry_date AS vencimiento,
-'IMPUESTOS',
+ 'IMPUESTOS',
 tax_type.name as tipo_impuesto,
 CASE
     WHEN (transaction.debt_status = 1 OR transaction.debt_status = 2) THEN 'PENDIENTE'
     ELSE 'PAGADA'
-END AS estatus_planilla
+END AS estatus_planilla,
+tax_classifier.code,
+tax_classifier.name,
+tax_classifier.aliquot,
+sum(statement_detail.income)
 FROM transaction
 LEFT JOIN public.tax ON transaction.id_tax = tax.id
 LEFT JOIN taxpayer ON tax.id_taxpayer = taxpayer.id
 LEFT JOIN tax_type ON  tax.id_tax_type  = tax_type.id
+LEFT JOIN statement ON transaction.id_statement = statement.id
+LEFT JOIN statement_detail ON statement.id = statement_detail.id_statement
+LEFT JOIN tax_classifier  ON tax_classifier.id=statement_detail.id_classifier_tax
 WHERE transaction.canceled=false AND taxpayer.firm_name not ilike '%prueba%'
-and transaction.id_transaction_type=1 and extract(year from application_date) = 2022
+and transaction.id_transaction_type=1
+--AND tax.tax_account_number = '030016601'
+GROUP BY transaction.id,
+rif,
+contribuyente,
+planilla,
+monto,
+concept,
+emision,
+vencimiento,
+tipo_impuesto,
+estatus_planilla,
+tax_classifier.code,
+tax_classifier.name,
+tax_classifier.aliquot
 ORDER BY contribuyente ASC
 OFFSET {offset} LIMIT {limit}</field>
-            <field name="sql_count">SELECT
-COUNT(*)
+            <field name="sql_count">SELECT COUNT(*) FROM
+(SELECT transaction.id,
+rif,
+firm_name AS contribuyente,
+tax_account_number AS planilla,
+transaction.amount AS monto,
+concept,
+application_date AS emision,
+transaction.expiry_date AS vencimiento,
+ 'IMPUESTOS',
+tax_type.name as tipo_impuesto,
+CASE
+    WHEN (transaction.debt_status = 1 OR transaction.debt_status = 2) THEN 'PENDIENTE'
+    ELSE 'PAGADA'
+END AS estatus_planilla,
+tax_classifier.code,
+tax_classifier.name,
+tax_classifier.aliquot,
+sum(statement_detail.income)
 FROM transaction
 LEFT JOIN public.tax ON transaction.id_tax = tax.id
 LEFT JOIN taxpayer ON tax.id_taxpayer = taxpayer.id
 LEFT JOIN tax_type ON  tax.id_tax_type  = tax_type.id
+LEFT JOIN statement ON transaction.id_statement = statement.id
+LEFT JOIN statement_detail ON statement.id = statement_detail.id_statement
+LEFT JOIN tax_classifier  ON tax_classifier.id=statement_detail.id_classifier_tax
 WHERE transaction.canceled=false AND taxpayer.firm_name not ilike '%prueba%'
-and transaction.id_transaction_type=1 and extract(year from application_date) = 2022</field>
+and transaction.id_transaction_type=1
+--AND tax.tax_account_number = '030016601'
+GROUP BY transaction.id,
+rif,
+contribuyente,
+planilla,
+monto,
+concept,
+emision,
+vencimiento,
+tipo_impuesto,
+estatus_planilla,
+tax_classifier.code,
+tax_classifier.name,
+tax_classifier.aliquot) AS tax</field>
         </record>
 	</data>
 </odoo>
