@@ -83,15 +83,14 @@ class AccountTaxType(models.Model):
 class AccountTaxClassifier(models.Model):
     _name = 'account.tax.classifier'
     _description = 'Clasificador de impuesto'
-    _rec_name = 'code'
 
     sequence = fields.Integer()
     code = fields.Char('Código')
     name = fields.Char('Clasificador')
 
-    # def name_get(self):
-    #     result = []
-    #     for record in self:
-    #         name = f'{record.code} - {record.name}'
-    #         result.append((record.id, name))
-    #     return result
+    def name_get(self):
+        result = []
+        for record in self:
+            name = f'{record.code} - {record.name}'
+            result.append((record.id, name))
+        return result
