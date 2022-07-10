@@ -145,6 +145,8 @@ class ATR(models.Model):
             # Cambiar valores de las columnas según una condición
             df_tax.loc[df_tax.state == 'PAGADA', 'state'] = 'payment'
             df_tax.loc[df_tax.state == 'PENDIENTE', 'state'] = 'pending'
+            df_tax.loc[df_tax.aliquot == None, 'aliquot'] = 0
+            df_tax.loc[df_tax.income == None, 'income'] = 0
 
             # Llenar data maestra de las variables globales
             tax_classifier = df_tax[['tax_classifier_code', 'tax_classifier_name']]
