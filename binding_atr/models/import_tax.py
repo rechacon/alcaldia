@@ -147,6 +147,8 @@ class ATR(models.Model):
             df_tax.loc[df_tax.state == 'PENDIENTE', 'state'] = 'pending'
             df_tax.loc[df_tax.aliquot == None, 'aliquot'] = 0
             df_tax.loc[df_tax.income == None, 'income'] = 0
+            df_tax.loc[df_tax.income.isnull(), 'income'] = 0
+            df_tax.loc[df_tax.aliquot.isnull(), 'aliquot'] = 0
 
             # Llenar data maestra de las variables globales
             tax_classifier = df_tax[['tax_classifier_code', 'tax_classifier_name']]
