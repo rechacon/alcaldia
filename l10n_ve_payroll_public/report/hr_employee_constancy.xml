@@ -24,8 +24,14 @@
                 <br/>
                 <strong><p style="text-align:left; font-size:25px;">A Quien Pueda Interesar</p></strong>
                 <br/>
-                <p style="text-align:justify; font-size:20px;">Por medio de la presente se hace constar que el Sr(a) <strong><span t-esc="employee.employee_id.name"/></strong>, portador de la Cédula de Identidad N° <strong><span t-esc="employee.employee_id.identification_id"/></strong>, presta sus servicios en la Alcaldía del Municipio San Diego desde el <strong><span t-esc="employee.employee_id.first_contract_date.strftime('%d-%m-%-Y')"/></strong>. Actualmente se desempeña como <strong><span t-esc="employee.employee_id.job_id.name"/></strong>, devengando una  remuneración mensual que asciende a la suma de <strong><span><t t-esc="'{0:,.2f}'.format(employee.employee_id.job_id.wage)"/></span> Bs.S</strong></p>
-                <p style="text-align:justify; font-size:20px;">Adicionalmente, recibe un monto total mensual de <strong><span><t t-esc="'{0:,.2f}'.format(employee.employee_id.job_id.wage_compensate)"/></span> Bs.S</strong> por concepto de beneficios no salariales.</p>
+                <p style="text-align:justify; font-size:20px;">Por medio de la presente se hace constar que el Sr(a) <strong><span t-esc="employee.employee_id.name"/></strong>, portador de la Cédula de Identidad N° <strong><span t-esc="employee.employee_id.identification_id"/></strong>, presta sus servicios en la Alcaldía del Municipio San Diego desde el <strong><span t-esc="employee.employee_id.first_contract_date.strftime('%d-%m-%-Y')"/></strong>. Actualmente se desempeña como <strong><span t-esc="employee.employee_id.job_id.name"/></strong>, devengando una remuneración mensual:</p>
+                
+                <t t-set="salario" t-value="employee.employee_id.job_id.wage + employee.employee_id.job_id.wage_compensate"/>
+                <p style="text-align:justify; font-size:20px;"><strong>Salario: <span><t t-esc="'{0:,.2f}'.format(salario)"/></span></strong></p>
+
+                <t t-set="beneficio" t-value="employee.employee_id.company_id.cesta_ticket + employee.employee_id.company_id.bonus_transportation + employee.employee_id.company_id.bonus_food"/>
+                <p style="text-align:justify; font-size:20px;"><strong>Beneficios no salariales: <span><t t-esc="'{0:,.2f}'.format(beneficio)"/></span> Bs.S</strong></p>
+
                 <p style="text-align:justify; font-size:20px;">Constancia que se expide a petición de la parte interesada en Valencia, el <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d de %B del %Y.')"/></strong></p>
                 <p style="text-align:justify; font-size:20px;">Atentamente</p>
                 <br/>

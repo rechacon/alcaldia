@@ -56,10 +56,13 @@
                     </group>
                 </page>  
             </xpath>
+            <xpath expr="//field[@name='job_id']" position="replace"></xpath>
             <xpath expr="//field[@name='certificate']" position="replace">
                 <field name="academic_degree_id"/>
             </xpath>
-            <xpath expr="//field[@name='job_title']" position="replace"></xpath>
+            <xpath expr="//field[@name='job_title']" position="replace">
+                <field name="job_id"/>
+            </xpath>
             <xpath expr="//field[@name='job_id']" position="attributes">
                 <attribute name="required">1</attribute>
             </xpath>
