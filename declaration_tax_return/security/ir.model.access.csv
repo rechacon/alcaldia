@@ -10,4 +10,5 @@
 "access_account_tax_return_monthly_goal","account.tax.return.monthly.goal","model_account_tax_return_monthly_goal","base.group_user",1,1,1,1
 "access_account_tax_return_monthly_line","account.tax.return.monthly.line","model_account_tax_return_monthly_line","base.group_user",1,1,1,1
 "access_account_tax_classifier","account.tax.classifier","model_account_tax_classifier","base.group_user",1,1,1,1
-
+"access_account_macroeconomic_indicators","account.macroeconomic.indicators","model_account_macroeconomic_indicators","base.group_user",1,1,1,1
+"access_account_indicators","account.indicators","model_account_indicators","base.group_user",1,1,1,1

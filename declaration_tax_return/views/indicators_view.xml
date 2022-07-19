@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<odoo>
+    <!-- VISTA FORM: Indicadores MacroEconomicos -->
+    <record id="view_account_macroeconomic_indicators_form" model="ir.ui.view">
+        <field name="name">account.macroeconomic.indicators.form</field>
+        <field name="model">account.macroeconomic.indicators</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.macroeconomic.indicators">
+                 <sheet>
+                    <group col="4" colspan="2">
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="total"/>
+                    </group>
+                 </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- FIN VISTA FORM: Indicadores MacroEconomicos -->
+
+    <!-- VISTA TREE: Indicadores MacroEconomicos -->
+    <record id="view_account_macroeconomic_indicators_tree" model="ir.ui.view">
+        <field name="name">account.macroeconomic.indicators.tree</field>
+        <field name="model">account.macroeconomic.indicators</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.macroeconomic.indicators" editable="bottom">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="total"/>
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Indicadores MacroEconomicos -->
+
+        <!-- VISTA FORM: Indicadores -->
+    <record id="view_account_indicators_form" model="ir.ui.view">
+        <field name="name">account.indicators.form</field>
+        <field name="model">account.indicators</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="account.indicators">
+                <sheet>
+                    <group col="4" colspan="2">
+                        <field name="name"/>
+                        <field name="logo" widget="image" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- FIN VISTA FORM: Indicadores -->
+
+    <!-- VISTA TREE: Indicadores MacroEconomicos -->
+    <record id="view_account_indicators_tree" model="ir.ui.view">
+        <field name="name">account.indicators.tree</field>
+        <field name="model">account.indicators</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="account.macroeconomic.indicators" editable="bottom">
+                <field name="name"/>
+                <field name="logo" widget="image"/>
+            </tree>
+        </field>
+    </record>
+    <!-- FIN VISTA TREE: Indicadores MacroEconomicos -->
+
+    <!-- ACTION: Indicadores MacroEconomicos -->
+    <record id="action_account_macroeconomic_indicators" model="ir.actions.act_window">
+        <field name="name">Indicadores MacroEconomicos</field>
+        <field name="res_model">account.macroeconomic.indicators</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- FIN ACTION: Indicadores MacroEconomicos -->
+
+    <!-- ACTION: Indicadores -->
+    <record id="action_account_indicators" model="ir.actions.act_window">
+        <field name="name">Indicadores</field>
+        <field name="res_model">account.indicators</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <!-- FIN ACTION: Indicadores -->
+
+    <menuitem name="Indicadores"
+              id="menu_account_macroeconomic_indicators"
+              parent="menu_tax_return"
+              sequence="41"/>
+
+    <menuitem name="Indicadores"
+              id="menu_account_indicators"
+              action="action_account_indicators"
+              parent="menu_account_macroeconomic_indicators"
+              sequence="10"/>
+
+    <menuitem name="Indicadores Macroeconomicos"
+              id="menu_macroeconomic_indicators"
+              action="action_account_macroeconomic_indicators"
+              parent="menu_account_macroeconomic_indicators"
+              sequence="20"/>
+    
+</odoo>

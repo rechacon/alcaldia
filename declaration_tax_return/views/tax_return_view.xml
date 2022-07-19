@@ -436,5 +436,5 @@
                   action="action_account_tax_classifier"
                   parent="menu_account_tax_return_config"
                   sequence="30"/>
-
+                  
 </odoo>
