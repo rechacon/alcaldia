@@ -9,6 +9,33 @@
         <field name="print_report_name">'Constancia - %s' % (object.employee_id.name).replace('/', '')</field>
     </record>
 
+    <record id="hr_employee_constancy_jubilado" model="ir.actions.report">
+        <field name="name">Constancia de Trabajo Jubilado</field>
+        <field name="model">hr_constancy_work</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ve_payroll_public.print_employee_constancy_jubilado</field>
+        <field name="report_file">l10n_ve_payroll_public.print_employee_constancy_jubilado</field>
+        <field name="print_report_name">'Constancia - %s' % (object.employee_id.name).replace('/', '')</field>
+    </record>
+
+    <record id="hr_employee_constancy_anual" model="ir.actions.report">
+        <field name="name">Constancia de Trabajo</field>
+        <field name="model">hr_constancy_work</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ve_payroll_public.print_employee_constancy_anual</field>
+        <field name="report_file">l10n_ve_payroll_public.print_employee_constancy_anual</field>
+        <field name="print_report_name">'Constancia - %s' % (object.employee_id.name).replace('/', '')</field>
+    </record>
+
+    <record id="hr_employee_constancy_jubilado_anual" model="ir.actions.report">
+        <field name="name">Constancia de Trabajo</field>
+        <field name="model">hr_constancy_work</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ve_payroll_public.print_employee_constancy_jubilado_anual</field>
+        <field name="report_file">l10n_ve_payroll_public.print_employee_constancy_jubilado_anual</field>
+        <field name="print_report_name">'Constancia - %s' % (object.employee_id.name).replace('/', '')</field>
+    </record>
+
     <template id="print_employee_constancy">
         <t t-call="web.html_container">
           <t t-foreach="docs" t-as="employee">
@@ -47,4 +74,110 @@
           </t>
         </t>
     </template>
+
+    <template id="print_employee_constancy_jubilado">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="employee">
+            <t t-call="web.external_layout">
+              <div class="page">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <strong><p style="text-align:center; font-size:35px;">CONSTANCIA DE TRABAJO</p></strong>
+                <br/>
+                <br/>
+                <strong><p style="text-align:left; font-size:25px;">A Quien Pueda Interesar</p></strong>
+                <br/>
+                <p style="text-align:justify; font-size:20px;">Por medio de la presente se hace constar que el Sr(a) <strong><span t-esc="employee.employee_id.name"/></strong>, portador de la Cédula de Identidad N° <strong><span t-esc="employee.employee_id.identification_id"/></strong>, es <strong> Jubilado</strong>  de la Alcaldía del Municipio San Diego desde el XXXXXXXXXX devengando una pensión mensual que asciende a la suma de <strong><span t-esc="employee.employee_id.company_id.salary_min"/> Bs.S.</strong></p>
+                
+                <p style="text-align:justify; font-size:20px;">Constancia que se expide a petición de la parte interesada en Valencia, el <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d de %B del %Y.')"/></strong></p>
+                <p style="text-align:justify; font-size:20px;">Atentamente</p>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <p style="text-align:justify; font-size:20px;">_____________________________________________</p>
+                <p style="text-align:justify; font-size:20px;">Directora de Recursos Humanos</p>
+                <p style="text-align:justify; font-size:20px;">Alcaldía Municipal de San Diego</p>
+              </div>
+            </t>
+          </t>
+        </t>
+    </template>
+
+    <template id="print_employee_constancy_anual">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="employee">
+            <t t-call="web.external_layout">
+              <div class="page">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <strong><p style="text-align:center; font-size:35px;">CONSTANCIA DE TRABAJO</p></strong>
+                <br/>
+                <br/>
+                <strong><p style="text-align:left; font-size:25px;">A Quien Pueda Interesar</p></strong>
+                <br/>
+                <p style="text-align:justify; font-size:20px;">Por medio de la presente se hace constar que el Sr(a) <strong><span t-esc="employee.employee_id.name"/></strong>, portador de la Cédula de Identidad N° <strong><span t-esc="employee.employee_id.identification_id"/></strong>, presta sus servicios en la Alcaldía del Municipio San Diego desde el <strong><span t-esc="employee.employee_id.first_contract_date.strftime('%d-%m-%-Y')"/></strong>. Actualmente se desempeña como <strong><span t-esc="employee.employee_id.job_id.name"/></strong>, devengando una remuneración anual:</p>
+                
+                <t t-set="salario" t-value="(employee.employee_id.job_id.wage + employee.employee_id.job_id.wage_compensate) * 12"/>
+                <p style="text-align:justify; font-size:20px;"><strong>Salario: <span><t t-esc="'{0:,.2f}'.format(salario)"/></span></strong></p>
+
+                <t t-set="beneficio" t-value="(employee.employee_id.company_id.cesta_ticket + employee.employee_id.company_id.bonus_food) * 12 +  (employee.employee_id.company_id.bonus_transportation) * 12"/>
+                <p style="text-align:justify; font-size:20px;"><strong>Beneficios no salariales: <span><t t-esc="'{0:,.2f}'.format(beneficio)"/></span> Bs.S</strong></p>
+
+                <p style="text-align:justify; font-size:20px;">Constancia que se expide a petición de la parte interesada en Valencia, el <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d de %B del %Y.')"/></strong></p>
+                <p style="text-align:justify; font-size:20px;">Atentamente</p>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <p style="text-align:justify; font-size:20px;">_____________________________________________</p>
+                <p style="text-align:justify; font-size:20px;">Directora de Recursos Humanos</p>
+                <p style="text-align:justify; font-size:20px;">Alcaldía Municipal de San Diego</p>
+              </div>
+            </t>
+          </t>
+        </t>
+    </template>
+
+    <template id="print_employee_constancy_jubilado_anual">
+        <t t-call="web.html_container">
+          <t t-foreach="docs" t-as="employee">
+            <t t-call="web.external_layout">
+              <div class="page">
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <strong><p style="text-align:center; font-size:35px;">CONSTANCIA DE TRABAJO</p></strong>
+                <br/>
+                <br/>
+                <strong><p style="text-align:left; font-size:25px;">A Quien Pueda Interesar</p></strong>
+                <br/>
+                <p style="text-align:justify; font-size:20px;">Por medio de la presente se hace constar que el Sr(a) <strong><span t-esc="employee.employee_id.name"/></strong>, portador de la Cédula de Identidad N° <strong><span t-esc="employee.employee_id.identification_id"/></strong>, es <strong> Jubilado</strong>  de la Alcaldía del Municipio San Diego desde el XXXXXXXXXX devengando una pensión anual que asciende a la suma de <strong><span t-esc="employee.employee_id.company_id.salary_min * 12"/> Bs.S.</strong></p>
+                
+                <p style="text-align:justify; font-size:20px;">Constancia que se expide a petición de la parte interesada en Valencia, el <strong><span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d de %B del %Y.')"/></strong></p>
+                <p style="text-align:justify; font-size:20px;">Atentamente</p>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <p style="text-align:justify; font-size:20px;">_____________________________________________</p>
+                <p style="text-align:justify; font-size:20px;">Directora de Recursos Humanos</p>
+                <p style="text-align:justify; font-size:20px;">Alcaldía Municipal de San Diego</p>
+              </div>
+            </t>
+          </t>
+        </t>
+    </template>
+
 </odoo>
