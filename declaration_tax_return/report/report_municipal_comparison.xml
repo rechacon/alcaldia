@@ -67,7 +67,7 @@
                                             <img t-attf-src="data:image/*;base64,{{alcaldia.logo}}"
                                                 style="width:auto; height:50px;"/>
                                         </th>
-                                       <t t-foreach="o.line_ids" t-if="alcaldia == l.company_id" t-as="l">
+                                       <t t-foreach="o.line_ids" t-if="alcaldia == l.company_id"  t-as="l">
                                             <td>
                                                 <span t-if="l.amount_bs != 0" t-field='l.amount_bs' t-options='{"widget": "float","precision":0}' />
                                                 <span t-elif="l.amount_bs == 0">ND</span>
@@ -153,208 +153,44 @@
                         <br/>
                         <br/>
                                 <!--                     </div> -->
-                                <!--                    <div style="margin-top:150px;">-->
-                                <!--                        <h5>3. INDICADORES MACROECONÓMICOS</h5>-->
-                                <!--                    <table style="width:100%;font-size: 12px;">-->
-                                <!--                        <tr>-->
-                                <!--                            <th class="exampleone">Fecha Mes Año</th>-->
-                                <!--                                <th>Alcaldia 1</th>-->
-                                <!--                                <th>Alcaldia 2</th>-->
-                                <!--                                <th>Alcaldia 3</th>-->
-                                <!--                                <th>Alcaldia 4</th>-->
-                                <!--                                <th>Alcaldia 5</th>-->
-                                <!--                                <th>Alcaldia 6</th>-->
-                                <!--                                <th>Alcaldia 7</th>-->
-                                <!--                                <th>Alcaldia 8</th>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                            <tr>-->
-                                <!--                                <td>ene-21</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>250.862</td>-->
-                                <!--                                <td>208.316</td>-->
-                                <!--                                <td>142.298</td>-->
-                                <!--                                <td>ND</td>-->
-                                <!--                                <td>931.527</td>-->
-                                <!--                                <td>1.597.006</td>-->
-                                <!--                                <td>2.179.727</td>-->
-                                <!--                            </tr>-->
-                                <!--                    </table>-->
+                                <!--EN TEORIA ESTA PARTE ESTA LISTA--> 
+                    <div style="margin-top:150px;">
+                       <h5>3. INDICADORES MACROECONÓMICOS</h5>
+                        <table style="width:100%;font-size: 12px;">
+                            <tr>
+                                <tr>
+                                    <th  colspan="2" style="background-color:#203764; color:#ffffff; height: 45px;">
+                                        FECHA MES-AÑO
+                                    </th>
+                                        <t t-foreach="o._date_range()" t-as="d">
+                                    <td style="width: 15%">
+                                        <span t-esc="d" t-options='{"widget": "uppercase"}' />
+                                    </td>
+                                        </t>
+                                </tr>
+                                <t t-foreach="o.accounts_indicators_ids" t-as="indicator">
+                                    <tr>
+                                        <th>
+                                            <img t-attf-src="data:image/*;base64,{{indicator.logo}}"
+                                                style="width:auto; height:50px; class:center"  />    
+                                        </th>
+                                        <th style="background-color:#203764; color:#ffffff; text-align:center" ><span t-esc='indicator.name'/></th>
+                                        <!--EN TEORIA ESTA PARTE ESTA LISTA--> 
+                                        <t t-foreach="o.indicators_ids" t-if="indicator == i.name" t-as="i">
+                                      <!--  <t t-foreach="o.indicators_ids" t-if="indicator == i.name" t-as="i"> -->
+                                            <td>
+                                               <!----> <span t-esc="i.total" />
+                                                <!--<span t-if="i != 0" t-esc='i' t-options='{"widget": "float","precision":0}' />
+                                                <span t-elif="i == 0" >-</span>-->
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tr>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
                                 <!--                    <table style="width:100%">-->
                                 <!--                            <thead>-->
                                 <!--                                <tr style="background-color: #132864;">-->

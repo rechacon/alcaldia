@@ -8,6 +8,9 @@
                 <group>
                     <field name="company_ids" widget="many2many_tags"/>
                 </group>
+                <group>
+                    <field name="accounts_indicators_ids" widget="many2many_tags"/>
+                </group>
                 <group col="4" colspan="2">
                     <label for="date_start" string="Fechas"/>
                     <div class="o_row">
@@ -15,8 +18,15 @@
                         <i class="fa fa-angle-right mx-1" aria-label="Arrow icon" title="a"/>
                         <field name="date_end" class="oe_inline" placeholder="Fin"/>
                     </div>
-                    
 
+                <!--    <field name="accounts_indicators_ids" colspan="4" nolabel="1" invisible="0">
+                        <tree create="0" delete="0">
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="total"/>
+                        </tree>
+                    </field>           
+                -->
                     <field name="line_ids" colspan="4" nolabel="1" invisible="1">
                         <tree create="0" delete="0">
                             <field name="name"/>

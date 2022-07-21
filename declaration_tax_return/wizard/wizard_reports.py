@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, api
 # from mpl_toolkits.mplot3d import axes3d
 import numpy as np
 import io
@@ -31,8 +31,10 @@ class WizardReports(models.TransientModel):
     month = fields.Selection(MONTHS, 'Mes', required=True)
     year = fields.Selection([(str(i), str(i)) for i in range(2020, int(datetime.now().year) + 10)], 'Años', required=True)
     goal_ids = fields.Many2many('account.tax.return.monthly.line', string="Metas")
-    # payment_ids = fields.Many2many('account.tax.return', string="Planillas de pagos")
+    indicators_ids = fields.Many2many('account.macroeconomic.indicators', string="Indicadores Macroeconomicos")
+    accounts_indicators_ids = fields.Many2many('account.indicators', string="Indicadores", required=True)
 
+    
     def _date_range(self):
         """Imprimir las Fechas"""
         month_list = [i.strftime("%b-%y") for i in pd.period_range(start=self.date_start, end=self.date_end, freq='M')]
@@ -87,10 +89,16 @@ class WizardReports(models.TransientModel):
             ('month', '=', self.month), ('year', '=', self.year),
             ('company_id', 'in', self.company_ids.ids)
         ]).ids)]
+        # Obtener los totales de los indicadores macroeconomicos
+        self.indicators_ids = [(6, 0, self.env['account.macroeconomic.indicators'].search([
+            '&', '&',
+            ('date', '>=', self.date_start), ('date', '<=', self.date_end),
+            ('name', 'in', self.accounts_indicators_ids.ids)
+        ]).ids)]
         action = self.env.ref(
             'declaration_tax_return.report_municipal_comparison_action').sudo().report_action(self)
         return action
-
+         
     def retun_graph_base64(self, users):
         mpl.rc('lines', linewidth=2.)
         # fondo de la grafica

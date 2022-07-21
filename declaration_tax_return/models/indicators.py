@@ -7,11 +7,10 @@ class AccountMacroeconomicIndicators(models.Model):
     name = fields.Many2one('account.indicators', 'Indicador', required=True)
     date = fields.Date('Fecha')
     total = fields.Float('Total')
-    
+        
 class AccountIndicators(models.Model):
     _name = 'account.indicators'
     _description = 'Indicadores'
     
     name = fields.Char('Indicador', required=True)
     logo = fields.Binary('Logo')
-    
